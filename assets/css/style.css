@@ -1043,3 +1043,9 @@ blink {
         width: 100%!important;
     }
 }
+
+.ui-autocomplete{
+    overflow-y: auto !important;
+    min-height: 140px !important;
+    max-height: 140px !important;
+}

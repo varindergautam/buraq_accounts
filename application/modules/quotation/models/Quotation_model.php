@@ -109,7 +109,7 @@ class Quotation_model extends CI_Model {
                 ->like('product_name', $product_name, 'both')
                 ->or_like('product_model', $product_name, 'both')
                 ->order_by('product_name','asc')
-                ->limit(15)
+                // ->limit(15)
                 ->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();  
