@@ -32025,3 +32025,968 @@ WHERE `COAID` = '5020101'
 AND `fyear` = '2';
 UPDATE `acc_vaucher` SET `VNo` = 'JV-331', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 11:23:28', `status` = 1
 WHERE `VNo` = 'JV-331';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2016, '2', NULL, '', '123', '18', '123', '', '0', '6.15', '5', NULL, '1');
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2016, '3', '2023-12-11', '2023-12-11', '129.15', '0.00', '6.15', NULL, '0.00', '0.00', '0.00', NULL, '', '', 2016, '1', '', 1, 1, 0);
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '3', '2023-12-11', 'item');
+INSERT INTO `quotation_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2016, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '3', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `quotation` SET `status` = 2
+WHERE `quotation_id` = '2016';
+INSERT INTO `invoice` (`invoice_id`, `customer_id`, `date`, `total_amount`, `paid_amount`, `total_tax`, `invoice`, `invoice_details`, `invoice_discount`, `total_discount`, `total_vat_amnt`, `prevous_due`, `due_amount`, `shipping_cost`, `sales_by`, `status`, `payment_type`, `bank_id`, `is_fixed`, `is_dynamic`, `no_of_credit_days`) VALUES (1149, '3', '2023-12-11', '129.15', '129.15', NULL, 1149, '2016', '0.00', '0.00', '6.15', '', '', '', '1', 1, 1, NULL, 1, 0, '10');
+INSERT INTO `tax_collection` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '3', '2023-12-11', 1149);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`, `Debit`, `Credit`) VALUES ('2', 'CV-126', 'CV', 1149, '2023-12-11', '1020102', 'Sales Voucher', 'Sales Voucher for customer', '3010301', 0, '1', '2023-12-11 21:26:14', 0, '129.15', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-332', 'JV', 1149, '2023-12-11', '4010101', 'Sales cost of goods Voucher', 'Sales cost of goods Voucher for customer', 15, '1020401', 0, '1', '2023-12-11 21:26:14', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-333', 'JV', 1149, '2023-12-11', '4021101', 'Tax for Sales Voucher', 'Tax for Sales Voucher for customer', '6.15', '5020101', 0, '1', '2023-12-11 21:26:14', 0);
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('693113733816917', 150, '2', NULL, '1.00', '123.00', '0.00', '', '', '6.15', '5.00', '0.00', '129.15', '', '18', '123.00', 1);
+UPDATE `product_information` SET `price` = '123.00'
+WHERE `product_id` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('464', '2', 'CV-126', 'CV', '1149', '2023-12-11', '1020102', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '129.15', '0.00', 0, 1, '3010301', '1', NULL, 1, '1', '2023-12-11 21:26:14');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 847, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"464\",\"fyear\":\"2\",\"VNo\":\"CV-126\",\"Vtype\":\"CV\",\"referenceNo\":\"1149\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020102\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"129.15\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"3010301\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 21:26:14\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020102', `balance12` = 19157.73, `updatedDate` = '2023-12-11 09:26:14'
+WHERE `COAID` = '1020102'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('464', '2', 'CV-126', 'CV', '1149', '2023-12-11', '3010301', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '0.00', '129.15', 0, 1, '1020102', '1', NULL, 1, '1', '2023-12-11 21:26:14');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 848, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"464\",\"fyear\":\"2\",\"VNo\":\"CV-126\",\"Vtype\":\"CV\",\"referenceNo\":\"1149\",\"VDate\":\"2023-12-11\",\"COAID\":\"3010301\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"129.15\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020102\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 21:26:14\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '3010301', `balance12` = 41737.87, `updatedDate` = '2023-12-11 09:26:15'
+WHERE `COAID` = '3010301'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'CV-126', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 21:26:14', `status` = 1
+WHERE `VNo` = 'CV-126';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('465', '2', 'JV-332', 'JV', '1149', '2023-12-11', '4010101', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '15.00', '0.00', 0, 1, '1020401', '1', NULL, 1, '1', '2023-12-11 21:26:15');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 849, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"465\",\"fyear\":\"2\",\"VNo\":\"JV-332\",\"Vtype\":\"JV\",\"referenceNo\":\"1149\",\"VDate\":\"2023-12-11\",\"COAID\":\"4010101\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"15.00\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020401\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 21:26:15\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4010101', `balance12` = 10814.14, `updatedDate` = '2023-12-11 09:26:15'
+WHERE `COAID` = '4010101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('465', '2', 'JV-332', 'JV', '1149', '2023-12-11', '1020401', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '15.00', 0, 1, '4010101', '1', NULL, 1, '1', '2023-12-11 21:26:15');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 850, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"465\",\"fyear\":\"2\",\"VNo\":\"JV-332\",\"Vtype\":\"JV\",\"referenceNo\":\"1149\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020401\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"15.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4010101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 21:26:15\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020401', `balance12` = 11214.33, `updatedDate` = '2023-12-11 09:26:15'
+WHERE `COAID` = '1020401'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-332', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 21:26:15', `status` = 1
+WHERE `VNo` = 'JV-332';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('466', '2', 'JV-333', 'JV', '1149', '2023-12-11', '4021101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '6.15', '0.00', 0, 1, '5020101', '1', NULL, 1, '1', '2023-12-11 21:26:15');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 851, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"466\",\"fyear\":\"2\",\"VNo\":\"JV-333\",\"Vtype\":\"JV\",\"referenceNo\":\"1149\",\"VDate\":\"2023-12-11\",\"COAID\":\"4021101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"6.15\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"5020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 21:26:15\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4021101', `balance12` = 1263.01, `updatedDate` = '2023-12-11 09:26:16'
+WHERE `COAID` = '4021101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('466', '2', 'JV-333', 'JV', '1149', '2023-12-11', '5020101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.00', '6.15', 0, 1, '4021101', '1', NULL, 1, '1', '2023-12-11 21:26:15');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 852, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"466\",\"fyear\":\"2\",\"VNo\":\"JV-333\",\"Vtype\":\"JV\",\"referenceNo\":\"1149\",\"VDate\":\"2023-12-11\",\"COAID\":\"5020101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"6.15\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4021101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 21:26:15\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '5020101', `balance12` = 1263.01, `updatedDate` = '2023-12-11 09:26:16'
+WHERE `COAID` = '5020101'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-333', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 21:26:15', `status` = 1
+WHERE `VNo` = 'JV-333';
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-334', 'JV', 'serv-1', '2023-12-11', '4021101', 'Tax for Service Sales Voucher', 'Tax for Service Sales Voucher for customer', '0.00', '5020101', 0, '1', '2023-12-11 21:26:21', 0);
+INSERT INTO `tax_collection` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '3', '2023-12-11', 'serv-1');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `invoice` (`invoice_id`, `customer_id`, `date`, `total_amount`, `total_tax`, `invoice`, `invoice_details`, `invoice_discount`, `total_discount`, `total_vat_amnt`, `paid_amount`, `due_amount`, `prevous_due`, `shipping_cost`, `sales_by`, `status`, `payment_type`, `bank_id`, `is_credit`, `is_fixed`, `is_dynamic`) VALUES (1150, '18', '2023-12-11', '180.60', NULL, 1150, 'Thank you for shopping with us', '', '0.00', '8.60', '180.6', '0', '  0.00', '', '1', 1, 1, NULL, '', 1, 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`, `Debit`, `Credit`) VALUES ('2', 'CV-127', 'CV', 1150, '2023-12-11', '1020101', 'Sales Voucher', 'Sales Voucher for customer', '3010301', 0, '1', '2023-12-11 23:27:44', 0, '180.6', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-335', 'JV', 1150, '2023-12-11', '4010101', 'Sales cost of goods Voucher', 'Sales cost of goods Voucher for customer', 155, '1020401', 0, '1', '2023-12-11 23:27:44', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-336', 'JV', 1150, '2023-12-11', '4021101', 'Tax for Sales Voucher', 'Tax for Sales Voucher for customer', '8.60', '5020101', 0, '1', '2023-12-11 23:27:44', 0);
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `serial_no`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('335228574438989', 151, '12', '', NULL, '1', '2.00', '0', '', '', '0.1', '5', '8.5', '180.6', '0', 0, '2', 1);
+UPDATE `product_information` SET `price` = '2.00'
+WHERE `product_id` = '12';
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `serial_no`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('854885171229634', 151, '25', '', NULL, '1', '170', '0', '', '', '8.5', '5', '0', '180.6', '0', '155.000000', '170', 1);
+UPDATE `product_information` SET `price` = '170'
+WHERE `product_id` = '25';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('468', '2', 'CV-127', 'CV', '1150', '2023-12-11', '1020101', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '180.60', '0.00', 0, 1, '3010301', '1', NULL, 1, '1', '2023-12-11 23:27:44');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 853, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"468\",\"fyear\":\"2\",\"VNo\":\"CV-127\",\"Vtype\":\"CV\",\"referenceNo\":\"1150\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020101\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"180.60\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"3010301\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:27:44\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020101', `balance12` = 15303.33, `updatedDate` = '2023-12-11 11:27:45'
+WHERE `COAID` = '1020101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('468', '2', 'CV-127', 'CV', '1150', '2023-12-11', '3010301', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '0.00', '180.60', 0, 1, '1020101', '1', NULL, 1, '1', '2023-12-11 23:27:44');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 854, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"468\",\"fyear\":\"2\",\"VNo\":\"CV-127\",\"Vtype\":\"CV\",\"referenceNo\":\"1150\",\"VDate\":\"2023-12-11\",\"COAID\":\"3010301\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"180.60\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:27:44\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '3010301', `balance12` = 41918.47, `updatedDate` = '2023-12-11 11:27:45'
+WHERE `COAID` = '3010301'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'CV-127', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:27:44', `status` = 1
+WHERE `VNo` = 'CV-127';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('469', '2', 'JV-335', 'JV', '1150', '2023-12-11', '4010101', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '155.00', '0.00', 0, 1, '1020401', '1', NULL, 1, '1', '2023-12-11 23:27:45');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 855, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"469\",\"fyear\":\"2\",\"VNo\":\"JV-335\",\"Vtype\":\"JV\",\"referenceNo\":\"1150\",\"VDate\":\"2023-12-11\",\"COAID\":\"4010101\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"155.00\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020401\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:27:45\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4010101', `balance12` = 10969.14, `updatedDate` = '2023-12-11 11:27:45'
+WHERE `COAID` = '4010101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('469', '2', 'JV-335', 'JV', '1150', '2023-12-11', '1020401', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '155.00', 0, 1, '4010101', '1', NULL, 1, '1', '2023-12-11 23:27:45');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 856, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"469\",\"fyear\":\"2\",\"VNo\":\"JV-335\",\"Vtype\":\"JV\",\"referenceNo\":\"1150\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020401\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"155.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4010101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:27:45\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020401', `balance12` = 11059.33, `updatedDate` = '2023-12-11 11:27:45'
+WHERE `COAID` = '1020401'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-335', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:27:45', `status` = 1
+WHERE `VNo` = 'JV-335';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('470', '2', 'JV-336', 'JV', '1150', '2023-12-11', '4021101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '8.60', '0.00', 0, 1, '5020101', '1', NULL, 1, '1', '2023-12-11 23:27:45');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 857, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"470\",\"fyear\":\"2\",\"VNo\":\"JV-336\",\"Vtype\":\"JV\",\"referenceNo\":\"1150\",\"VDate\":\"2023-12-11\",\"COAID\":\"4021101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"8.60\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"5020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:27:45\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4021101', `balance12` = 1271.61, `updatedDate` = '2023-12-11 11:27:45'
+WHERE `COAID` = '4021101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('470', '2', 'JV-336', 'JV', '1150', '2023-12-11', '5020101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.00', '8.60', 0, 1, '4021101', '1', NULL, 1, '1', '2023-12-11 23:27:45');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 858, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"470\",\"fyear\":\"2\",\"VNo\":\"JV-336\",\"Vtype\":\"JV\",\"referenceNo\":\"1150\",\"VDate\":\"2023-12-11\",\"COAID\":\"5020101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"8.60\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4021101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:27:45\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '5020101', `balance12` = 1271.61, `updatedDate` = '2023-12-11 11:27:46'
+WHERE `COAID` = '5020101'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-336', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:27:45', `status` = 1
+WHERE `VNo` = 'JV-336';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `invoice` (`invoice_id`, `customer_id`, `date`, `total_amount`, `total_tax`, `invoice`, `invoice_details`, `invoice_discount`, `total_discount`, `total_vat_amnt`, `paid_amount`, `due_amount`, `prevous_due`, `shipping_cost`, `sales_by`, `status`, `payment_type`, `bank_id`, `is_credit`, `is_fixed`, `is_dynamic`) VALUES (1151, '14', '2023-12-11', '15.75', NULL, 1151, 'Thank you for shopping with us', '', '0.00', '0.75', '15.75', '0', '  0.00', '', '1', 1, 1, NULL, '', 1, 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`, `Debit`, `Credit`) VALUES ('2', 'CV-128', 'CV', 1151, '2023-12-11', '1020101', 'Sales Voucher', 'Sales Voucher for customer', '3010301', 0, '1', '2023-12-11 23:30:04', 0, '15.75', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-337', 'JV', 1151, '2023-12-11', '4010101', 'Sales cost of goods Voucher', 'Sales cost of goods Voucher for customer', 0, '1020401', 0, '1', '2023-12-11 23:30:04', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-338', 'JV', 1151, '2023-12-11', '4021101', 'Tax for Sales Voucher', 'Tax for Sales Voucher for customer', '0.75', '5020101', 0, '1', '2023-12-11 23:30:04', 0);
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `serial_no`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('274887641494992', 152, '32', '', NULL, '1', '8', '0', '', '', '0.4', '5', '0.35000000000000003', '15.75', '0', '6.5', '8', 1);
+UPDATE `product_information` SET `price` = '8'
+WHERE `product_id` = '32';
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `serial_no`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('253358287796753', 152, '1971', '', NULL, '1', '7.00', '0', '', '', '0.35', '5', '0', '15.75', '0', '3', '7', 1);
+UPDATE `product_information` SET `price` = '7.00'
+WHERE `product_id` = '1971';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('471', '2', 'CV-128', 'CV', '1151', '2023-12-11', '1020101', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '15.75', '0.00', 0, 1, '3010301', '1', NULL, 1, '1', '2023-12-11 23:30:04');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 859, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"471\",\"fyear\":\"2\",\"VNo\":\"CV-128\",\"Vtype\":\"CV\",\"referenceNo\":\"1151\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020101\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"15.75\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"3010301\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:04\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020101', `balance12` = 15319.08, `updatedDate` = '2023-12-11 11:30:05'
+WHERE `COAID` = '1020101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('471', '2', 'CV-128', 'CV', '1151', '2023-12-11', '3010301', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '0.00', '15.75', 0, 1, '1020101', '1', NULL, 1, '1', '2023-12-11 23:30:04');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 860, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"471\",\"fyear\":\"2\",\"VNo\":\"CV-128\",\"Vtype\":\"CV\",\"referenceNo\":\"1151\",\"VDate\":\"2023-12-11\",\"COAID\":\"3010301\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"15.75\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:04\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '3010301', `balance12` = 41934.22, `updatedDate` = '2023-12-11 11:30:05'
+WHERE `COAID` = '3010301'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'CV-128', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:30:04', `status` = 1
+WHERE `VNo` = 'CV-128';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('472', '2', 'JV-337', 'JV', '1151', '2023-12-11', '4010101', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '0.00', 0, 1, '1020401', '1', NULL, 1, '1', '2023-12-11 23:30:05');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 861, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"472\",\"fyear\":\"2\",\"VNo\":\"JV-337\",\"Vtype\":\"JV\",\"referenceNo\":\"1151\",\"VDate\":\"2023-12-11\",\"COAID\":\"4010101\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020401\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:05\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4010101', `balance12` = 10969.14, `updatedDate` = '2023-12-11 11:30:05'
+WHERE `COAID` = '4010101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('472', '2', 'JV-337', 'JV', '1151', '2023-12-11', '1020401', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '0.00', 0, 1, '4010101', '1', NULL, 1, '1', '2023-12-11 23:30:05');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 862, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"472\",\"fyear\":\"2\",\"VNo\":\"JV-337\",\"Vtype\":\"JV\",\"referenceNo\":\"1151\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020401\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4010101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:05\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020401', `balance12` = 11059.33, `updatedDate` = '2023-12-11 11:30:06'
+WHERE `COAID` = '1020401'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-337', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:30:05', `status` = 1
+WHERE `VNo` = 'JV-337';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('473', '2', 'JV-338', 'JV', '1151', '2023-12-11', '4021101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.75', '0.00', 0, 1, '5020101', '1', NULL, 1, '1', '2023-12-11 23:30:06');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 863, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"473\",\"fyear\":\"2\",\"VNo\":\"JV-338\",\"Vtype\":\"JV\",\"referenceNo\":\"1151\",\"VDate\":\"2023-12-11\",\"COAID\":\"4021101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.75\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"5020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:06\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4021101', `balance12` = 1272.36, `updatedDate` = '2023-12-11 11:30:06'
+WHERE `COAID` = '4021101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('473', '2', 'JV-338', 'JV', '1151', '2023-12-11', '5020101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.00', '0.75', 0, 1, '4021101', '1', NULL, 1, '1', '2023-12-11 23:30:06');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 864, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"473\",\"fyear\":\"2\",\"VNo\":\"JV-338\",\"Vtype\":\"JV\",\"referenceNo\":\"1151\",\"VDate\":\"2023-12-11\",\"COAID\":\"5020101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"0.75\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4021101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:06\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '5020101', `balance12` = 1272.36, `updatedDate` = '2023-12-11 11:30:06'
+WHERE `COAID` = '5020101'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-338', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:30:06', `status` = 1
+WHERE `VNo` = 'JV-338';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `invoice` (`invoice_id`, `customer_id`, `date`, `total_amount`, `total_tax`, `invoice`, `invoice_details`, `invoice_discount`, `total_discount`, `total_vat_amnt`, `paid_amount`, `due_amount`, `prevous_due`, `shipping_cost`, `sales_by`, `status`, `payment_type`, `bank_id`, `is_credit`, `is_fixed`, `is_dynamic`) VALUES (1152, '5', '2023-12-11', '5.25', NULL, 1152, 'Thank you for shopping with us', '', '0.00', '0.25', '5.25', '0', '  0.00', '', '1', 1, 1, NULL, '', 1, 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`, `Debit`, `Credit`) VALUES ('2', 'CV-129', 'CV', 1152, '2023-12-11', '1020101', 'Sales Voucher', 'Sales Voucher for customer', '3010301', 0, '1', '2023-12-11 23:30:39', 0, '5.25', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-339', 'JV', 1152, '2023-12-11', '4010101', 'Sales cost of goods Voucher', 'Sales cost of goods Voucher for customer', 1.75, '1020401', 0, '1', '2023-12-11 23:30:39', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-340', 'JV', 1152, '2023-12-11', '4021101', 'Tax for Sales Voucher', 'Tax for Sales Voucher for customer', '0.25', '5020101', 0, '1', '2023-12-11 23:30:39', 0);
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `serial_no`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('249839379819885', 153, '12', '', NULL, '1', '2.00', '0', '', '', '0.1', '5', '0.15000000000000002', '5.25', '0', 0, '2', 1);
+UPDATE `product_information` SET `price` = '2.00'
+WHERE `product_id` = '12';
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `serial_no`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('248137417174353', 153, '27', '', NULL, '1', '3.00', '0', '', '', '0.15', '5', '0', '5.25', '0', '1.750000', '3', 1);
+UPDATE `product_information` SET `price` = '3.00'
+WHERE `product_id` = '27';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('474', '2', 'CV-129', 'CV', '1152', '2023-12-11', '1020101', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '5.25', '0.00', 0, 1, '3010301', '1', NULL, 1, '1', '2023-12-11 23:30:39');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 865, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"474\",\"fyear\":\"2\",\"VNo\":\"CV-129\",\"Vtype\":\"CV\",\"referenceNo\":\"1152\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020101\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"5.25\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"3010301\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:39\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020101', `balance12` = 15324.33, `updatedDate` = '2023-12-11 11:30:39'
+WHERE `COAID` = '1020101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('474', '2', 'CV-129', 'CV', '1152', '2023-12-11', '3010301', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '0.00', '5.25', 0, 1, '1020101', '1', NULL, 1, '1', '2023-12-11 23:30:39');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 866, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"474\",\"fyear\":\"2\",\"VNo\":\"CV-129\",\"Vtype\":\"CV\",\"referenceNo\":\"1152\",\"VDate\":\"2023-12-11\",\"COAID\":\"3010301\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"5.25\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:39\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '3010301', `balance12` = 41939.47, `updatedDate` = '2023-12-11 11:30:39'
+WHERE `COAID` = '3010301'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'CV-129', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:30:39', `status` = 1
+WHERE `VNo` = 'CV-129';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('475', '2', 'JV-339', 'JV', '1152', '2023-12-11', '4010101', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '1.75', '0.00', 0, 1, '1020401', '1', NULL, 1, '1', '2023-12-11 23:30:40');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 867, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"475\",\"fyear\":\"2\",\"VNo\":\"JV-339\",\"Vtype\":\"JV\",\"referenceNo\":\"1152\",\"VDate\":\"2023-12-11\",\"COAID\":\"4010101\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"1.75\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020401\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:40\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4010101', `balance12` = 10970.89, `updatedDate` = '2023-12-11 11:30:40'
+WHERE `COAID` = '4010101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('475', '2', 'JV-339', 'JV', '1152', '2023-12-11', '1020401', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '1.75', 0, 1, '4010101', '1', NULL, 1, '1', '2023-12-11 23:30:40');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 868, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"475\",\"fyear\":\"2\",\"VNo\":\"JV-339\",\"Vtype\":\"JV\",\"referenceNo\":\"1152\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020401\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"1.75\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4010101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:40\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020401', `balance12` = 11057.58, `updatedDate` = '2023-12-11 11:30:40'
+WHERE `COAID` = '1020401'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-339', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:30:40', `status` = 1
+WHERE `VNo` = 'JV-339';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('476', '2', 'JV-340', 'JV', '1152', '2023-12-11', '4021101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.25', '0.00', 0, 1, '5020101', '1', NULL, 1, '1', '2023-12-11 23:30:40');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 869, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"476\",\"fyear\":\"2\",\"VNo\":\"JV-340\",\"Vtype\":\"JV\",\"referenceNo\":\"1152\",\"VDate\":\"2023-12-11\",\"COAID\":\"4021101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.25\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"5020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:40\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4021101', `balance12` = 1272.61, `updatedDate` = '2023-12-11 11:30:40'
+WHERE `COAID` = '4021101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('476', '2', 'JV-340', 'JV', '1152', '2023-12-11', '5020101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.00', '0.25', 0, 1, '4021101', '1', NULL, 1, '1', '2023-12-11 23:30:40');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 870, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"476\",\"fyear\":\"2\",\"VNo\":\"JV-340\",\"Vtype\":\"JV\",\"referenceNo\":\"1152\",\"VDate\":\"2023-12-11\",\"COAID\":\"5020101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"0.25\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4021101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:30:40\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '5020101', `balance12` = 1272.61, `updatedDate` = '2023-12-11 11:30:40'
+WHERE `COAID` = '5020101'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-340', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:30:40', `status` = 1
+WHERE `VNo` = 'JV-340';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `invoice` (`invoice_id`, `customer_id`, `date`, `total_amount`, `total_tax`, `invoice`, `invoice_details`, `invoice_discount`, `total_discount`, `total_vat_amnt`, `paid_amount`, `due_amount`, `prevous_due`, `shipping_cost`, `sales_by`, `status`, `payment_type`, `bank_id`, `is_credit`, `is_fixed`, `is_dynamic`) VALUES (1153, '8', '2023-12-11', '179.55', NULL, 1153, 'Thank you for shopping with us', '', '0.00', '8.55', '179.55', '0', '  0.00', '', '1', 1, 1, NULL, '', 1, 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`, `Debit`, `Credit`) VALUES ('2', 'CV-130', 'CV', 1153, '2023-12-11', '1020101', 'Sales Voucher', 'Sales Voucher for customer', '3010301', 0, '1', '2023-12-11 23:31:08', 0, '179.55', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-341', 'JV', 1153, '2023-12-11', '4010101', 'Sales cost of goods Voucher', 'Sales cost of goods Voucher for customer', 155, '1020401', 0, '1', '2023-12-11 23:31:09', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-342', 'JV', 1153, '2023-12-11', '4021101', 'Tax for Sales Voucher', 'Tax for Sales Voucher for customer', '8.55', '5020101', 0, '1', '2023-12-11 23:31:09', 0);
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `serial_no`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('177725379483498', 154, '201', '', NULL, '1', '1', '0', '', '', '0.05', '5', '8.5', '179.55', '0', '0.6', '1', 1);
+UPDATE `product_information` SET `price` = '1'
+WHERE `product_id` = '201';
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `serial_no`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('796398281846217', 154, '25', '', NULL, '1', '170', '0', '', '', '8.5', '5', '0', '179.55', '0', '155.000000', '170', 1);
+UPDATE `product_information` SET `price` = '170'
+WHERE `product_id` = '25';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('477', '2', 'CV-130', 'CV', '1153', '2023-12-11', '1020101', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '179.55', '0.00', 0, 1, '3010301', '1', NULL, 1, '1', '2023-12-11 23:31:09');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 871, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"477\",\"fyear\":\"2\",\"VNo\":\"CV-130\",\"Vtype\":\"CV\",\"referenceNo\":\"1153\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020101\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"179.55\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"3010301\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:31:09\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020101', `balance12` = 15503.88, `updatedDate` = '2023-12-11 11:31:09'
+WHERE `COAID` = '1020101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('477', '2', 'CV-130', 'CV', '1153', '2023-12-11', '3010301', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '0.00', '179.55', 0, 1, '1020101', '1', NULL, 1, '1', '2023-12-11 23:31:09');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 872, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"477\",\"fyear\":\"2\",\"VNo\":\"CV-130\",\"Vtype\":\"CV\",\"referenceNo\":\"1153\",\"VDate\":\"2023-12-11\",\"COAID\":\"3010301\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"179.55\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:31:09\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '3010301', `balance12` = 42119.02, `updatedDate` = '2023-12-11 11:31:09'
+WHERE `COAID` = '3010301'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'CV-130', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:31:09', `status` = 1
+WHERE `VNo` = 'CV-130';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('478', '2', 'JV-341', 'JV', '1153', '2023-12-11', '4010101', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '155.00', '0.00', 0, 1, '1020401', '1', NULL, 1, '1', '2023-12-11 23:31:09');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 873, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"478\",\"fyear\":\"2\",\"VNo\":\"JV-341\",\"Vtype\":\"JV\",\"referenceNo\":\"1153\",\"VDate\":\"2023-12-11\",\"COAID\":\"4010101\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"155.00\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020401\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:31:09\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4010101', `balance12` = 11125.89, `updatedDate` = '2023-12-11 11:31:09'
+WHERE `COAID` = '4010101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('478', '2', 'JV-341', 'JV', '1153', '2023-12-11', '1020401', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '155.00', 0, 1, '4010101', '1', NULL, 1, '1', '2023-12-11 23:31:09');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 874, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"478\",\"fyear\":\"2\",\"VNo\":\"JV-341\",\"Vtype\":\"JV\",\"referenceNo\":\"1153\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020401\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"155.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4010101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:31:09\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020401', `balance12` = 10902.58, `updatedDate` = '2023-12-11 11:31:09'
+WHERE `COAID` = '1020401'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-341', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:31:09', `status` = 1
+WHERE `VNo` = 'JV-341';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('479', '2', 'JV-342', 'JV', '1153', '2023-12-11', '4021101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '8.55', '0.00', 0, 1, '5020101', '1', NULL, 1, '1', '2023-12-11 23:31:09');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 875, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"479\",\"fyear\":\"2\",\"VNo\":\"JV-342\",\"Vtype\":\"JV\",\"referenceNo\":\"1153\",\"VDate\":\"2023-12-11\",\"COAID\":\"4021101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"8.55\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"5020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:31:09\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4021101', `balance12` = 1281.16, `updatedDate` = '2023-12-11 11:31:10'
+WHERE `COAID` = '4021101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('479', '2', 'JV-342', 'JV', '1153', '2023-12-11', '5020101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.00', '8.55', 0, 1, '4021101', '1', NULL, 1, '1', '2023-12-11 23:31:09');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 876, 'acc_transaction', 'invoice/invoice/bdtask_manual_sales_insert', '{\"vid\":\"479\",\"fyear\":\"2\",\"VNo\":\"JV-342\",\"Vtype\":\"JV\",\"referenceNo\":\"1153\",\"VDate\":\"2023-12-11\",\"COAID\":\"5020101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"8.55\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4021101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 23:31:09\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '5020101', `balance12` = 1281.16, `updatedDate` = '2023-12-11 11:31:10'
+WHERE `COAID` = '5020101'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-342', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 23:31:09', `status` = 1
+WHERE `VNo` = 'JV-342';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2017, '3', NULL, '', '50.00', '17', '50', '', '0', '2.5', '5', '0.4', '1');
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2017, '31', NULL, '', '8', '2.1', '8', '', '0', '0.4', '5', '0', '1');
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2017, '4', '2023-12-11', '2023-12-11', '60.90', '0.00', '2.90', NULL, '0.00', '0.00', '0.00', NULL, '', '', 2017, '1', '', 1, 1, 0);
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '4', '2023-12-11', 'item');
+INSERT INTO `quotation_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2017, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '4', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2018, '21', NULL, '', '5', '2.1', '5', '', '0', '0.25', '5', '0.2625', '1');
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2018, '16', NULL, '', '5.25', '4.5', '5.25', '', '0', '0.2625', '5', '0', '1');
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2018, '7', '2023-12-11', '2023-12-11', '10.76', '0.00', '0.51', NULL, '0.00', '0.00', '0.00', NULL, '', '', 2018, '1', '', 1, 1, 0);
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '7', '2023-12-11', 'item');
+INSERT INTO `quotation_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2018, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '7', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `quotation` SET `status` = 2
+WHERE `quotation_id` = '2018';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2019, '7', '2023-12-11', '2023-12-11', '10.76', '0.00', '0.51', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2019, '1', '', 1, 1, 0);
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2019, '21', NULL, '', '5.00', '2.1', '5.00', '', '0.00', '0.25', '5.00', NULL, '1.00');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2019, '16', NULL, '', '5.25', '4.5', '5.25', '', '0.00', '0.26', '5.00', NULL, '1.00');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '7', '2023-12-11', 'item2018');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2019, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '7', '2023-12-11', 'serv2018');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `delivery` SET `quotation_id` = '5004', `customer_id` = '43', `quotdate` = '2023-11-25', `expire_date` = '2023-11-25', `item_total_amount` = '17.85', `item_total_dicount` = '0.00', `item_total_tax` = NULL, `item_total_vat` = '0.85', `service_total_amount` = '0.00', `service_total_discount` = '0.00', `service_total_vat` = '0.00', `service_total_tax` = NULL, `quot_dis_item` = '0.00', `quot_dis_service` = '0.00', `quot_no` = '5004', `create_by` = '1', `quot_description` = '', `status` = 1
+WHERE `quotation_id` = '5004';
+DELETE FROM `deli_products_used`
+WHERE `quot_id` = '5004';
+DELETE FROM `delivery_service_used`
+WHERE `quot_id` = '5004';
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES ('5004', '966', NULL, '', '10.00', '1.5', '10.00', '', '0.00', '0.50', '5.00', NULL, '1.00');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES ('5004', '1971', NULL, '', '7.00', '3', '7.00', '', '0.00', '0.35', '5.00', NULL, '1.00');
+INSERT INTO `delivery_taxinfo` (`customer_id`, `date`, `relation_id`) VALUES ('43', '2023-11-25', 'item5004');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES ('5004', '', '', '0.00', '', '', '', '', 0, '1.00');
+INSERT INTO `delivery_taxinfo` (`customer_id`, `date`, `relation_id`) VALUES ('43', '2023-11-25', 'serv5004');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (5005, '4', '2023-12-11', '2023-12-11', '73.50', '0.00', '3.50', NULL, '0.00', '0.00', '0.00', NULL, '', '', 5005, '1', '', 1, 1, 0);
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (5005, '34', NULL, '', '20', '15', '20', '', '0', '1', '5', '2.5', '1');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (5005, '3', NULL, '', '50.00', '17', '50', '', '0', '2.5', '5', '0', '1');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '4', '2023-12-11', 'item');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (5005, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '4', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2020, '4', '2023-12-11', '2023-12-11', '60.90', '0.00', '2.90', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2020, '1', '', 1, 1, 0);
+SET SESSION sql_mode = "";
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2021, '4', '2023-12-11', '2023-12-11', '60.90', '0.00', '2.90', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2021, '1', '', 1, 1, 0);
+SET SESSION sql_mode = "";
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2022, '4', '2023-12-11', '2023-12-11', '60.90', '0.00', '2.90', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2022, '1', '', 1, 1, 0);
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2023, '4', '2023-12-11', '2023-12-11', '60.90', '0.00', '2.90', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2023, '1', '', 1, 1, 0);
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+DELETE FROM `quotation`
+WHERE `quotation_id` = '2022';
+DELETE FROM `quot_products_used`
+WHERE `quot_id` = '2022';
+DELETE FROM `quotation_service_used`
+WHERE `quot_id` = '2022';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+DELETE FROM `quotation`
+WHERE `quotation_id` = '2021';
+DELETE FROM `quot_products_used`
+WHERE `quot_id` = '2021';
+DELETE FROM `quotation_service_used`
+WHERE `quot_id` = '2021';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+DELETE FROM `quotation`
+WHERE `quotation_id` = '2020';
+DELETE FROM `quot_products_used`
+WHERE `quot_id` = '2020';
+DELETE FROM `quotation_service_used`
+WHERE `quot_id` = '2020';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+DELETE FROM `quotation`
+WHERE `quotation_id` = '2019';
+DELETE FROM `quot_products_used`
+WHERE `quot_id` = '2019';
+DELETE FROM `quotation_service_used`
+WHERE `quot_id` = '2019';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2019, '4', '2023-12-11', '2023-12-11', '60.90', '0.00', '2.90', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2019, '1', '', 1, 1, 0);
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2019, '3', NULL, '', '50.00', '17', '50.00', '', '0.00', '2.50', '5.00', NULL, '1.00');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2019, '31', NULL, '', '8.00', '2.1', '8.00', '', '0.00', '0.40', '5.00', NULL, '1.00');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '4', '2023-12-11', 'item2017');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2019, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '4', '2023-12-11', 'serv2017');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (5006, '4', '2023-12-11', '2023-12-11', '131.25', '0.00', '6.25', NULL, '0.00', '0.00', '0.00', NULL, '', '', 5006, '1', '', 1, 1, 0);
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (5006, '12', NULL, '', '2.00', '0', '2', '', '0', '0.1', '5', '6.15', '1');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (5006, '2', NULL, '', '123.00', '18', '123', '', '0', '6.15', '5', '0', '1');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '4', '2023-12-11', 'item');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (5006, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '4', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2019, '27', NULL, '', '3.00', '1.75', '3', '', '0', '0.15', '5', '6', '1');
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2019, '1', NULL, '', '120.00', '115', '120', '', '0', '6', '5', '0', '1');
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2019, '3', '2023-12-11', '2023-12-11', '129.15', '0.00', '6.15', NULL, '0.00', '0.00', '0.00', NULL, '', '', 2019, '1', '', 1, 1, 0);
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '3', '2023-12-11', 'item');
+INSERT INTO `quotation_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2019, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '3', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2020, '3', '2023-12-11', '2023-12-11', '129.15', '0.00', '6.15', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2020, '1', '', 1, 1, 0);
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2020, '27', NULL, '', '3.00', '1.75', '3.00', '', '0.00', '0.15', '5.00', NULL, '1.00');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2020, '1', NULL, '', '120.00', '115', '120.00', '', '0.00', '6.00', '5.00', NULL, '1.00');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '3', '2023-12-11', 'item2019');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2020, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '3', '2023-12-11', 'serv2019');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2020, '2', NULL, '', '123.00', '18', '123', '', '0', '6.15', '5', '0.1', '1');
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2020, '12', NULL, '', '2.00', '0', '2', '', '0', '0.1', '5', '0', '1');
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2020, '24', '2023-12-11', '2023-12-11', '131.25', '0.00', '6.25', NULL, '0.00', '0.00', '0.00', NULL, '', '', 2020, '1', '', 1, 1, 0);
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'item');
+INSERT INTO `quotation_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2020, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2021, '24', '2023-12-11', '2023-12-11', '131.25', '0.00', '6.25', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2021, '1', '', 1, 1, 0);
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2021, '2', NULL, '', '123.00', '18', '123.00', '', '0.00', '6.15', '5.00', NULL, '1.00');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2021, '12', NULL, '', '2.00', '0', '2.00', '', '0.00', '0.10', '5.00', NULL, '1.00');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'item2020');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2021, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'serv2020');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (5007, '24', '2023-12-11', '2023-12-11', '131.25', '0.00', '6.25', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 5007, '1', '', 1, 1, 0);
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (5007, '2', NULL, '', '123.00', '18', '123.00', '', '0.00', '6.15', '5.00', NULL, '1.00');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (5007, '12', NULL, '', '2.00', '0', '2.00', '', '0.00', '0.10', '5.00', NULL, '1.00');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'item2020');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (5007, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'serv2020');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (5008, '24', '2023-12-11', '2023-12-11', '131.25', '0.00', '6.25', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 5008, '1', '', 1, 1, 0);
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (5008, '2', NULL, '', '123.00', '18', '123.00', '', '0.00', '6.15', '5.00', NULL, '1.00');
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (5008, '12', NULL, '', '2.00', '0', '2.00', '', '0.00', '0.10', '5.00', NULL, '1.00');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'item2020');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (5008, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'serv2020');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `quotation` SET `status` = 2
+WHERE `quotation_id` = '2020';
+INSERT INTO `invoice` (`invoice_id`, `customer_id`, `date`, `total_amount`, `paid_amount`, `total_tax`, `invoice`, `invoice_details`, `invoice_discount`, `total_discount`, `total_vat_amnt`, `prevous_due`, `due_amount`, `shipping_cost`, `sales_by`, `status`, `payment_type`, `bank_id`, `is_fixed`, `is_dynamic`, `no_of_credit_days`) VALUES (1154, '24', '2023-12-11', '131.25', '131.25', NULL, 1154, '2020', '0.00', '0.00', '6.25', '', '', '', '1', 1, 1, NULL, 1, 0, '');
+INSERT INTO `tax_collection` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 1154);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`, `Debit`, `Credit`) VALUES ('2', 'CV-131', 'CV', 1154, '2023-12-11', '1020101', 'Sales Voucher', 'Sales Voucher for customer', '3010301', 0, '1', '2023-12-11 22:41:16', 0, '131.25', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-343', 'JV', 1154, '2023-12-11', '4010101', 'Sales cost of goods Voucher', 'Sales cost of goods Voucher for customer', 15, '1020401', 0, '1', '2023-12-11 22:41:16', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-344', 'JV', 1154, '2023-12-11', '4021101', 'Tax for Sales Voucher', 'Tax for Sales Voucher for customer', '6.25', '5020101', 0, '1', '2023-12-11 22:41:16', 0);
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('115816587553582', 155, '2', NULL, '1.00', '123.00', '0.00', '', '', '6.15', '5.00', '0.00', '131.25', '', '18', '123.00', 1);
+UPDATE `product_information` SET `price` = '123.00'
+WHERE `product_id` = '2';
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('742776168593255', 155, '12', NULL, '1.00', '2.00', '0.00', '', '', '0.10', '5.00', '0.00', '131.25', '', '0', '2.00', 1);
+UPDATE `product_information` SET `price` = '2.00'
+WHERE `product_id` = '12';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('480', '2', 'CV-131', 'CV', '1154', '2023-12-11', '1020101', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '131.25', '0.00', 0, 1, '3010301', '1', NULL, 1, '1', '2023-12-11 22:41:17');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 877, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"480\",\"fyear\":\"2\",\"VNo\":\"CV-131\",\"Vtype\":\"CV\",\"referenceNo\":\"1154\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020101\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"131.25\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"3010301\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:41:17\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020101', `balance12` = 15635.13, `updatedDate` = '2023-12-11 10:41:17'
+WHERE `COAID` = '1020101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('480', '2', 'CV-131', 'CV', '1154', '2023-12-11', '3010301', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '0.00', '131.25', 0, 1, '1020101', '1', NULL, 1, '1', '2023-12-11 22:41:17');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 878, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"480\",\"fyear\":\"2\",\"VNo\":\"CV-131\",\"Vtype\":\"CV\",\"referenceNo\":\"1154\",\"VDate\":\"2023-12-11\",\"COAID\":\"3010301\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"131.25\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:41:17\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '3010301', `balance12` = 42250.27, `updatedDate` = '2023-12-11 10:41:17'
+WHERE `COAID` = '3010301'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'CV-131', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:41:17', `status` = 1
+WHERE `VNo` = 'CV-131';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('481', '2', 'JV-343', 'JV', '1154', '2023-12-11', '4010101', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '15.00', '0.00', 0, 1, '1020401', '1', NULL, 1, '1', '2023-12-11 22:41:17');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 879, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"481\",\"fyear\":\"2\",\"VNo\":\"JV-343\",\"Vtype\":\"JV\",\"referenceNo\":\"1154\",\"VDate\":\"2023-12-11\",\"COAID\":\"4010101\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"15.00\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020401\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:41:17\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4010101', `balance12` = 11140.89, `updatedDate` = '2023-12-11 10:41:18'
+WHERE `COAID` = '4010101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('481', '2', 'JV-343', 'JV', '1154', '2023-12-11', '1020401', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '15.00', 0, 1, '4010101', '1', NULL, 1, '1', '2023-12-11 22:41:17');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 880, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"481\",\"fyear\":\"2\",\"VNo\":\"JV-343\",\"Vtype\":\"JV\",\"referenceNo\":\"1154\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020401\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"15.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4010101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:41:17\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020401', `balance12` = 10887.58, `updatedDate` = '2023-12-11 10:41:18'
+WHERE `COAID` = '1020401'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-343', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:41:17', `status` = 1
+WHERE `VNo` = 'JV-343';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('482', '2', 'JV-344', 'JV', '1154', '2023-12-11', '4021101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '6.25', '0.00', 0, 1, '5020101', '1', NULL, 1, '1', '2023-12-11 22:41:18');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 881, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"482\",\"fyear\":\"2\",\"VNo\":\"JV-344\",\"Vtype\":\"JV\",\"referenceNo\":\"1154\",\"VDate\":\"2023-12-11\",\"COAID\":\"4021101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"6.25\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"5020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:41:18\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4021101', `balance12` = 1287.41, `updatedDate` = '2023-12-11 10:41:18'
+WHERE `COAID` = '4021101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('482', '2', 'JV-344', 'JV', '1154', '2023-12-11', '5020101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.00', '6.25', 0, 1, '4021101', '1', NULL, 1, '1', '2023-12-11 22:41:18');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 882, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"482\",\"fyear\":\"2\",\"VNo\":\"JV-344\",\"Vtype\":\"JV\",\"referenceNo\":\"1154\",\"VDate\":\"2023-12-11\",\"COAID\":\"5020101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"6.25\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4021101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:41:18\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '5020101', `balance12` = 1287.41, `updatedDate` = '2023-12-11 10:41:18'
+WHERE `COAID` = '5020101'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-344', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:41:18', `status` = 1
+WHERE `VNo` = 'JV-344';
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-345', 'JV', 'serv-1', '2023-12-11', '4021101', 'Tax for Service Sales Voucher', 'Tax for Service Sales Voucher for customer', '0.00', '5020101', 0, '1', '2023-12-11 22:41:18', 0);
+INSERT INTO `tax_collection` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '24', '2023-12-11', 'serv-1');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2021, '2', NULL, '', '123.00', '18', '123', '', '0', '6.15', '5', NULL, '1');
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2021, '7', '2023-12-11', '2023-12-11', '129.15', '0.00', '6.15', NULL, '0.00', '0.00', '0.00', NULL, '', '', 2021, '1', '', 1, 1, 0);
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '7', '2023-12-11', 'item');
+INSERT INTO `quotation_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2021, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '7', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `quotation` SET `status` = 2
+WHERE `quotation_id` = '2021';
+INSERT INTO `invoice` (`invoice_id`, `customer_id`, `date`, `total_amount`, `paid_amount`, `total_tax`, `invoice`, `invoice_details`, `invoice_discount`, `total_discount`, `total_vat_amnt`, `prevous_due`, `due_amount`, `shipping_cost`, `sales_by`, `status`, `payment_type`, `bank_id`, `is_fixed`, `is_dynamic`, `no_of_credit_days`) VALUES (1155, '7', '2023-12-11', '129.15', '129.15', NULL, 1155, '2021', '0.00', '0.00', '6.15', '', '', '', '1', 1, 1, NULL, 1, 0, '');
+INSERT INTO `tax_collection` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '7', '2023-12-11', 1155);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`, `Debit`, `Credit`) VALUES ('2', 'CV-132', 'CV', 1155, '2023-12-11', '1020101', 'Sales Voucher', 'Sales Voucher for customer', '3010301', 0, '1', '2023-12-11 22:51:20', 0, '129.15', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-346', 'JV', 1155, '2023-12-11', '4010101', 'Sales cost of goods Voucher', 'Sales cost of goods Voucher for customer', 15, '1020401', 0, '1', '2023-12-11 22:51:20', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-347', 'JV', 1155, '2023-12-11', '4021101', 'Tax for Sales Voucher', 'Tax for Sales Voucher for customer', '6.15', '5020101', 0, '1', '2023-12-11 22:51:20', 0);
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('937953242155131', 156, '2', NULL, '1.00', '123.00', '0.00', '', '', '6.15', '5.00', '0.00', '129.15', '', '18', '123.00', 1);
+UPDATE `product_information` SET `price` = '123.00'
+WHERE `product_id` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('484', '2', 'CV-132', 'CV', '1155', '2023-12-11', '1020101', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '129.15', '0.00', 0, 1, '3010301', '1', NULL, 1, '1', '2023-12-11 22:51:20');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 883, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"484\",\"fyear\":\"2\",\"VNo\":\"CV-132\",\"Vtype\":\"CV\",\"referenceNo\":\"1155\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020101\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"129.15\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"3010301\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:51:20\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020101', `balance12` = 15764.28, `updatedDate` = '2023-12-11 10:51:20'
+WHERE `COAID` = '1020101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('484', '2', 'CV-132', 'CV', '1155', '2023-12-11', '3010301', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '0.00', '129.15', 0, 1, '1020101', '1', NULL, 1, '1', '2023-12-11 22:51:20');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 884, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"484\",\"fyear\":\"2\",\"VNo\":\"CV-132\",\"Vtype\":\"CV\",\"referenceNo\":\"1155\",\"VDate\":\"2023-12-11\",\"COAID\":\"3010301\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"129.15\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:51:20\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '3010301', `balance12` = 42379.42, `updatedDate` = '2023-12-11 10:51:21'
+WHERE `COAID` = '3010301'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'CV-132', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:51:20', `status` = 1
+WHERE `VNo` = 'CV-132';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('485', '2', 'JV-346', 'JV', '1155', '2023-12-11', '4010101', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '15.00', '0.00', 0, 1, '1020401', '1', NULL, 1, '1', '2023-12-11 22:51:21');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 885, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"485\",\"fyear\":\"2\",\"VNo\":\"JV-346\",\"Vtype\":\"JV\",\"referenceNo\":\"1155\",\"VDate\":\"2023-12-11\",\"COAID\":\"4010101\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"15.00\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020401\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:51:21\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4010101', `balance12` = 11155.89, `updatedDate` = '2023-12-11 10:51:21'
+WHERE `COAID` = '4010101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('485', '2', 'JV-346', 'JV', '1155', '2023-12-11', '1020401', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '15.00', 0, 1, '4010101', '1', NULL, 1, '1', '2023-12-11 22:51:21');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 886, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"485\",\"fyear\":\"2\",\"VNo\":\"JV-346\",\"Vtype\":\"JV\",\"referenceNo\":\"1155\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020401\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"15.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4010101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:51:21\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020401', `balance12` = 10872.58, `updatedDate` = '2023-12-11 10:51:21'
+WHERE `COAID` = '1020401'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-346', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:51:21', `status` = 1
+WHERE `VNo` = 'JV-346';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('486', '2', 'JV-347', 'JV', '1155', '2023-12-11', '4021101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '6.15', '0.00', 0, 1, '5020101', '1', NULL, 1, '1', '2023-12-11 22:51:21');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 887, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"486\",\"fyear\":\"2\",\"VNo\":\"JV-347\",\"Vtype\":\"JV\",\"referenceNo\":\"1155\",\"VDate\":\"2023-12-11\",\"COAID\":\"4021101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"6.15\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"5020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:51:21\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4021101', `balance12` = 1293.56, `updatedDate` = '2023-12-11 10:51:21'
+WHERE `COAID` = '4021101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('486', '2', 'JV-347', 'JV', '1155', '2023-12-11', '5020101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.00', '6.15', 0, 1, '4021101', '1', NULL, 1, '1', '2023-12-11 22:51:21');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 888, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"486\",\"fyear\":\"2\",\"VNo\":\"JV-347\",\"Vtype\":\"JV\",\"referenceNo\":\"1155\",\"VDate\":\"2023-12-11\",\"COAID\":\"5020101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"6.15\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4021101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:51:21\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '5020101', `balance12` = 1293.56, `updatedDate` = '2023-12-11 10:51:21'
+WHERE `COAID` = '5020101'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-347', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:51:21', `status` = 1
+WHERE `VNo` = 'JV-347';
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-348', 'JV', 'serv-1', '2023-12-11', '4021101', 'Tax for Service Sales Voucher', 'Tax for Service Sales Voucher for customer', '0.00', '5020101', 0, '1', '2023-12-11 22:51:21', 0);
+INSERT INTO `tax_collection` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '7', '2023-12-11', 'serv-1');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2022, '2', NULL, '', '123.00', '18', '123', '', '0', '6.15', '5', NULL, '1');
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2022, '5', '2023-12-11', '2023-12-11', '129.15', '0.00', '6.15', NULL, '0.00', '0.00', '0.00', NULL, '', '', 2022, '1', '', 1, 1, 0);
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '5', '2023-12-11', 'item');
+INSERT INTO `quotation_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2022, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '5', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `quotation` SET `status` = 2
+WHERE `quotation_id` = '2022';
+INSERT INTO `invoice` (`invoice_id`, `customer_id`, `date`, `total_amount`, `paid_amount`, `total_tax`, `invoice`, `invoice_details`, `invoice_discount`, `total_discount`, `total_vat_amnt`, `prevous_due`, `due_amount`, `shipping_cost`, `sales_by`, `status`, `payment_type`, `bank_id`, `is_fixed`, `is_dynamic`, `no_of_credit_days`) VALUES (1156, '5', '2023-12-11', '129.15', '129.15', NULL, 1156, '2022', '0.00', '0.00', '6.15', '', '', '', '1', 1, 1, NULL, 1, 0, '10');
+INSERT INTO `tax_collection` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '5', '2023-12-11', 1156);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`, `Debit`, `Credit`) VALUES ('2', 'CV-133', 'CV', 1156, '2023-12-11', '1020101', 'Sales Voucher', 'Sales Voucher for customer', '3010301', 0, '1', '2023-12-11 22:57:31', 0, '129.15', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-349', 'JV', 1156, '2023-12-11', '4010101', 'Sales cost of goods Voucher', 'Sales cost of goods Voucher for customer', 15, '1020401', 0, '1', '2023-12-11 22:57:31', 0);
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-350', 'JV', 1156, '2023-12-11', '4021101', 'Tax for Sales Voucher', 'Tax for Sales Voucher for customer', '6.15', '5020101', 0, '1', '2023-12-11 22:57:31', 0);
+INSERT INTO `invoice_details` (`invoice_details_id`, `invoice_id`, `product_id`, `batch_id`, `quantity`, `rate`, `discount`, `description`, `discount_per`, `vat_amnt`, `vat_amnt_per`, `tax`, `paid_amount`, `due_amount`, `supplier_rate`, `total_price`, `status`) VALUES ('727971377851711', 157, '2', NULL, '1.00', '123.00', '0.00', '', '', '6.15', '5.00', '0.00', '129.15', '', '18', '123.00', 1);
+UPDATE `product_information` SET `price` = '123.00'
+WHERE `product_id` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('488', '2', 'CV-133', 'CV', '1156', '2023-12-11', '1020101', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '129.15', '0.00', 0, 1, '3010301', '1', NULL, 1, '1', '2023-12-11 22:57:31');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 889, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"488\",\"fyear\":\"2\",\"VNo\":\"CV-133\",\"Vtype\":\"CV\",\"referenceNo\":\"1156\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020101\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"129.15\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"3010301\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:57:31\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020101', `balance12` = 15893.43, `updatedDate` = '2023-12-11 10:57:32'
+WHERE `COAID` = '1020101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('488', '2', 'CV-133', 'CV', '1156', '2023-12-11', '3010301', 'Sales Voucher', '', NULL, '0', 'Sales Voucher for customer', '0.00', '129.15', 0, 1, '1020101', '1', NULL, 1, '1', '2023-12-11 22:57:31');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 890, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"488\",\"fyear\":\"2\",\"VNo\":\"CV-133\",\"Vtype\":\"CV\",\"referenceNo\":\"1156\",\"VDate\":\"2023-12-11\",\"COAID\":\"3010301\",\"Narration\":\"Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"129.15\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:57:31\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '3010301', `balance12` = 42508.57, `updatedDate` = '2023-12-11 10:57:32'
+WHERE `COAID` = '3010301'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'CV-133', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:57:31', `status` = 1
+WHERE `VNo` = 'CV-133';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('489', '2', 'JV-349', 'JV', '1156', '2023-12-11', '4010101', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '15.00', '0.00', 0, 1, '1020401', '1', NULL, 1, '1', '2023-12-11 22:57:32');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 891, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"489\",\"fyear\":\"2\",\"VNo\":\"JV-349\",\"Vtype\":\"JV\",\"referenceNo\":\"1156\",\"VDate\":\"2023-12-11\",\"COAID\":\"4010101\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"15.00\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"1020401\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:57:32\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4010101', `balance12` = 11170.89, `updatedDate` = '2023-12-11 10:57:32'
+WHERE `COAID` = '4010101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('489', '2', 'JV-349', 'JV', '1156', '2023-12-11', '1020401', 'Sales cost of goods Voucher', '', NULL, '0', 'Sales cost of goods Voucher for customer', '0.00', '15.00', 0, 1, '4010101', '1', NULL, 1, '1', '2023-12-11 22:57:32');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 892, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"489\",\"fyear\":\"2\",\"VNo\":\"JV-349\",\"Vtype\":\"JV\",\"referenceNo\":\"1156\",\"VDate\":\"2023-12-11\",\"COAID\":\"1020401\",\"Narration\":\"Sales cost of goods Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Sales cost of goods Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"15.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4010101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:57:32\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '1020401', `balance12` = 10857.58, `updatedDate` = '2023-12-11 10:57:32'
+WHERE `COAID` = '1020401'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-349', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:57:32', `status` = 1
+WHERE `VNo` = 'JV-349';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('490', '2', 'JV-350', 'JV', '1156', '2023-12-11', '4021101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '6.15', '0.00', 0, 1, '5020101', '1', NULL, 1, '1', '2023-12-11 22:57:33');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_transation', 'create', 893, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"490\",\"fyear\":\"2\",\"VNo\":\"JV-350\",\"Vtype\":\"JV\",\"referenceNo\":\"1156\",\"VDate\":\"2023-12-11\",\"COAID\":\"4021101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"6.15\",\"Credit\":\"0.00\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"5020101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:57:33\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '4021101', `balance12` = 1299.71, `updatedDate` = '2023-12-11 10:57:33'
+WHERE `COAID` = '4021101'
+AND `fyear` = '2';
+INSERT INTO `acc_transaction` (`vid`, `fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `chequeNo`, `chequeDate`, `isHonour`, `ledgerComment`, `Debit`, `Credit`, `StoreID`, `IsPosted`, `RevCodde`, `subType`, `subCode`, `IsAppove`, `CreateBy`, `CreateDate`) VALUES ('490', '2', 'JV-350', 'JV', '1156', '2023-12-11', '5020101', 'Tax for Sales Voucher', '', NULL, '0', 'Tax for Sales Voucher for customer', '0.00', '6.15', 0, 1, '4021101', '1', NULL, 1, '1', '2023-12-11 22:57:33');
+INSERT INTO `activity_logs` (`user_id`, `type`, `action`, `action_id`, `table_name`, `slug`, `form_data`, `status`) VALUES ('1', 'approved_vaucher_reversetransation', 'create', 894, 'acc_transaction', 'quotation/quotation/add_quotation_to_invoice', '{\"vid\":\"490\",\"fyear\":\"2\",\"VNo\":\"JV-350\",\"Vtype\":\"JV\",\"referenceNo\":\"1156\",\"VDate\":\"2023-12-11\",\"COAID\":\"5020101\",\"Narration\":\"Tax for Sales Voucher\",\"chequeNo\":\"\",\"chequeDate\":null,\"isHonour\":\"0\",\"ledgerComment\":\"Tax for Sales Voucher for customer\",\"Debit\":\"0.00\",\"Credit\":\"6.15\",\"StoreID\":0,\"IsPosted\":1,\"RevCodde\":\"4021101\",\"subType\":\"1\",\"subCode\":null,\"IsAppove\":1,\"CreateBy\":\"1\",\"CreateDate\":\"2023-12-11 22:57:33\"}', 1);
+UPDATE `acc_monthly_balance` SET `fyear` = '2', `COAID` = '5020101', `balance12` = 1299.71, `updatedDate` = '2023-12-11 10:57:33'
+WHERE `COAID` = '5020101'
+AND `fyear` = '2';
+UPDATE `acc_vaucher` SET `VNo` = 'JV-350', `isApproved` = 1, `approvedBy` = '1', `approvedDate` = '2023-12-11 22:57:33', `status` = 1
+WHERE `VNo` = 'JV-350';
+INSERT INTO `acc_vaucher` (`fyear`, `VNo`, `Vtype`, `referenceNo`, `VDate`, `COAID`, `Narration`, `ledgerComment`, `Debit`, `RevCodde`, `isApproved`, `CreateBy`, `CreateDate`, `status`) VALUES ('2', 'JV-351', 'JV', 'serv-1', '2023-12-11', '4021101', 'Tax for Service Sales Voucher', 'Tax for Service Sales Voucher for customer', '0.00', '5020101', 0, '1', '2023-12-11 22:57:33', 0);
+INSERT INTO `tax_collection` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '5', '2023-12-11', 'serv-1');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `delivery` SET `status` = 2
+WHERE `quotation_id` = 2023;
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `delivery` SET `delivery_status` = 2
+WHERE `quotation_id` = 2023;
+SET SESSION sql_mode = "";
+UPDATE `quotation` SET `delivery_status` = 2
+WHERE `quotation_id` = 2023;
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+UPDATE `quotation` SET `delivery_status` = 2
+WHERE `quotation_id` = '2022';
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `quot_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2023, '27', NULL, '', '3.00', '1.75', '3', '', '0', '0.15', '5', NULL, '1');
+INSERT INTO `quotation` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`) VALUES (2023, '6', '2023-12-11', '2023-12-11', '3.15', '0.00', '0.15', NULL, '0.00', '0.00', '0.00', NULL, '', '', 2023, '1', '', 1, 1, 0);
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '6', '2023-12-11', 'item');
+INSERT INTO `quotation_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2023, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `quotation_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '6', '2023-12-11', 'serv');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+INSERT INTO `delivery` (`quotation_id`, `customer_id`, `quotdate`, `expire_date`, `item_total_amount`, `item_total_dicount`, `item_total_vat`, `item_total_tax`, `service_total_amount`, `service_total_discount`, `service_total_vat`, `service_total_tax`, `quot_dis_item`, `quot_dis_service`, `quot_no`, `create_by`, `quot_description`, `status`, `is_fixed`, `is_dynamic`, `quotation_main_id`) VALUES (2024, '6', '2023-12-11', '2023-12-11', '3.15', '0.00', '0.15', NULL, '0.00', '0.00', '0.00', NULL, '0.00', '0.00', 2024, '1', '', 1, 1, 0, '2023');
+UPDATE `quotation` SET `delivery_status` = 2
+WHERE `quotation_id` = '2023';
+INSERT INTO `deli_products_used` (`quot_id`, `product_id`, `batch_id`, `description`, `rate`, `supplier_rate`, `total_price`, `discount_per`, `discount`, `vat_amnt`, `vat_per`, `tax`, `used_qty`) VALUES (2024, '27', NULL, '', '3.00', '1.75', '3.00', '', '0.00', '0.15', '5.00', NULL, '1.00');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '6', '2023-12-11', 'item2023');
+INSERT INTO `delivery_service_used` (`quot_id`, `service_id`, `charge`, `total`, `discount`, `discount_amount`, `vat_per`, `vat_amnt`, `tax`, `qty`) VALUES (2024, '', '', '0.00', '', '', '', '', NULL, '');
+INSERT INTO `delivery_taxinfo` (`tax0`, `tax1`, `customer_id`, `date`, `relation_id`) VALUES (NULL, NULL, '6', '2023-12-11', 'serv2023');
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";
+SET SESSION sql_mode = "";

@@ -329,5 +329,19 @@ class Quotation_model extends CI_Model {
            return false;
        }
     }
+
+    public function delivery_entry($data) {
+        $this->db->select('*');
+        $this->db->from('delivery');
+        $this->db->where('quot_no', $data['quot_no']);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return FALSE;
+        } else {
+            
+            $this->db->insert('delivery', $data);
+            return TRUE;
+        }
+    }
 }
 
