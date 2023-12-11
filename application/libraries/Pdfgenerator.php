@@ -2,7 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 define('DOMPDF_ENABLE_AUTOLOAD', false);
-require_once("./vendor/dompdf/dompdf/dompdf_config.inc.php");
+// require_once("./vendor/dompdf/dompdf/dompdf_config.inc.php");
+require_once FCPATH . 'vendor/dompdf/dompdf/src/Dompdf.php';  // Adjust the path accordingly
+
 
 class Pdfgenerator {
 

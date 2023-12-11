@@ -7,5 +7,6 @@ $route['manage_quotation/(:num)']  = "quotation/quotation/manage_quotation/$1";
 $route['quotation_to_sales/(:any)']= "quotation/quotation/quotation_to_sales/$1";
 $route['quotation_details/(:any)']= "quotation/quotation/quotation_details_data/$1";
 $route['edit_quotation/(:any)']   = "quotation/quotation/quotation_edit/$1";
+$route['quotation_to_delivery/(:any)']= "quotation/quotation/quotation_to_delivery/$1";
 
 

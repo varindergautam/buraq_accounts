@@ -1,5 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+// ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
+
  #------------------------------------    
     # Author: Bdtask Ltd
     # Author link: https://www.bdtask.com/
@@ -530,7 +536,7 @@ class Quotation extends MX_Controller {
             $no_of_credit_day = $cusifo->no_of_credit_days;
             $headn        = $customer_id.'-'.$cusifo->customer_name;
             $coainfo      = $this->db->select('*')->from('acc_coa')->where('HeadName',$headn)->get()->row();
-            $customer_headcode = $coainfo->HeadCode;
+            // $customer_headcode = $coainfo->HeadCode;
             $bank_id      = $this->input->post('bank_id',TRUE);
             if(!empty($bank_id)){
                 $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id',$bank_id)->get()->row()->bank_name;
@@ -624,7 +630,7 @@ class Quotation extends MX_Controller {
 
             if (!empty($quantity)) {
                 $this->db->insert('invoice', $datainvmain);
-                $inv_insert_id =  $this->db->insert_id();  
+                $inv_insert_id =  $this->db->insert_id();
                 $this->db->insert('tax_collection',$taxdata);
                 $multipayamount = $this->input->post('pamount_by_method',TRUE);
                 $multipaytype   = $this->input->post('multipaytype',TRUE);
@@ -638,7 +644,7 @@ class Quotation extends MX_Controller {
 
             if($multipaytype && $multipayamount){
 
-                
+                $is_credit = NULL;
                 $amnt_type = 'Debit';
                 for ($i=0; $i < count($multipaytype); $i++) {
 
@@ -670,7 +676,6 @@ class Quotation extends MX_Controller {
             $this->insert_sale_taxvoucher($invoice_id,$taxCOAID,$taxvalue,$taxNarration,$taxComment,$taxreVID);
             // for taxs end
 
-
             $rate                = $this->input->post('product_rate',TRUE);
             $p_id                = $this->input->post('product_id',TRUE);
             $total_amount        = $this->input->post('total_price',TRUE);
@@ -687,14 +692,14 @@ class Quotation extends MX_Controller {
                 $product_quantity = $quantity[$i];
                 $product_rate     = $rate[$i];
                 $product_id       = $p_id[$i];
-                $serial_no        = $serial_n[$i];
+                $serial_no        = isset($serial_n) ? $serial_n[$i] : NULL;
                 $total_price      = $total_amount[$i];
                 $supplier_rate    = $supplier_price[$i];
                 $disper           = $discount_per[$i];
                 $discount         = $discount_rate[$i];
                 $vatamnt          = $vat_amnt[$i];
                 $vatamntpcnt      = $vat_amnt_pcnt[$i];
-                $tax              = $tax_amount[$i];
+                $tax              = isset($tax_amount[$i]) ? $tax_amount[$i] : '0.00';
                 $description      = $invoice_description[$i];
             
                 $invoiceDetails = array(
@@ -779,7 +784,6 @@ class Quotation extends MX_Controller {
             
             );
 
-
             if (!empty($squantity) && $squantity[0] != '') {
                 $this->db->insert('service_invoice', $serviceinvoice);
                 $serv_insert_id =  $this->db->insert_id();  
@@ -796,7 +800,7 @@ class Quotation extends MX_Controller {
             $Commentserv        = "Service Sales Voucher for customer";
             $reVIDserv          = $predefine_account->serviceCode;
 
-            if($smultipaytype && $smultipayamount){
+            if(isset($smultipaytype) && $smultipaytype && $smultipayamount){
 
                 $amnt_type = 'Debit';
                 for ($i=0; $i < count($smultipaytype); $i++) {
@@ -832,6 +836,7 @@ class Quotation extends MX_Controller {
             $tax_amount          = $this->input->post('stax',TRUE);
             $invoice_description = $this->input->post('details',TRUE);
 
+            if(isset($serv_insert_id)) {
             for ($i = 0, $n   = count($serv_id); $i < $n; $i++) {
                 $service_qty  = $qty[$i];
                 $service_rate = $srate[$i];
@@ -874,6 +879,7 @@ class Quotation extends MX_Controller {
                     }
                 }
             }
+        }
 
             for($j=0;$j<$num_column;$j++){
                 $taxfield = 'tax'.$j;
@@ -1260,7 +1266,7 @@ class Quotation extends MX_Controller {
 
         $this->load->library('pdfgenerator');
         $html = $this->load->view('invoice/invoice_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();
@@ -1684,5 +1690,55 @@ class Quotation extends MX_Controller {
         redirect("manage_quotation");
     }
 
+    // Quotation To Delivery
+    public function quotation_to_delivery($quot_id = null) {
+        $vat_tax_info   = $this->quotation_model->vat_tax_setting();
+        $data['quot_main']       = $this->quotation_model->quot_main_edit($quot_id);
+        
+        if ($data['quot_main'][0]['is_dynamic'] ==1) {
+            if ($data['quot_main'][0]['is_dynamic'] != $vat_tax_info->dynamic_tax) {
 
+                $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
+                redirect("manage_quotation");
+            }
+            
+        }
+        elseif ($data['quot_main'][0]['is_fixed'] ==1) {
+            if ($data['quot_main'][0]['is_fixed'] != $vat_tax_info->fixed_tax) {
+
+                $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
+                redirect("manage_quotation");
+            }
+        }
+        $taxfield = $this->db->select('tax_name,default_value')
+                ->from('tax_settings')
+                ->get()
+                ->result_array();
+            
+        $tablecolumn = $this->db->list_fields('tax_collection');
+                $num_column = count($tablecolumn)-4;       
+        $currency_details        = $this->quotation_model->setting_data();
+        $data['currency_details'] = $currency_details;
+        $data['title']           = display('quotation_to_delivery');
+        $data['quot_product']    = $this->quotation_model->quot_product_detail($quot_id);
+        $data['quot_service']    = $this->quotation_model->quot_service_detail($quot_id);
+        $data['customer_info']   = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
+        $data['itemtaxin']       = $this->quotation_model->itemtaxdetails($data['quot_main'][0]['quot_no']);
+        $data['servicetaxin']    = $this->quotation_model->servicetaxdetails($data['quot_main'][0]['quot_no']);
+        $data['taxes']           = $taxfield;
+        $data['taxnumber']       = $num_column;
+        $data['customers']       = $this->quotation_model->get_allcustomer();
+        $data['get_productlist'] = $this->quotation_model->get_allproduct();
+        $data['all_pmethod']     = $this->quotation_model->pmethod_dropdown();
+        $data['module']          = "quotation";
+        $vatortax              = $this->quotation_model->vat_tax_setting();
+        if($vatortax->fixed_tax == 1){
+            
+            $data['page']            = "quotation_to_sales"; 
+        }
+        if($vatortax->dynamic_tax == 1){
+            $data['page']          = "quotation_to_sales_dynamic"; 
+        }
+        echo modules::run('template/layout', $data);
+    }
 }

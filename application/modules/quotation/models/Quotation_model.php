@@ -85,7 +85,7 @@ class Quotation_model extends CI_Model {
                         a.due_amount as due_amount'
                     );
         $this->db->from('invoice a');
-        $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
+        $this->db->join('invoice_details c', 'c.invoice_id = a.id');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->join('product_information d', 'd.product_id = c.product_id');
         $this->db->where('a.invoice_id', $invoice_id);
