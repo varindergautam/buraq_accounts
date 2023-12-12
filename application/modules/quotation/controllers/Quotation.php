@@ -321,7 +321,7 @@ class Quotation extends MX_Controller
         $email   = $data['customer_info'][0]['customer_email'];
         $this->load->library('pdfgenerator');
         $html   = $this->load->view('quotation/quotation_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();
@@ -1347,7 +1347,7 @@ class Quotation extends MX_Controller
         );
         $this->load->library('pdfgenerator');
         $html = $this->load->view('service/invoice_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();
@@ -1665,7 +1665,7 @@ class Quotation extends MX_Controller
         $data['currency_details'] = $currency_details;
 
         $this->load->library('pdfgenerator');
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $page = $this->load->view('quotation/quotation_download', $data, true);
         $file_name = time();
         $dompdf->load_html($page);

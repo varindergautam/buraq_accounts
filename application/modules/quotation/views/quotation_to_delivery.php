@@ -8,7 +8,7 @@
         <div class="panel panel-bd lobidrag">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <h4><?php echo display('add_to_invoice') ?> </h4>
+                    <h4>Add To Delivery Note </h4>
                 </div>
             </div>
             <?php echo form_open_multipart('quotation/quotation/add_quotation_to_delivery', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
@@ -34,10 +34,10 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <label for="quotation_no" class="col-sm-4 col-form-label"><?php echo display('quotation_no') ?>
+                        <label for="quotation_no" class="col-sm-4 col-form-label"><?php echo "Delivery No." ?>
                         </label>
                         <div class="col-sm-8">
-                            <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo display('quotation_no') ?>" value="<?php echo $quot_main[0]['quot_no']; ?>" readonly>
+                            <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo "Delivery No." ?>" value="<?php echo $quot_main[0]['quot_no']; ?>" readonly>
                             <input type="hidden" name="quotation_id" id="quotation_id" class="form-control" value="<?php echo $quot_main[0]['quotation_id']; ?>" readonly>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <label for="qdate" class="col-sm-4 col-form-label"><?php echo display('quotation_date') ?>
+                        <label for="qdate" class="col-sm-4 col-form-label"><?php echo "Delivery Date" ?>
                         </label>
                         <div class="col-sm-8">
                             <input type="text" name="qdate" class="form-control" id="qdate" value="<?php echo $quot_main[0]['quotdate']; ?>" readonly>
@@ -327,7 +327,7 @@
 
                 <hr>
                 <div>
-                    <button type="button" class="btn btn-primary" id="service_quotation_div"><?php echo display('add_service_quotation') ?></button>
+                    <button type="button" class="btn btn-primary" id="service_quotation_div"><?php echo "Add Service Delivery" ?></button>
                 </div>
 
                 <div class="row" id="quotation_service">
