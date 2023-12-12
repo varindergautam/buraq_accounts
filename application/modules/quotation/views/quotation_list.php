@@ -75,8 +75,14 @@
                                                 <?php if ($this->permission1->method('quotation_to_delivery', 'create')->access()) { ?>
                                                     <a href="<?php echo base_url() . 'quotation_to_delivery/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> ">Add To Delivery Note</a>
                                                 <?php } ?>
-
                                             <?php }
+
+                                            if ($quotation->sale_order_status == 1) { ?>
+                                                <?php if ($this->permission1->method('quotation_to_sale_order', 'create')->access()) { ?>
+                                                    <a href="<?php echo base_url() . '/quotation/quotation_to_sale_order/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> ">Add To Sale Order</a>
+                                                <?php } ?>
+                                            <?php }
+
                                             if ($quotation->status == 2) {
                                                 $que_id = $quotation->quotation_id;
                                                 $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)->get()->row();
@@ -87,6 +93,12 @@
                                                 $que_id = $quotation->quotation_id;
                                                 $deliveryNote = $this->db->select('*')->from('delivery')->where('quotation_main_id', $que_id)->get()->row();
                                                 echo '<a href=" ' . base_url() . 'delivery_details/' . $deliveryNote->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Delivery Note"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $deliveryNote->quotation_id . '';
+                                            }
+
+                                            if ($quotation->sale_order_status == 2) {
+                                                $que_id = $quotation->quotation_id;
+                                                $deliveryNote = $this->db->select('*')->from('sale_orders')->where('quotation_main_id', $que_id)->get()->row();
+                                                echo '<a href=" ' . base_url() . 'sale_order_details/' . $deliveryNote->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale Order"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $deliveryNote->quotation_id . '';
                                             }
 
                                             ?>
