@@ -17,4 +17,18 @@ class Delivery_model extends CI_Model
             ->get()
             ->result_array();
     }
+
+    public function delivery_quot_number_generator()
+    {
+        $this->db->select_max('quot_no', 'quot_no');
+        $query   = $this->db->get('delivery');
+        $result  = $query->result_array();
+        $quot_no = $result[0]['quot_no'];
+        if ($quot_no != '') {
+            $quot_no = $quot_no + 1;
+        } else {
+            $quot_no = 5000;
+        }
+        return $quot_no;
+    }
 }

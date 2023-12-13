@@ -88,7 +88,7 @@
                                                 echo '<a href=" ' . base_url() . 'sale_order_details/' . $deliveryNote->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale Order"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $deliveryNote->quotation_id . '';
                                             } else {
                                             ?>
-                                                <a href="<?php echo base_url() . 'quotation/quotation_to_sale_order/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> ">Add To Sale Order</a>
+                                                <a href="<?php echo base_url() . 'delivery/delivery_to_sale_order/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo "Add To Sale Order" ?> ">Add To Sale Order</a>
                                             <?php
 
                                             }

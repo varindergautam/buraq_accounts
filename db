@@ -61,7 +61,7 @@ CREATE TABLE `sale_order_taxinfo` (
 --------------------------------------------------------------------------
 
 CREATE TABLE `sale_order_products_used` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `quot_id` varchar(100) NOT NULL,
   `product_id` varchar(100) NOT NULL,
   `serial_no` varchar(30) DEFAULT NULL,
@@ -75,7 +75,8 @@ CREATE TABLE `sale_order_products_used` (
   `discount_per` varchar(15) DEFAULT NULL,
   `vat_amnt` decimal(10,2) DEFAULT NULL,
   `vat_per` decimal(10,2) DEFAULT NULL,
-  `tax` decimal(10,2) DEFAULT NULL
+  `tax` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------------------------
