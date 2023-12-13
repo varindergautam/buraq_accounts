@@ -63,7 +63,8 @@
                                         <td class="text-right">
                                             <?php echo html_escape((($position == 0) ? "$currency $quotation->service_total_amount" : "$quotation->service_total_amount $currency")); ?>
                                         </td>
-                                        <td><?php
+                                        <td>
+                                            <?php
                                             if ($quotation->status == 1) { ?>
                                                 <?php if ($this->permission1->method('add_to_invoice', 'create')->access()) { ?>
                                                     <a href="<?php echo base_url() . 'delivery_to_sales/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> "><?php echo display('add_to_invoice') ?></a>
@@ -79,8 +80,14 @@
                                                 //                                    }
                                                 //                                        echo display('added_to_invoice');
                                             }
-
                                             ?>
+
+                                        <?php
+                                            if ($quotation->delivery_note_status == 1) { ?>
+                                                <?php if ($this->permission1->method('to_delivery_note', 'create')->access()) { ?>
+                                                    <a href="<?php echo base_url() . 'to_delivery_note/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo "Delivery Note" ?> "><?php echo "Delivery Note" ?></a>
+                                                <?php } ?>
+                                            <?php } ?>
                                         </td>
 
                                         <td class="text-center">
@@ -92,6 +99,7 @@
                                                     <a href="<?php echo base_url() . 'edit_delivery/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a>
                                                 <?php } ?>
                                             <?php } ?>
+
 
                                             <?php if ($this->permission1->method('manage_quotation', 'delete')->access()) { ?>
                                                 <a href="<?php echo base_url() . 'delivery/delivery/delete_quotation/' . $quotation->quotation_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want to Delete ??')" title="<?php echo display('delete') ?>" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>

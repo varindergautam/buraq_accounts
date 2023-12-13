@@ -18,6 +18,19 @@ class Sale_order_model extends CI_Model
         return $quot_no;
     }
 
+    public function list($offset, $limit) {
+        $this->db->select('a.*, b.customer_name');
+        $this->db->from('sale_orders a');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->order_by('a.id', 'desc');
+        $this->db->limit($offset, $limit);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        return false;
+    }
+
     public function sale_order_entry($data)
     {
 
