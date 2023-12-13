@@ -21,7 +21,7 @@ class Quotation extends MX_Controller
         parent::__construct();
 
         $this->load->model(array(
-            'quotation_model', 'sale_order_model', 'service/service_model', 'account/Accounts_model'
+            'quotation_model', 'sale_order/sale_order_model', 'service/service_model', 'account/Accounts_model'
         ));
         if (!$this->session->userdata('isLogIn'))
             redirect('login');
@@ -1988,7 +1988,8 @@ class Quotation extends MX_Controller
         $this->form_validation->set_rules('expiry_date', display('expiry_date'), 'required|max_length[50]');
         if ($this->form_validation->run()) {
 
-            $quot_id     = $this->quot_number_generator();
+            $quot_id     = $this->sale_order_model->sale_order_quot_number_generator();
+            
             $quotation_id = $this->input->post('quotation_id', TRUE);
 
             $tablecolumn = $this->db->list_fields('sale_order_taxinfo');
@@ -2029,8 +2030,7 @@ class Quotation extends MX_Controller
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
             );
-
-
+            
             $result = $this->sale_order_model->sale_order_entry($data);
 
             $quotdata = array('sale_order_status'  => 2);

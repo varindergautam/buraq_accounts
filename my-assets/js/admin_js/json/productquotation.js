@@ -52,9 +52,9 @@ function addInputField(t) {
         " valid' value='None' readonly='' aria-invalid='false' type='text'></td><td> <input type='text' required name='product_quantity[]' value='1'  onkeyup='quantity_calculate(" + count + 
         ");' onchange='quantity_calculate(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + 
         " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/></td><td><input type='text' required name='product_rate[]' onkeyup='quantity_calculate(" + count + 
-        ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + 
+        "); validateMinValue(this);' onchange='quantity_calculate(" + count + "); validateMinValue(this);' id='price_item_" + count + "' class='common_rate price_item" + count + 
         " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab4 + "'/> <input type='hidden' name='supplier_price[]'' id='supplier_price_" + count + 
-        "'></td><td><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + 
+        "'> <span id='minValueMsg_" + count + "' style='display: none; color: red;'></span></td><td><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + 
         ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + 
         "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + 
         "'></td><td><input type='text' readonly name='discountvalue[]'  id='discount_value_" + count + 
