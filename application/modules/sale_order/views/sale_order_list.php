@@ -34,9 +34,7 @@
                                     <tr>
                                         <td><?php echo $sl; ?></td>
                                         <td>
-
                                             <?php echo html_escape($quotation->customer_name); ?>
-
                                         </td>
                                         <td>
                                             <a href="<?php echo base_url('quotation_details/' . $quotation->quotation_id); ?>">
@@ -45,16 +43,12 @@
                                         </td>
                                         <td>
                                             <?php
-
                                             echo date('m-d-Y', strtotime(html_escape($quotation->quotdate)));
-
                                             ?>
                                         </td>
                                         <td>
                                             <?php
-
                                             echo date('m-d-Y', strtotime(html_escape($quotation->expire_date)));
-
                                             ?>
                                         </td>
                                         <td class="text-right">
@@ -67,22 +61,24 @@
                                             <?php
                                             if ($quotation->status == 1) { ?>
                                                 <?php if ($this->permission1->method('add_to_invoice', 'create')->access()) { ?>
-                                                    <a href="<?php echo base_url() . 'delivery_to_sales/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> "><?php echo display('add_to_invoice') ?></a>
+                                                    <a href="<?php echo base_url() . 'to_sales/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> "><?php echo display('add_to_invoice') ?></a>
                                                 <?php } ?>
                                             <?php }
                                             if ($quotation->status == 2) {
-                                                $que_id = $quotation->quotation_id;
-
+                                                $que_id = $quotation->quotation_main_id;
                                                 $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)->get()->row();
 
-                                                echo '<a href="https://buraq.smartaccount.online/invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
-                                                //                                        echo display('added_to_invoice');
-                                                //                                    }
-                                                //                                        echo display('added_to_invoice');
+                                                echo '<a href="' . base_url() . 'invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
                                             }
+
+                                            if ($quotation->delivery_note_status == 2) {
+                                                    $que_id = $quotation->quotation_id;
+                                                    $deliveryNote = $this->db->select('*')->from('delivery')->where('quotation_main_id', $que_id)->get()->row();
+                                                    echo '<a href=" ' . base_url() . 'delivery_details/' . $deliveryNote->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Delivery Note"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $deliveryNote->quotation_id . '';
+                                                }
                                             ?>
 
-                                        <?php
+                                            <?php
                                             if ($quotation->delivery_note_status == 1) { ?>
                                                 <?php if ($this->permission1->method('to_delivery_note', 'create')->access()) { ?>
                                                     <a href="<?php echo base_url() . 'to_delivery_note/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo "Delivery Note" ?> "><?php echo "Delivery Note" ?></a>
@@ -92,7 +88,7 @@
 
                                         <td class="text-center">
 
-                                            <a href="<?php echo base_url() . 'delivery_details/' . $quotation->quotation_id; ?>" class="btn btn-info btn-sm" title="<?php echo display('details') ?>" data-original-title="<?php echo display('details') ?> "><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a href="<?php echo base_url() . 'sale_order_details/' . $quotation->quotation_id; ?>" class="btn btn-info btn-sm" title="<?php echo display('details') ?>" data-original-title="<?php echo display('details') ?> "><i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <?php
                                             if ($quotation->status == 1) { ?>
                                                 <?php if ($this->permission1->method('manage_quotation', 'update')->access()) { ?>
@@ -105,7 +101,7 @@
                                                 <a href="<?php echo base_url() . 'delivery/delivery/delete_quotation/' . $quotation->quotation_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want to Delete ??')" title="<?php echo display('delete') ?>" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             <?php } ?>
 
-                                            <a href="<?php echo base_url('delivery/delivery/quotation_download/' . $quotation->quotation_id); ?>" class="btn btn-primary btn-sm" title="<?php echo display('download') ?>" data-original-title="<?php echo display('download') ?> "><i class="fa fa-download" aria-hidden="true"></i></a>
+                                            <a href="<?php echo base_url('sale_order/sale_order/sale_order_download/' . $quotation->quotation_id); ?>" class="btn btn-primary btn-sm" title="<?php echo display('download') ?>" data-original-title="<?php echo display('download') ?> "><i class="fa fa-download" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                             <?php

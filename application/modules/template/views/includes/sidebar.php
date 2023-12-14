@@ -1164,12 +1164,12 @@
             </a>
                 <ul class="treeview-menu">
                         <?php if($this->permission1->method('add_sale_order','create')->access()){ ?>
-                        <li class="treeview <?php if ($this->uri->segment('1') == ("add_sale_order")){
+                        <!-- <li class="treeview <?php if ($this->uri->segment('1') == ("add_sale_order")){
                                 echo "active";
                             } else {
                                 echo " ";
-                            }?>"><a href="<?php echo base_url('add_sale_order') ?>"><?php echo "Add Sale Order"; ?></a>
-                        </li>
+                            }?>"><a href="<?php echo base_url('add_sale_order') ?>"><?php //echo "Add Sale Order"; ?></a>
+                        </li> -->
                         <?php }?>
                         <?php if($this->permission1->method('manage_sale_order','read')->access()){ ?>
                         <li class="treeview <?php if ($this->uri->segment('1') == ("manage_sale_order")){

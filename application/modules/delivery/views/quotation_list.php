@@ -76,7 +76,7 @@
 
                                                 $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)->get()->row();
 
-                                                echo '<a href="https://buraq.smartaccount.online/invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
+                                                echo '<a href="'. base_url() .'invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
                                                 //                                        echo display('added_to_invoice');
                                                 //                                    }
                                                 //                                        echo display('added_to_invoice');

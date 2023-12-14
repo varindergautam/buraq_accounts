@@ -1,10 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
-// ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
 
 #------------------------------------    
 # Author: Bdtask Ltd
@@ -1774,7 +1769,7 @@ class Quotation extends MX_Controller
                 $is_dynamic = 1;
             }
             $customershow = 0;
-            // $status = 1;
+            $status = 1;
             // $deliver_status = 1;
             // $sale_order_status = 1;
             $data = array(
@@ -1795,7 +1790,7 @@ class Quotation extends MX_Controller
                 'quot_no'             => $quot_id,
                 'create_by'           => $this->session->userdata('id'),
                 'quot_description'    => $this->input->post('details', TRUE),
-                // 'status'              => $status,
+                'status'              => $status,
                 // 'deliver_status'              => $deliver_status,
                 // 'sale_order_status'              => $sale_order_status,
                 'is_fixed'            =>  $is_fixed,
@@ -2006,7 +2001,7 @@ class Quotation extends MX_Controller
                 $is_dynamic = 1;
             }
             $customershow = 0;
-            // $status = 1;
+            $status = 1;
             $data = array(
                 'quotation_id'        => $quot_id,
                 'customer_id'         => $this->input->post('customer_id', TRUE),
@@ -2025,7 +2020,8 @@ class Quotation extends MX_Controller
                 'quot_no'             => $quot_id,
                 'create_by'           => $this->session->userdata('id'),
                 'quot_description'    => $this->input->post('details', TRUE),
-                // 'status'              => $status,
+                'status'              => $status,
+                'delivery_note_status'              => $status,
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,

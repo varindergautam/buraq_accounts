@@ -87,3 +87,6 @@ add delivery_status null, sale_order_status,
 deliviery
 quotation_main_id int, delivery_note_status default 1
 
+sale_orders
+delivery_note_status
+

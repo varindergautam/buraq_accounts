@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
 
@@ -297,8 +297,7 @@ class Delivery extends MX_Controller {
         $data['quot_service']     = $this->quotation_model->quot_service_detail($quot_id);
         // $data['quot_main']        = $this->quotation_model->quot_main_edit($quot_id);
         $data['quot_main']        = $this->delivery_model->delivery($quot_id);
-        echo "<pre>";
-        print_r($data['quot_main']);die;
+  
         $data['quot_product']     = $this->quotation_model->quot_product_detail($quot_id);
         $data['customer_info']    = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
         $data['company_info'] = $this->quotation_model->retrieve_company();
@@ -636,7 +635,7 @@ class Delivery extends MX_Controller {
 
             if($multipaytype && $multipayamount){
 
-
+                $is_credit = NULL;
                 $amnt_type = 'Debit';
                 for ($i=0; $i < count($multipaytype); $i++) {
 
@@ -1738,7 +1737,7 @@ class Delivery extends MX_Controller {
                 $is_dynamic = 1;
             }
             $customershow = 0;
-            // $status = 1;
+            $status = 1;
             $data = array(
                 'quotation_id'        => $quot_id,
                 'customer_id'         => $this->input->post('customer_id', TRUE),
@@ -1757,7 +1756,7 @@ class Delivery extends MX_Controller {
                 'quot_no'             => $quot_id,
                 'create_by'           => $this->session->userdata('id'),
                 'quot_description'    => $this->input->post('details', TRUE),
-                // 'status'              => $status,
+                'status'              => $status,
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
@@ -1875,7 +1874,7 @@ class Delivery extends MX_Controller {
                 if ($mailsetting[0]['isquotation'] == 1) {
                     $mail = $this->quotation_pdf_generate($quotation_id);
                     if ($mail == 0) {
-                        $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
+                    $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
                     }
                 }
                 $this->session->set_flashdata(array('message' => display('successfully_added')));
