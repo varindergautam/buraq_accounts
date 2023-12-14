@@ -125,7 +125,7 @@ class Sale_order extends MX_Controller
         $email   = $data['customer_info'][0]['customer_email'];
         $this->load->library('pdfgenerator');
         $html   = $this->load->view('quotation/quotation_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();
@@ -219,8 +219,8 @@ class Sale_order extends MX_Controller
                 $is_dynamic = 1;
             }
             $customershow = 0;
-            // $status = 1;
-            // $deliver_status = 1;
+            $status = 1;
+            $deliver_status = 1;
             // $sale_order_status = 1;
             $data = array(
                 'quotation_id'        => $quot_id,
@@ -240,8 +240,8 @@ class Sale_order extends MX_Controller
                 'quot_no'             => $quot_id,
                 'create_by'           => $this->session->userdata('id'),
                 'quot_description'    => $this->input->post('details', TRUE),
-                // 'status'              => $status,
-                // 'deliver_status'              => $deliver_status,
+                'status'              => $status,
+                'deliver_status'              => $deliver_status,
                 // 'sale_order_status'              => $sale_order_status,
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
@@ -515,6 +515,7 @@ class Sale_order extends MX_Controller
                     'shipping_cost'   => '',
                     'sales_by'        => $this->session->userdata('id'),
                     'status'          => 1,
+                    'delivery_note_status'          => 1,
                     'payment_type'    =>  1,
                     'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
                     'is_fixed'        =>  $is_fixed,

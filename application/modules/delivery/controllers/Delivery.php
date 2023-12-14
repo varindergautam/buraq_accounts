@@ -305,7 +305,7 @@ class Delivery extends MX_Controller {
         $email   = $data['customer_info'][0]['customer_email'];
         $this->load->library('pdfgenerator');
         $html   = $this->load->view('quotation/quotation_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();
@@ -525,9 +525,9 @@ class Delivery extends MX_Controller {
             $num_column   = count($tablecolumn)-4;
             $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id',$customer_id)->get()->row();
             $no_of_credit_day = $cusifo->no_of_credit_days;
-            $headn        = $customer_id.'-'.$cusifo->customer_name;
-            $coainfo      = $this->db->select('*')->from('acc_coa')->where('HeadName',$headn)->get()->row();
-            $customer_headcode = $coainfo->HeadCode;
+            // $headn        = $customer_id.'-'.$cusifo->customer_name;
+            // $coainfo      = $this->db->select('*')->from('acc_coa')->where('HeadName',$headn)->get()->row();
+            // $customer_headcode = $coainfo->HeadCode;
             $bank_id      = $this->input->post('bank_id',TRUE);
             if(!empty($bank_id)){
                 $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id',$bank_id)->get()->row()->bank_name;
@@ -1257,7 +1257,7 @@ class Delivery extends MX_Controller {
 
         $this->load->library('pdfgenerator');
         $html = $this->load->view('invoice/invoice_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();
@@ -1347,7 +1347,7 @@ class Delivery extends MX_Controller {
         );
         $this->load->library('pdfgenerator');
         $html = $this->load->view('service/invoice_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();
@@ -1647,7 +1647,7 @@ class Delivery extends MX_Controller {
         $data['currency_details'] = $currency_details;
 
         $this->load->library('pdfgenerator');
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $page = $this->load->view('delivery/quotation_download', $data, true);
         $file_name = time();
         $dompdf->load_html($page);
@@ -1757,6 +1757,7 @@ class Delivery extends MX_Controller {
                 'create_by'           => $this->session->userdata('id'),
                 'quot_description'    => $this->input->post('details', TRUE),
                 'status'              => $status,
+                'delivery_note_status'              => $status,
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
