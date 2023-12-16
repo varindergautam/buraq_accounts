@@ -1482,16 +1482,16 @@ class Invoice_model extends CI_Model
 
     public function number_generator()
     {
-        $this->db->select_max('invoice', 'invoice_no');
+        $this->db->select_max('id', 'id');
         $query = $this->db->get('invoice');
         $result = $query->result_array();
-        $invoice_no = $result[0]['invoice_no'];
+        $invoice_no = $result[0]['id'];
         if ($invoice_no != '') {
             $invoice_no = $invoice_no + 1;
         } else {
             $invoice_no = 1000;
         }
-        return $invoice_no;
+        return 'IN-'.$invoice_no;
     }
 
     public function autoapprove($invoice_id)
@@ -1602,7 +1602,7 @@ class Invoice_model extends CI_Model
 
         $this->load->library('pdfgenerator');
         $html = $this->load->view('invoice/invoice_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();
@@ -1868,7 +1868,7 @@ class Invoice_model extends CI_Model
         );
         $this->load->library('pdfgenerator');
         $html = $this->load->view('service/invoice_download', $data, true);
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $dompdf->load_html($html);
         $dompdf->render();
         $output = $dompdf->output();

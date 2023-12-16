@@ -251,10 +251,6 @@ class Sale_order extends MX_Controller
 
             $result = $this->quotation_model->delivery_entry($data);
 
-            $quotdata = array('delivery_note_status'  => 2);
-            $this->db->where('quotation_id', $quotation_id);
-            $this->db->update('sale_orders', $quotdata);
-
             if ($result == TRUE) {
                 // Used Item Details Part
                 $item         = $this->input->post('product_id', TRUE);
@@ -515,7 +511,6 @@ class Sale_order extends MX_Controller
                     'shipping_cost'   => '',
                     'sales_by'        => $this->session->userdata('id'),
                     'status'          => 1,
-                    'delivery_note_status'          => 1,
                     'payment_type'    =>  1,
                     'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
                     'is_fixed'        =>  $is_fixed,

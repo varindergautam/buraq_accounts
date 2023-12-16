@@ -3042,7 +3042,7 @@ public function update_debit_voucher(){
 
         // PDF Generator 
         $this->load->library('pdfgenerator');
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $page = $this->load->view('account/day_book_report_pdf',$data,true);
         $dompdf->load_html($page);
         $dompdf->render();
@@ -3623,7 +3623,7 @@ public function update_debit_voucher(){
 
         // PDF Generator 
         $this->load->library('pdfgenerator');
-        $dompdf = new DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $page = $this->load->view('account/cash_flow_report_search_pdf',$data,true);
         $dompdf->load_html($page);
         $dompdf->render();
