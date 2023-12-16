@@ -387,37 +387,37 @@ $user_id = $this->session->userdata('id'); ?>
 <script>
     let timeoutReference;
 
-function validateMinValue(input) {
+    function validateMinValue(input) {
 
-    const inputId = input.id;
+        const inputId = input.id;
 
-    const number = parseInt(inputId.match(/\d+/)[0]);
-    console.log(number);
+        const number = parseInt(inputId.match(/\d+/)[0]);
+        console.log(number);
 
-    clearTimeout(timeoutReference);
+        clearTimeout(timeoutReference);
 
 
-    timeoutReference = setTimeout(function() {
+        timeoutReference = setTimeout(function() {
 
-        var value = parseFloat(input.value);
+            var value = parseFloat(input.value);
 
-        var minValue = parseFloat(document.getElementById('supplier_price_' + number).value);
+            var minValue = parseFloat(document.getElementById('supplier_price_' + number).value);
 
-        console.log('ds', minValue);
+            console.log('ds', minValue);
 
-        console.log('Input value:', value);
+            console.log('Input value:', value);
 
-        console.log('Supplier price value:', minValue);
+            console.log('Supplier price value:', minValue);
 
-        var errorElement = document.getElementById('minValueMsg_' + number);
+            var errorElement = document.getElementById('minValueMsg_' + number);
 
-        if (isNaN(value) || value < minValue) {
-            errorElement.innerHTML = 'Value must be greater than or equal to ' + minValue;
-            errorElement.style.display = 'block';
-            input.value = '';
-        } else {
-            errorElement.style.display = 'none';
-        }
-    }, 2000); // 1000 milliseconds = 1 second
-}
+            if (isNaN(value) || value < minValue) {
+                errorElement.innerHTML = 'Value must be greater than or equal to ' + minValue;
+                errorElement.style.display = 'block';
+                input.value = '';
+            } else {
+                errorElement.style.display = 'none';
+            }
+        }, 2000); // 1000 milliseconds = 1 second
+    }
 </script>

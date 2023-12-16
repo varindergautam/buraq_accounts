@@ -40,10 +40,10 @@
 
                                         </td>
                                         <td>
-                                                <?php echo html_escape($quotation->quotation_main_id); ?>
+                                            <?php echo html_escape($quotation->quotation_main_id); ?>
                                         </td>
                                         <td>
-                                            <a href="<?php echo base_url('quotation_details/' . $quotation->quotation_id); ?>">
+                                            <a href="<?php echo base_url('delivery_details/' . $quotation->quotation_id); ?>">
                                                 <?php echo html_escape($quotation->quot_no); ?>
                                             </a>
                                         </td>
@@ -56,9 +56,7 @@
                                         </td>
                                         <td>
                                             <?php
-
                                             echo date('m-d-Y', strtotime(html_escape($quotation->expire_date)));
-
                                             ?>
                                         </td>
                                         <td class="text-right">
@@ -68,40 +66,28 @@
                                             <?php echo html_escape((($position == 0) ? "$currency $quotation->service_total_amount" : "$quotation->service_total_amount $currency")); ?>
                                         </td>
                                         <td><?php
-                                            if ($quotation->status == 1) { ?>
-                                                <?php if ($this->permission1->method('add_to_invoice', 'create')->access()) { ?>
-                                                    <a href="<?php echo base_url() . 'delivery_to_sales/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> "><?php echo display('add_to_invoice') ?></a>
-                                                <?php } ?>
-                                            <?php }
+                                        $que_id = $quotation->quotation_main_id;
+                                        $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)->get()->row();
 
+                                        $saleOrderInfo = $this->db->select('*')->from('sale_orders')->where('quotation_main_id', $que_id)->get()->row();
 
-                                            if ($quotation->status == 2) {
-                                                $que_id = $quotation->quotation_id;
+                                            if (isset($invinfo) && !empty($invinfo)) {
+                                                echo '<a href="' . base_url() . 'invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
+                                            } else { ?>
+                                                <a href="<?php echo base_url() . 'delivery_to_sales/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> "><?php echo display('add_to_invoice') ?></a>
+                                            <?php } 
 
-                                                $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)->get()->row();
-
-                                                echo '<a href="'. base_url() .'invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
-                                                //                                        echo display('added_to_invoice');
-                                                //                                    }
-                                                //                                        echo display('added_to_invoice');
-                                            }
-
-                                            if ($quotation->sale_order_status == 2) {
-                                                $que_id = $quotation->quotation_id;
-                                                $deliveryNote = $this->db->select('*')->from('sale_orders')->where('quotation_main_id', $que_id)->get()->row();
-                                                echo '<a href=" ' . base_url() . 'sale_order_details/' . $deliveryNote->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale Order"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $deliveryNote->quotation_id . '';
+                                            if (isset($saleOrderInfo) && !empty($saleOrderInfo)) {
+                                                echo '<a href=" ' . base_url() . 'sale_order_details/' . $saleOrderInfo->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale Order"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $saleOrderInfo->quotation_id . '';
                                             } else {
                                             ?>
                                                 <a href="<?php echo base_url() . 'delivery/delivery_to_sale_order/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo "Add To Sale Order" ?> ">Add To Sale Order</a>
                                             <?php
-
                                             }
-
                                             ?>
                                         </td>
 
                                         <td class="text-center">
-
                                             <a href="<?php echo base_url() . 'delivery_details/' . $quotation->quotation_id; ?>" class="btn btn-info btn-sm" title="<?php echo display('details') ?>" data-original-title="<?php echo display('details') ?> "><i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <?php
                                             if ($quotation->status == 1) { ?>
@@ -118,7 +104,6 @@
                                         </td>
                                     </tr>
                             <?php
-
                                 }
                             }
                             ?>

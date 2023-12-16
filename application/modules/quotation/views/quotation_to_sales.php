@@ -2,14 +2,17 @@
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/json/productquotation.js"></script>
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice.js" type="text/javascript"></script>
 
-<?php 
-    if($quot_main[0]['status'] == 2 || $quot_main[0]['delivery_status'] == 2 || $quot_main[0]['sale_order_status'] == 2) {
-        $readonly = 'readonly';
-        $disabled = 'disabled';
-    } else {
-        $readonly = '';
-        $disabled = '';
-    }
+<?php
+// if($quot_main[0]['status'] == 2 || $quot_main[0]['delivery_status'] == 2 || $quot_main[0]['sale_order_status'] == 2) {
+//     $readonly = 'readonly';
+//     $disabled = 'disabled';
+// } else {
+//     $readonly = '';
+//     $disabled = '';
+// }
+
+$readonly = 'readonly';
+$disabled = 'disabled';
 ?>
 
 <div class="row">

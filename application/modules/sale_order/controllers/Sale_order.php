@@ -241,7 +241,7 @@ class Sale_order extends MX_Controller
                 'create_by'           => $this->session->userdata('id'),
                 'quot_description'    => $this->input->post('details', TRUE),
                 'status'              => $status,
-                'deliver_status'              => $deliver_status,
+                // 'delivery_status'              => $deliver_status,
                 // 'sale_order_status'              => $sale_order_status,
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,

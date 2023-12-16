@@ -1187,6 +1187,38 @@
         <?php }?>
         <!-- quotation Menu end -->
 
+        <!-- Quotation Menu Start -->
+        <?php if($this->permission1->method('add_sale_order','create')->access() || $this->permission1->method('manage_performa','read')->access()){?>
+        <li class="treeview <?php
+            if ($this->uri->segment('1') == ("add_sale_order") || $this->uri->segment('1') == ("manage_performa")|| $this->uri->segment('1') == ("sale_order_to_sales")) {
+                echo "active";
+            } else {
+                echo " ";
+            }
+            ?>">
+            <a href="#">
+                <i class="fa fa-book"></i><span><?php echo "Performa invoice" ?></span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+                <ul class="treeview-menu">
+                        <?php if($this->permission1->method('manage_performa','read')->access()){ ?>
+                        <li class="treeview <?php if ($this->uri->segment('1') == ("manage_performa")){
+                                echo "active";
+                            } else {
+                                echo " ";
+                            }?>"><a
+                                href="<?php echo base_url('manage_performa') ?>"><?php echo "Manage Performa Invoice" ?></a>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </li>
+
+                
+        <?php }?>
+        <!-- quotation Menu end -->
+
         <!-- Tax menu start -->
         <?php if($this->permission1->method('add_incometax','create')->access() || $this->permission1->method('manage_income_tax','read')->access()|| $this->permission1->method('tax_settings','create')->access() || $this->permission1->method('tax_report','read')->access() || $this->permission1->method('invoice_wise_tax_report','read')->access() || $this->permission1->method('tax_settings','read')->access() || $this->permission1->method('vat_tax_setting','read')->access()){?>
         <li class="treeview <?php

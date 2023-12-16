@@ -208,12 +208,14 @@
                                         <td class="invoice_fields">
                                             <input type="text" required name="product_rate[]" id="price_item_<?php echo $sl;?>"
                                                 class="price_item<?php echo $sl;?> price_item form-control text-right"
-                                                tabindex="9" onkeyup="quantity_calculate(<?php echo $sl;?>);"
-                                                onchange="quantity_calculate(<?php echo $sl;?>);"
+                                                tabindex="9" onkeyup="quantity_calculate(<?php echo $sl;?>); validateMinValue(this);"
+                                                onchange="quantity_calculate(<?php echo $sl;?>); validateMinValue(this);"
                                                 value="<?php echo $item['rate']; ?>" placeholder="0.00" min="<?php echo $item['supplier_rate']; ?>" />
                                             <input type="hidden" name="supplier_price[]"
                                                 id="supplier_price_<?php echo $sl;?>"
                                                 value="<?php echo $item['supplier_rate']; ?>">
+
+                                                <span id="minValueMsg_1" style="display: none; color: red;"></span>
                                         </td>
                                         <!-- Discount -->
                                         <td>
@@ -647,3 +649,41 @@
 </div>
 
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/json/quotation.js"></script>
+
+<script>
+    let timeoutReference;
+
+    function validateMinValue(input) {
+
+        const inputId = input.id;
+
+        const number = parseInt(inputId.match(/\d+/)[0]);
+        console.log(number);
+
+        clearTimeout(timeoutReference);
+
+
+        timeoutReference = setTimeout(function() {
+
+            var value = parseFloat(input.value);
+
+            var minValue = parseFloat(document.getElementById('supplier_price_' + number).value);
+
+            console.log('ds', minValue);
+
+            console.log('Input value:', value);
+
+            console.log('Supplier price value:', minValue);
+
+            var errorElement = document.getElementById('minValueMsg_' + number);
+
+            if (isNaN(value) || value < minValue) {
+                errorElement.innerHTML = 'Value must be greater than or equal to ' + minValue;
+                errorElement.style.display = 'block';
+                input.value = '';
+            } else {
+                errorElement.style.display = 'none';
+            }
+        }, 2000); // 1000 milliseconds = 1 second
+    }
+</script>

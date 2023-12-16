@@ -3,13 +3,16 @@
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice.js" type="text/javascript"></script>
 
 <?php
-if ($quot_main[0]['status'] == 2 ||  $quot_main[0]['sale_order_status'] == 2) {
-    $readonly = 'readonly';
-    $disabled = 'disabled';
-} else {
-    $readonly = '';
-    $disabled = '';
-}
+// if($quot_main[0]['status'] == 2 || $quot_main[0]['delivery_status'] == 2 || $quot_main[0]['sale_order_status'] == 2) {
+//     $readonly = 'readonly';
+//     $disabled = 'disabled';
+// } else {
+//     $readonly = '';
+//     $disabled = '';
+// }
+
+$readonly = 'readonly';
+$disabled = 'disabled';
 ?>
 
 <div class="row">
@@ -48,8 +51,8 @@ if ($quot_main[0]['status'] == 2 ||  $quot_main[0]['sale_order_status'] == 2) {
                         <label for="quotation_no" class="col-sm-4 col-form-label"><?php echo "Sale Order No." ?>
                         </label>
                         <div class="col-sm-8">
-                            <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo "Sale Order No." ?>" value="<?php echo $quot_main[0]['quot_no']; ?>" readonly>
-                            <input type="hidden" name="quotation_id" id="quotation_id" class="form-control" value="<?php echo $quot_main[0]['quotation_id']; ?>" readonly>
+                            <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo "Sale Order No." ?>" value="<?php echo $quot_main[0]['quotation_main_id']; ?>" readonly>
+                            <input type="hidden" name="quotation_id" id="quotation_id" class="form-control" value="<?php echo $quot_main[0]['quotation_main_id']; ?>" readonly>
                         </div>
                     </div>
                 </div>

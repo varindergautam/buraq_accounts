@@ -1776,7 +1776,7 @@ class Quotation extends MX_Controller
                 $is_dynamic = 1;
             }
             $customershow = 0;
-            $status = 1;
+            $status = 2;
             // $deliver_status = 1;
             // $sale_order_status = 1;
             $data = array(
@@ -1974,7 +1974,6 @@ class Quotation extends MX_Controller
         $data['module']          = "quotation";
         $vatortax              = $this->quotation_model->vat_tax_setting();
         if ($vatortax->fixed_tax == 1) {
-
             $data['page']            = "quotation_to_sale_order";
         }
         if ($vatortax->dynamic_tax == 1) {

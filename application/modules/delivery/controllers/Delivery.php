@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
@@ -8,39 +8,41 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
 
 
- #------------------------------------    
-    # Author: Bdtask Ltd
-    # Author link: https://www.bdtask.com/
-    # Dynamic style php file
-    # Developed by :Isahaq
-    #------------------------------------    
+#------------------------------------    
+# Author: Bdtask Ltd
+# Author link: https://www.bdtask.com/
+# Dynamic style php file
+# Developed by :Isahaq
+#------------------------------------    
 
-class Delivery extends MX_Controller {
+class Delivery extends MX_Controller
+{
 
     public function __construct()
     {
         parent::__construct();
-  
-        $this->load->model(array(
-            'quotation_model','service/service_model','account/Accounts_model', 'delivery_model', 'sale_order/sale_order_model'));
-        if (! $this->session->userdata('isLogIn'))
-            redirect('login');
-          
-    }
-   
 
-    function bdtask_quotation_form() {
+        $this->load->model(array(
+            'quotation_model', 'service/service_model', 'account/Accounts_model', 'delivery_model', 'sale_order/sale_order_model'
+        ));
+        if (!$this->session->userdata('isLogIn'))
+            redirect('login');
+    }
+
+
+    function bdtask_quotation_form()
+    {
         $data['title']           = display('add_delivery');
         $data['quotation_no']    = $this->quot_number_generator();
         $data['taxes']           = $this->quotation_model->tax_fields();
         $data['customers']       = $this->quotation_model->get_allcustomer();
         $data['get_productlist'] = $this->quotation_model->get_allproduct();
         $vatortax                = $this->quotation_model->vat_tax_setting();
-        if($vatortax->fixed_tax == 1){
+        if ($vatortax->fixed_tax == 1) {
 
             $data['page']        = "quotation_form";
         }
-        if($vatortax->dynamic_tax == 1){
+        if ($vatortax->dynamic_tax == 1) {
             $data['page']        = "quotation_form_dynamic";
         }
         $data['module']          = "delivery";
@@ -48,15 +50,17 @@ class Delivery extends MX_Controller {
     }
 
 
-       //    ========== its for get_customer_info ===========
-    public function get_customer_info() {
-        $customer_id = $this->input->post('customer_id',TRUE);
+    //    ========== its for get_customer_info ===========
+    public function get_customer_info()
+    {
+        $customer_id = $this->input->post('customer_id', TRUE);
         $get_customer_info = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
         echo json_encode($get_customer_info);
     }
 
 
-        public function quot_number_generator() {
+    public function quot_number_generator()
+    {
         $this->db->select_max('quot_no', 'quot_no');
         $query   = $this->db->get('delivery');
         $result  = $query->result_array();
@@ -69,33 +73,35 @@ class Delivery extends MX_Controller {
         return $quot_no;
     }
 
-       public function autocompleteproductsearch(){
-        $product_name   = $this->input->post('product_name',TRUE);
+    public function autocompleteproductsearch()
+    {
+        $product_name   = $this->input->post('product_name', TRUE);
         $product_info   = $this->quotation_model->autocompletproductdata($product_name);
 
-       if(!empty($product_info)){
-        $list[''] = '';
-        foreach ($product_info as $value) {
-            $json_product[] = array('label'=>$value['product_name'].'('.$value['product_model'].')','value'=>$value['product_id'],'vat_per' => ($value['product_vat']?$value['product_vat']:0));
-        }
-    }else{
-        $json_product[] = 'No Product Found';
+        if (!empty($product_info)) {
+            $list[''] = '';
+            foreach ($product_info as $value) {
+                $json_product[] = array('label' => $value['product_name'] . '(' . $value['product_model'] . ')', 'value' => $value['product_id'], 'vat_per' => ($value['product_vat'] ? $value['product_vat'] : 0));
+            }
+        } else {
+            $json_product[] = 'No Product Found';
         }
         echo json_encode($json_product);
-
     }
 
 
-       public function retrieve_product_data_inv() {
-        $product_id = $this->input->post('product_id',TRUE);
+    public function retrieve_product_data_inv()
+    {
+        $product_id = $this->input->post('product_id', TRUE);
         $product_info = $this->quotation_model->get_total_product_invoic($product_id);
 
         echo json_encode($product_info);
     }
 
-    public function bdtask_batchwise_productprice() {
-        $product_id   = $this->input->post('prod_id',TRUE);
-        $batch_no   = $this->input->post('batch_no',TRUE);
+    public function bdtask_batchwise_productprice()
+    {
+        $product_id   = $this->input->post('prod_id', TRUE);
+        $batch_no   = $this->input->post('batch_no', TRUE);
 
         $this->db->select('SUM(quantity) as purchase_qty,batch_id,product_id');
         $this->db->from('product_purchase_details');
@@ -104,79 +110,80 @@ class Delivery extends MX_Controller {
         $pur_product_batch = $this->db->get()->row();
 
         $sellt_prod_batch = $this->db->select('SUM(quantity) as sale_qty,batch_id, product_id')
-        ->from('invoice_details')->where('product_id', $product_id)
-        ->where('batch_id', $batch_no)
-        ->get()
-        ->row();
+            ->from('invoice_details')->where('product_id', $product_id)
+            ->where('batch_id', $batch_no)
+            ->get()
+            ->row();
         $batch_wise_stock = $pur_product_batch->purchase_qty - $sellt_prod_batch->sale_qty;
         echo $batch_wise_stock;
-        }
+    }
 
 
     //    ========== its for  insert_quotation =============
-    public function bdtask_insert_quotation() {
+    public function bdtask_insert_quotation()
+    {
 
-        $this->form_validation->set_rules('customer_id', display('customer_name'),'required|max_length[50]');
-        $this->form_validation->set_rules('qdate', display('quotation_date'),'required|max_length[50]');
-        $this->form_validation->set_rules('expiry_date', display('expiry_date'),'required|max_length[50]');
+        $this->form_validation->set_rules('customer_id', display('customer_name'), 'required|max_length[50]');
+        $this->form_validation->set_rules('qdate', display('quotation_date'), 'required|max_length[50]');
+        $this->form_validation->set_rules('expiry_date', display('expiry_date'), 'required|max_length[50]');
         if ($this->form_validation->run()) {
 
             $quot_id     = $this->quot_number_generator();
 
             $tablecolumn = $this->db->list_fields('delivery_taxinfo');
-            $num_column  = count($tablecolumn)-4;
+            $num_column  = count($tablecolumn) - 4;
             $fixordyn    = $this->db->select('*')->from('vat_tax_setting')->get()->row();
             $is_fixed    = '';
             $is_dynamic  = '';
 
-            if($fixordyn->fixed_tax == 1 ){
+            if ($fixordyn->fixed_tax == 1) {
                 $is_fixed   = 1;
                 $is_dynamic = 0;
-            }elseif($fixordyn->dynamic_tax == 1 ){
+            } elseif ($fixordyn->dynamic_tax == 1) {
                 $is_fixed   = 0;
                 $is_dynamic = 1;
             }
             $customershow = 0;
             $status = 1;
             $data = array(
-            'quotation_id'        => $quot_id,
-            'customer_id'         => $this->input->post('customer_id',TRUE),
-            'quotdate'            => $this->input->post('qdate',TRUE),
-            'expire_date'         => $this->input->post('expiry_date',TRUE),
-            'item_total_amount'   => $this->input->post('grand_total_price',TRUE),
-            'item_total_dicount'  => $this->input->post('total_discount',TRUE),
-            'item_total_vat'      => $this->input->post('total_vat_amnt',TRUE),
-            'item_total_tax'      => $this->input->post('total_tax',TRUE),
-            'service_total_amount'=> $this->input->post('grand_total_service_amount',TRUE),
-            'service_total_discount'=> $this->input->post('totalServiceDicount',TRUE),
-            'service_total_vat'   => $this->input->post('service_total_vat_amnt',TRUE),
-            'service_total_tax'   => $this->input->post('total_service_tax',TRUE),
-            'quot_dis_item'       =>$this->input->post('invoice_discount',TRUE),
-            'quot_dis_service'    =>$this->input->post('service_discount',TRUE),
-            'quot_no'             => $quot_id,
-            'create_by'           => $this->session->userdata('id'),
-            'quot_description'    => $this->input->post('details',TRUE),
-            'status'              => $status,
-            'is_fixed'            =>  $is_fixed,
-            'is_dynamic'          =>  $is_dynamic,
+                'quotation_id'        => $quot_id,
+                'customer_id'         => $this->input->post('customer_id', TRUE),
+                'quotdate'            => $this->input->post('qdate', TRUE),
+                'expire_date'         => $this->input->post('expiry_date', TRUE),
+                'item_total_amount'   => $this->input->post('grand_total_price', TRUE),
+                'item_total_dicount'  => $this->input->post('total_discount', TRUE),
+                'item_total_vat'      => $this->input->post('total_vat_amnt', TRUE),
+                'item_total_tax'      => $this->input->post('total_tax', TRUE),
+                'service_total_amount' => $this->input->post('grand_total_service_amount', TRUE),
+                'service_total_discount' => $this->input->post('totalServiceDicount', TRUE),
+                'service_total_vat'   => $this->input->post('service_total_vat_amnt', TRUE),
+                'service_total_tax'   => $this->input->post('total_service_tax', TRUE),
+                'quot_dis_item'       => $this->input->post('invoice_discount', TRUE),
+                'quot_dis_service'    => $this->input->post('service_discount', TRUE),
+                'quot_no'             => $quot_id,
+                'create_by'           => $this->session->userdata('id'),
+                'quot_description'    => $this->input->post('details', TRUE),
+                'status'              => $status,
+                'is_fixed'            =>  $is_fixed,
+                'is_dynamic'          =>  $is_dynamic,
             );
 
             $result = $this->quotation_model->quotation_entry($data);
 
             if ($result == TRUE) {
                 // Used Item Details Part
-                $item         = $this->input->post('product_id',TRUE);
-                $serial       = $this->input->post('serial_no',TRUE);
-                $descrp       = $this->input->post('desc',TRUE);
-                $item_rate    = $this->input->post('product_rate',TRUE);
-                $item_supp_rate= $this->input->post('supplier_price',TRUE);
-                $item_qty     = $this->input->post('product_quantity',TRUE);
-                $item_dis_per = $this->input->post('discount',TRUE);
-                $item_total_discount = $this->input->post('discountvalue',TRUE);
-                $vat_per      = $this->input->post('vatpercent',TRUE);
-                $vat_value    = $this->input->post('vatvalue',TRUE);
-                $item_tax     = $this->input->post('tax',TRUE);
-                $totalp       =  $this->input->post('total_price',TRUE);
+                $item         = $this->input->post('product_id', TRUE);
+                $serial       = $this->input->post('serial_no', TRUE);
+                $descrp       = $this->input->post('desc', TRUE);
+                $item_rate    = $this->input->post('product_rate', TRUE);
+                $item_supp_rate = $this->input->post('supplier_price', TRUE);
+                $item_qty     = $this->input->post('product_quantity', TRUE);
+                $item_dis_per = $this->input->post('discount', TRUE);
+                $item_total_discount = $this->input->post('discountvalue', TRUE);
+                $vat_per      = $this->input->post('vatpercent', TRUE);
+                $vat_value    = $this->input->post('vatvalue', TRUE);
+                $item_tax     = $this->input->post('tax', TRUE);
+                $totalp       =  $this->input->post('total_price', TRUE);
                 for ($j = 0, $n = count($item); $j < $n; $j++) {
                     $product_id    = $item[$j];
                     $rate          = $item_rate[$j];
@@ -209,26 +216,26 @@ class Delivery extends MX_Controller {
                 }
 
                 //item tax info
-                for($l=0;$l<$num_column;$l++){
-                $taxfield = 'tax'.$l;
-                $taxvalue = 'total_tax'.$l;
-              $taxdata[$taxfield]=$this->input->post($taxvalue);
-            }
-            $taxdata['customer_id'] = $this->input->post('customer_id',TRUE);
-            $taxdata['date']        = (!empty($this->input->post('qdate',TRUE))?$this->input->post('qdate',TRUE):date('Y-m-d'));
-            $taxdata['relation_id'] = 'item'.$this->input->post('quotation_no',TRUE);
-            $this->db->insert('delivery_taxinfo',$taxdata);
+                for ($l = 0; $l < $num_column; $l++) {
+                    $taxfield = 'tax' . $l;
+                    $taxvalue = 'total_tax' . $l;
+                    $taxdata[$taxfield] = $this->input->post($taxvalue);
+                }
+                $taxdata['customer_id'] = $this->input->post('customer_id', TRUE);
+                $taxdata['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
+                $taxdata['relation_id'] = 'item' . $this->input->post('quotation_no', TRUE);
+                $this->db->insert('delivery_taxinfo', $taxdata);
 
-                    // Used Service Details Part
-                $service                = $this->input->post('service_id',TRUE);
-                $service_rate           = $this->input->post('service_rate',TRUE);
-                $service_qty            = $this->input->post('service_quantity',TRUE);
-                $service_dis_per        = $this->input->post('sdiscount',TRUE);
-                $service_discountvalue  = $this->input->post('service_discountvalue',TRUE);
-                $service_vatpercent     = $this->input->post('service_vatpercent',TRUE);
-                $service_vatvalue       = $this->input->post('service_vatvalue',TRUE);
-                $totalservicep          = $this->input->post('total_service_amount',TRUE);
-                $service_tax            = $this->input->post('stax',TRUE);
+                // Used Service Details Part
+                $service                = $this->input->post('service_id', TRUE);
+                $service_rate           = $this->input->post('service_rate', TRUE);
+                $service_qty            = $this->input->post('service_quantity', TRUE);
+                $service_dis_per        = $this->input->post('sdiscount', TRUE);
+                $service_discountvalue  = $this->input->post('service_discountvalue', TRUE);
+                $service_vatpercent     = $this->input->post('service_vatpercent', TRUE);
+                $service_vatvalue       = $this->input->post('service_vatvalue', TRUE);
+                $totalservicep          = $this->input->post('total_service_amount', TRUE);
+                $service_tax            = $this->input->post('stax', TRUE);
                 for ($k = 0, $n = count($service); $k < $n; $k++) {
                     $service_id     = $service[$k];
                     $charge         = $service_rate[$k];
@@ -245,7 +252,7 @@ class Delivery extends MX_Controller {
                         'charge'         => $charge,
                         'total'          => $total_serviceprice,
                         'discount'       => $sdiscount,
-                        'discount_amount'=> $stotaldiscount,
+                        'discount_amount' => $stotaldiscount,
                         'vat_per'        => $service_vatper,
                         'vat_amnt'       => $servicevatval,
                         'tax'            => $stax,
@@ -255,40 +262,39 @@ class Delivery extends MX_Controller {
                 }
                 //service taxinfo
 
-                for($m=0;$m<$num_column;$m++){
-                     $taxfield = 'tax'.$m;
-                $taxvalue = 'total_service_tax'.$m;
-              $servicetaxinfo[$taxfield]=$this->input->post($taxvalue);
-            }
-            $servicetaxinfo['customer_id'] =$this->input->post('customer_id',TRUE);
-            $servicetaxinfo['date']        = (!empty($this->input->post('qdate',TRUE))?$this->input->post('qdate',TRUE):date('Y-m-d'));
-            $servicetaxinfo['relation_id'] = 'serv'.$this->input->post('quotation_no',TRUE);
-            $this->db->insert('delivery_taxinfo',$servicetaxinfo);
+                for ($m = 0; $m < $num_column; $m++) {
+                    $taxfield = 'tax' . $m;
+                    $taxvalue = 'total_service_tax' . $m;
+                    $servicetaxinfo[$taxfield] = $this->input->post($taxvalue);
+                }
+                $servicetaxinfo['customer_id'] = $this->input->post('customer_id', TRUE);
+                $servicetaxinfo['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
+                $servicetaxinfo['relation_id'] = 'serv' . $this->input->post('quotation_no', TRUE);
+                $this->db->insert('delivery_taxinfo', $servicetaxinfo);
 
-       $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
-        if($mailsetting[0]['isquotation']==1){
-          $mail = $this->quotation_pdf_generate($quot_id);
-          if($mail == 0){
-                $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
-              }
-            }
-            $this->session->set_flashdata(array('message' => display('successfully_added')));
-             redirect(base_url('manage_delivery'));
-
+                $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
+                if ($mailsetting[0]['isquotation'] == 1) {
+                    $mail = $this->quotation_pdf_generate($quot_id);
+                    if ($mail == 0) {
+                        $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
+                    }
+                }
+                $this->session->set_flashdata(array('message' => display('successfully_added')));
+                redirect(base_url('manage_delivery'));
             } else {
                 $this->session->set_flashdata(array('exception' => display('already_inserted')));
                 redirect(base_url('add_delivery'));
             }
-            }else{
+        } else {
             $this->session->set_flashdata(array('exception' => validation_errors()));
-             redirect(base_url('add_delivery'));
+            redirect(base_url('add_delivery'));
         }
-
     }
 
 
-      //    ============ its for invoice pdf generate =======
-    public function quotation_pdf_generate($quot_id = null) {
+    //    ============ its for invoice pdf generate =======
+    public function quotation_pdf_generate($quot_id = null)
+    {
         $id = $quot_id;
         $currency_details         = $this->quotation_model->setting_data();
         $data['currency_details'] = $currency_details;
@@ -297,7 +303,7 @@ class Delivery extends MX_Controller {
         $data['quot_service']     = $this->quotation_model->quot_service_detail($quot_id);
         // $data['quot_main']        = $this->quotation_model->quot_main_edit($quot_id);
         $data['quot_main']        = $this->delivery_model->delivery($quot_id);
-  
+
         $data['quot_product']     = $this->quotation_model->quot_product_detail($quot_id);
         $data['customer_info']    = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
         $data['company_info'] = $this->quotation_model->retrieve_company();
@@ -315,24 +321,22 @@ class Delivery extends MX_Controller {
         if (!empty($email)) {
             $send_email = $this->setmail($email, $file_path, $id, $name);
 
-            if($send_email){
-          return 1;
-            }else{
-              return 0;
-
+            if ($send_email) {
+                return 1;
+            } else {
+                return 0;
             }
-
         }
-       return 0;
-
+        return 0;
     }
 
-    public function setmail($email, $file_path, $id = null, $name = null) {
+    public function setmail($email, $file_path, $id = null, $name = null)
+    {
         $setting_detail = $this->db->select('*')->from('email_config')->get()->row();
         $subject = 'Quotation Information';
         $message = strtoupper($name) . '-' . $id;
 
-        $config = Array(
+        $config = array(
             'protocol'  => $setting_detail->protocol,
             'smtp_host' => $setting_detail->smtp_host,
             'smtp_port' => $setting_detail->smtp_port,
@@ -350,15 +354,15 @@ class Delivery extends MX_Controller {
         $this->email->from($setting_detail->smtp_user);
         $this->email->to($email);
 
-        $config = Array(
-        'protocol'  => $setting_detail->protocol,
-        'smtp_host' => $setting_detail->smtp_host,
-        'smtp_port' => $setting_detail->smtp_port,
-        'smtp_user' => $setting_detail->smtp_user,
-        'smtp_pass' => $setting_detail->smtp_pass,
-        'mailtype'  => 'html',
-        'charset'   => 'utf-8',
-        'wordwrap'  => TRUE
+        $config = array(
+            'protocol'  => $setting_detail->protocol,
+            'smtp_host' => $setting_detail->smtp_host,
+            'smtp_port' => $setting_detail->smtp_port,
+            'smtp_user' => $setting_detail->smtp_user,
+            'smtp_pass' => $setting_detail->smtp_pass,
+            'mailtype'  => 'html',
+            'charset'   => 'utf-8',
+            'wordwrap'  => TRUE
         );
 
         $this->load->library('email');
@@ -385,15 +389,17 @@ class Delivery extends MX_Controller {
     }
 
     //Email testing for email
-    public function test_input($data) {
+    public function test_input($data)
+    {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
         return $data;
     }
 
-     //    ============= its for  manage quotation ============
-      public function manage_quotation() {
+    //    ============= its for  manage quotation ============
+    public function manage_quotation()
+    {
         $data['title']         = 'Delivery Note';
         $config["base_url"]    = base_url('manage_delivery');
         $config["total_rows"]  = $this->db->count_all('quotation');
@@ -421,36 +427,35 @@ class Delivery extends MX_Controller {
         $page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
         $data["links"]  = $this->pagination->create_links();
         $data['module'] = "delivery";
-        $data['quotation_list']=$this->quotation_model->quotation_list($config["per_page"], $page);
-         $data['page']   = "quotation_list";
+        $data['quotation_list'] = $this->quotation_model->quotation_list($config["per_page"], $page);
+        $data['page']   = "quotation_list";
         echo Modules::run('template/layout', $data);
     }
 
 
-    public function autoapprove($invoice_id){
+    public function autoapprove($invoice_id)
+    {
 
-        $vouchers = $this->db->select('referenceNo, VNo')->from('acc_vaucher')->where('referenceNo',$invoice_id)->where('status',0)->get()->result();
+        $vouchers = $this->db->select('referenceNo, VNo')->from('acc_vaucher')->where('referenceNo', $invoice_id)->where('status', 0)->get()->result();
         foreach ($vouchers as $value) {
             # code...
             $data = $this->Accounts_model->approved_vaucher($value->VNo, 'active');
         }
         return true;
-
     }
 
-      // Quotation To Sales
-    public function quotation_to_sales($quot_id = null) {
+    // Quotation To Sales
+    public function quotation_to_sales($quot_id = null)
+    {
         $vat_tax_info   = $this->quotation_model->vat_tax_setting();
         $data['quot_main']       = $this->quotation_model->quot_main_edit($quot_id);
-        if ($data['quot_main'][0]['is_dynamic'] ==1) {
+        if ($data['quot_main'][0]['is_dynamic'] == 1) {
             if ($data['quot_main'][0]['is_dynamic'] != $vat_tax_info->dynamic_tax) {
 
                 $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
                 redirect("manage_quotation");
             }
-
-        }
-        elseif ($data['quot_main'][0]['is_fixed'] ==1) {
+        } elseif ($data['quot_main'][0]['is_fixed'] == 1) {
             if ($data['quot_main'][0]['is_fixed'] != $vat_tax_info->fixed_tax) {
 
                 $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
@@ -458,12 +463,12 @@ class Delivery extends MX_Controller {
             }
         }
         $taxfield = $this->db->select('tax_name,default_value')
-                ->from('tax_settings')
-                ->get()
-                ->result_array();
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
 
         $tablecolumn = $this->db->list_fields('tax_collection');
-                $num_column = count($tablecolumn)-4;
+        $num_column = count($tablecolumn) - 4;
         $currency_details        = $this->quotation_model->setting_data();
         $data['currency_details'] = $currency_details;
         $data['title']           = "Delivery to invoice";
@@ -479,440 +484,433 @@ class Delivery extends MX_Controller {
         $data['all_pmethod']     = $this->quotation_model->pmethod_dropdown();
         $data['module']          = "delivery";
         $vatortax              = $this->quotation_model->vat_tax_setting();
-        if($vatortax->fixed_tax == 1){
+        if ($vatortax->fixed_tax == 1) {
 
             $data['page']            = "quotation_to_sales";
         }
-        if($vatortax->dynamic_tax == 1){
+        if ($vatortax->dynamic_tax == 1) {
             $data['page']          = "quotation_to_sales_dynamic";
         }
         echo modules::run('template/layout', $data);
     }
 
-    public function bdtask_showpaymentmodal(){
+    public function bdtask_showpaymentmodal()
+    {
         $data['all_pmethod'] = $this->quotation_model->pmethod_dropdown();
-        $this->load->view('quotation/newpaymentveiw',$data);
+        $this->load->view('quotation/newpaymentveiw', $data);
     }
-    public function bdtask_showpaymentmodalser(){
+    public function bdtask_showpaymentmodalser()
+    {
         $data['all_pmethod'] = $this->quotation_model->pmethod_dropdown();
-        $this->load->view('quotation/newpaymentveiwser',$data);
+        $this->load->view('quotation/newpaymentveiwser', $data);
     }
 
     public function add_quotation_to_invoice()
     {
 
-        $this->form_validation->set_rules('customer_id', display('customer_name') ,'required|max_length[15]');
+        $this->form_validation->set_rules('customer_id', display('customer_name'), 'required|max_length[15]');
 
-        $quotation_id = $this->input->post('quotation_id',TRUE);
+        $quotation_id = $this->input->post('quotation_id', TRUE);
 
-        $finyear = $this->input->post('finyear',true);
-        if($finyear<=0){
+        $finyear = $this->input->post('finyear', true);
+        if ($finyear <= 0) {
             $this->session->set_flashdata('exception', 'Please Create Financial Year First From Accounts > Financial Year.');
             // redirect("add_purchase");
-            redirect("delivery_to_sales/".$quotation_id);
-        }else {
-        if ($this->form_validation->run() === true) {
-
-            $mailsetting  = $this->db->select('*')->from('email_config')->get()->result_array();
-            $product_id   = $this->input->post('product_id',TRUE);
-            $customer_id  = $this->input->post('customer_id',TRUE);
-            $invoice_id   = $this->number_generator();
-            $createby     = $this->session->userdata('id');
-            $createdate   = date('Y-m-d H:i:s');
-            $quantity     = $this->input->post('product_quantity',TRUE);
-            $squantity    = $this->input->post('service_quantity',TRUE);
-            $tablecolumn  = $this->db->list_fields('tax_collection');
-            $num_column   = count($tablecolumn)-4;
-            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id',$customer_id)->get()->row();
-            $no_of_credit_day = $cusifo->no_of_credit_days;
-            // $headn        = $customer_id.'-'.$cusifo->customer_name;
-            // $coainfo      = $this->db->select('*')->from('acc_coa')->where('HeadName',$headn)->get()->row();
-            // $customer_headcode = $coainfo->HeadCode;
-            $bank_id      = $this->input->post('bank_id',TRUE);
-            if(!empty($bank_id)){
-                $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id',$bank_id)->get()->row()->bank_name;
-                $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName',$bankname)->get()->row()->HeadCode;
-            }else{
-                $bankcoaid='';
-            }
-
-            $multipaytype   = $this->input->post('multipaytype',TRUE);
-
-            if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
-                echo '<script>alert("Credit is not available");</script>';
-//                echo '<script>setTimeout(function(){ window.location.href = "'.$base_url.'quotation_to_sales/'.$quotation_id.'"; }, 1000);</script>';
-                echo '<script>setTimeout(function(){ window.history.back(); }, 1000);</script>';
-                exit();
-            }
-
-            if($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0'){
-                $grand_total_price = $this->input->post('grand_total_price',TRUE);
-                $paid_amount = $this->input->post('paid_amount',TRUE);
-                $due_amount = $grand_total_price - $paid_amount;
-            }else{
-                $due_amount = '';
-            }
-
-
-            $quotdata = array('status'  => 2,);
-            $this->db->where('quotation_id', $quotation_id);
-            $this->db->update('delivery',$quotdata);
-
-            $transection_id = $this->occational->generator(15);
-            $fixordyn   = $this->db->select('*')->from('vat_tax_setting')->get()->row();
-            $is_fixed   = '';
-            $is_dynamic = '';
-
-            if($fixordyn->fixed_tax == 1 ){
-                $is_fixed   = 1;
-                $is_dynamic = 0;
-                $paid_tax = $this->input->post('total_vat_amnt',TRUE);
-            }elseif($fixordyn->dynamic_tax == 1 ){
-                $is_fixed   = 0;
-                $is_dynamic = 1;
-                $paid_tax = $this->input->post('total_tax',TRUE);
-            }
-
-            $datainvmain = array(
-                'invoice_id'      => $invoice_id,
-                'customer_id'     => $customer_id,
-                'date'            => (!empty($this->input->post('qdate',TRUE))?$this->input->post('qdate',TRUE):date('Y-m-d')),
-                'total_amount'    => $this->input->post('grand_total_price',TRUE),
-                'paid_amount'     => $this->input->post('paid_amount',TRUE),
-                'total_tax'       => $this->input->post('total_tax',TRUE),
-                'invoice'         => $invoice_id,
-                'invoice_details' => $quotation_id,
-                'invoice_discount'=> $this->input->post('invoice_discount',TRUE),
-                'total_discount'  => $this->input->post('total_discount',TRUE),
-                'total_vat_amnt'  => $this->input->post('total_vat_amnt',TRUE),
-                'prevous_due'     => '',
-                'due_amount'      => $due_amount,
-                'shipping_cost'   => '',
-                'sales_by'        => $this->session->userdata('id'),
-                'status'          => 1,
-                'payment_type'    =>  1,
-                'bank_id'         =>  (!empty($this->input->post('bank_id',TRUE))?$this->input->post('bank_id',TRUE):null),
-                'is_fixed'        =>  $is_fixed,
-                'is_dynamic'      =>  $is_dynamic,
-                'no_of_credit_days' =>  $no_of_credit_day,
-            );
-
-
-            $prinfo  = $this->db->select('product_id,Avg(rate) as product_rate')->from('product_purchase_details')->where_in('product_id',$product_id)->group_by('product_id')->get()->result();
-            $purchase_ave = [];
-            $i=0;
-            foreach ($prinfo as $avg) {
-                $purchase_ave [] =  $avg->product_rate*$quantity[$i];
-                $i++;
-            }
-            $sumval = array_sum($purchase_ave);
-
-            for($j=0;$j<$num_column;$j++){
-                $taxfield = 'tax'.$j;
-                $taxvalue = 'total_tax'.$j;
-                $taxdata[$taxfield]=$this->input->post($taxvalue);
-            }
-            $taxdata['customer_id'] = $customer_id;
-            $taxdata['date']        = (!empty($this->input->post('qdate',TRUE))?$this->input->post('qdate',TRUE):date('Y-m-d'));
-            $taxdata['relation_id'] = $invoice_id;
-
-
-            if (!empty($quantity)) {
-                $this->db->insert('invoice', $datainvmain);
-                $inv_insert_id =  $this->db->insert_id();
-                $this->db->insert('tax_collection',$taxdata);
-
-
-                $multipayamount = $this->input->post('pamount_by_method',TRUE);
-                $multipaytype   = $this->input->post('multipaytype',TRUE);
-
-            }
-
-            $predefine_account  = $this->db->select('*')->from('acc_predefine_account')->get()->row();
-            $Narration          = "Sales Voucher";
-            $Comment            = "Sales Voucher for customer";
-            $reVID              = $predefine_account->salesCode;
-
-            if($multipaytype && $multipayamount){
-
-                $is_credit = NULL;
-                $amnt_type = 'Debit';
-                for ($i=0; $i < count($multipaytype); $i++) {
-
-                    $COAID = $multipaytype[$i];
-                    $amount_pay = $multipayamount[$i];
-
-                    $this->insert_sale_creditvoucher($is_credit,$invoice_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
-
-                }
-
-            }
-            // for inventory & cost of goods sold start
-            $goodsCOAID     = $predefine_account->costs_of_good_solds;
-            $purchasevalue  = $sumval;
-            $goodsNarration = "Sales cost of goods Voucher";
-            $goodsComment   = "Sales cost of goods Voucher for customer";
-            $goodsreVID     = $predefine_account->inventoryCode;
-
-            $this->insert_sale_inventory_voucher($invoice_id,$goodsCOAID,$purchasevalue,$goodsNarration,$goodsComment,$goodsreVID);
-            // for inventory & cost of goods sold end
-
-            // for taxs start
-            $taxCOAID     = $predefine_account->tax;
-            $taxvalue     = $paid_tax;
-            $taxNarration = "Tax for Sales Voucher";
-            $taxComment   = "Tax for Sales Voucher for customer";
-            $taxreVID     = $predefine_account->prov_state_tax;
-
-            $this->insert_sale_taxvoucher($invoice_id,$taxCOAID,$taxvalue,$taxNarration,$taxComment,$taxreVID);
-            // for taxs end
-
-
-            $rate                = $this->input->post('product_rate',TRUE);
-            $p_id                = $this->input->post('product_id',TRUE);
-            $total_amount        = $this->input->post('total_price',TRUE);
-            $discount_rate       = $this->input->post('discountvalue',TRUE);
-            $discount_per        = $this->input->post('discount',TRUE);
-            $vat_amnt            = $this->input->post('vatvalue',TRUE);
-            $vat_amnt_pcnt       = $this->input->post('vatpercent',TRUE);
-            $tax_amount          = $this->input->post('tax',TRUE);
-            $invoice_description = $this->input->post('desc',TRUE);
-            $serial_n            = $this->input->post('serial_no',TRUE);
-            $supplier_price      = $this->input->post('supplier_price',TRUE);
-
-            for ($i = 0, $n = count($p_id); $i < $n; $i++) {
-                $product_quantity = $quantity[$i];
-                $product_rate     = $rate[$i];
-                $product_id       = $p_id[$i];
-                $serial_no        = $serial_n[$i];
-                $total_price      = $total_amount[$i];
-                $supplier_rate    = $supplier_price[$i];
-                $disper           = $discount_per[$i];
-                $discount         = $discount_rate[$i];
-                $vatamnt          = $vat_amnt[$i];
-                $vatamntpcnt      = $vat_amnt_pcnt[$i];
-                $tax              = $tax_amount[$i];
-                $description      = $invoice_description[$i];
-
-                $invoiceDetails = array(
-                    'invoice_details_id' => $this->generator(15),
-                    'invoice_id'         => $inv_insert_id,
-                    'product_id'         => $product_id,
-                    'batch_id'           => $serial_no,
-                    'quantity'           => $product_quantity,
-                    'rate'               => $product_rate,
-                    'discount'           => $discount,
-                    'description'        => $description,
-                    'discount_per'       => $disper,
-                    'vat_amnt'           => $vatamnt,
-                    'vat_amnt_per'       => $vatamntpcnt,
-                    'tax'                => $tax,
-                    'paid_amount'        => $this->input->post('grand_total_price',TRUE),
-                    'due_amount'         => '',
-                    'supplier_rate'      => $supplier_rate,
-                    'total_price'        => $total_price,
-                    'status'             => 1
-                );
-
-                $product_price = array(
-
-                    'price' => $product_rate
-                );
-                if (!empty($product_quantity)) {
-                    $this->db->insert('invoice_details', $invoiceDetails);
-                    $this->db->where('product_id', $product_id)->update('product_information', $product_price);
-
-                }
-            }
-            if (!empty($quantity)) {
-
-                $setting_data = $this->db->select('is_autoapprove_v')->from('web_setting')->where('setting_id', 1)->get()->result_array();
-                if ($setting_data[0]['is_autoapprove_v'] == 1) {
-
-                    $new = $this->autoapprove($invoice_id);
-                }
-                if($mailsetting[0]['isinvoice']==1){
-                    $mail = $this->invoice_pdf_generate($invoice_id);
-                    if($mail == 0){
-                        $data['message2'] = $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
-                    }
-                }
-            }
-
-            ##==== SERVICE PART START ====###
-
-            //service invoice
-            $fixordyn = $this->db->select('*')->from('vat_tax_setting')->get()->row();
-            $is_fixed   = '';
-            $is_dynamic = '';
-            $srinvoice_id = $this->voucher_no_generator();
-
-            if($fixordyn->fixed_tax == 1 ){
-                $is_fixed   = 1;
-                $is_dynamic = 0;
-                $service_paid_tax = $this->input->post('service_total_vat_amnt',TRUE);
-            }elseif($fixordyn->dynamic_tax == 1 ){
-                $is_fixed   = 0;
-                $is_dynamic = 1;
-                $service_paid_tax = $this->input->post('total_service_tax',TRUE);
-            }
-            $serviceinvoice = array(
-                'employee_id'     => '',
-                'customer_id'     => $customer_id,
-                'date'            => (!empty($this->input->post('qdate',TRUE))?$this->input->post('qdate',TRUE):date('Y-m-d')),
-                'total_amount'    => $this->input->post('grand_total_service_amount',TRUE),
-                'total_tax'       => $this->input->post('total_service_tax',TRUE),
-                'voucher_no'      => $srinvoice_id,
-                'details'         => (!empty($this->input->post('details',TRUE))?$this->input->post('details',TRUE):'Service From Quotation'),
-                'invoice_discount'=> $this->input->post('service_discount',TRUE),
-                'total_vat_amnt'  => $this->input->post('service_total_vat_amnt',true),
-                'total_discount'  => $this->input->post('totalServiceDicount',TRUE),
-                'shipping_cost'   => '',
-                'paid_amount'     => $this->input->post('grand_total_service_amount',TRUE),
-                'due_amount'      => 0,
-                'previous'        => '',
-                'is_fixed'        => $is_fixed,
-                'is_dynamic'      => $is_dynamic,
-
-            );
-
-
-            if (!empty($squantity) && $squantity[0] != '') {
-                $this->db->insert('service_invoice', $serviceinvoice);
-                $serv_insert_id =  $this->db->insert_id();
-
-                $smultipayamount = $this->input->post('ser_pamount_by_method',TRUE);
-                $smultipaytype = $this->input->post('ser_multipaytype',TRUE);
-                $i=0;
-
-            }
-
-
-            $predefine_account  = $this->db->select('*')->from('acc_predefine_account')->get()->row();
-            $Narrationserv      = "Service Sales Voucher";
-            $Commentserv        = "Service Sales Voucher for customer";
-            $reVIDserv          = $predefine_account->serviceCode;
-
-            if($smultipaytype && $smultipayamount){
-
-                $amnt_type = 'Debit';
-                for ($i=0; $i < count($smultipaytype); $i++) {
-
-                    $COAIDserv = $smultipaytype[$i];
-                    $amount_payserv = $smultipayamount[$i];
-
-                    $this->insert_servsale_creditvoucher($is_credit,$srinvoice_id,$COAIDserv,$amnt_type,$amount_payserv,$Narrationserv,$Commentserv,$reVIDserv);
-
-                }
-
-
-            }
-
-            // for taxs start
-            $taxCOAIDserv     = $predefine_account->tax;
-            $taxvalueserv     = $service_paid_tax;
-            $taxNarrationserv = "Tax for Service Sales Voucher";
-            $taxCommentserv   = "Tax for Service Sales Voucher for customer";
-            $taxreVIDserv     = $predefine_account->prov_state_tax;
-
-            $this->insert_servsale_taxvoucher($srinvoice_id,$taxCOAIDserv,$taxvalueserv,$taxNarrationserv,$taxCommentserv,$taxreVIDserv);
-            // for taxs end
-
-            $qty                 = $this->input->post('service_quantity',TRUE);
-            $srate               = $this->input->post('service_rate',TRUE);
-            $serv_id             = $this->input->post('service_id',TRUE);
-            $total_serviceamount = $this->input->post('total_service_amount',TRUE);
-            $sdiscount_rate      = $this->input->post('service_discountvalue',TRUE);
-            $sdiscount_per       = $this->input->post('sdiscount',TRUE);
-            $svat_rate           = $this->input->post('service_vatvalue',TRUE);
-            $svat_per            = $this->input->post('service_vatpercent',TRUE);
-            $tax_amount          = $this->input->post('stax',TRUE);
-            $invoice_description = $this->input->post('details',TRUE);
-
-            for ($i = 0, $n   = count($serv_id); $i < $n; $i++) {
-                $service_qty  = $qty[$i];
-                $service_rate = $srate[$i];
-                $service_id   = $serv_id[$i];
-                $total_amount = $total_serviceamount[$i];
-                $sdisper       = $sdiscount_per[$i];
-                $sdisamnt      = $sdiscount_rate[$i];
-                $svatper       = $svat_per[$i];
-                $svatamnt      = $svat_rate[$i];
-                $coa_info      = $this->db->select('HeadCode')->from('acc_coa')->where('service_id',$service_id)->get()->row();
-
-                $service_details = array(
-                    'service_inv_id'     => $serv_insert_id,
-                    'service_id'         => $service_id,
-                    'qty'                => $service_qty,
-                    'charge'             => $service_rate,
-                    'discount'           => $sdisper,
-                    'discount_amount'    => $sdisamnt,
-                    'vat'                => $svatper,
-                    'vat_amnt'           => $svatamnt,
-                    'total'              => $total_amount,
-                );
-
-                if (!empty($service_qty)) {
-                    $this->db->insert('service_invoice_details', $service_details);
-
-                }
-
-            }
-            if (!empty($squantity)) {
-                $setting_data = $this->db->select('is_autoapprove_v')->from('web_setting')->where('setting_id', 1)->get()->result_array();
-                if ($setting_data[0]['is_autoapprove_v'] == 1) {
-
-                    $new = $this->autoapprove($srinvoice_id);
-                }
-                if($mailsetting[0]['isservice']==1){
-                    $mail = $this->service_pdf_generate($srinvoice_id);
-                    if($mail == 0){
-                        $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
-                    }
-                }
-            }
-
-            for($j=0;$j<$num_column;$j++){
-                $taxfield = 'tax'.$j;
-                $taxvalue = 'total_service_tax'.$j;
-                $taxdata[$taxfield] = $this->input->post($taxvalue);
-            }
-            $taxdata['customer_id'] = $customer_id;
-            $taxdata['date']        = (!empty($this->input->post('qdate',TRUE))?$this->input->post('qdate',TRUE):date('Y-m-d'));
-            $taxdata['relation_id'] = $srinvoice_id;
-            $this->db->insert('tax_collection',$taxdata);
-            $this->session->set_flashdata(array('message' => display('successfully_added')));
-            redirect(base_url('manage_delivery'));
+            redirect("delivery_to_sales/" . $quotation_id);
         } else {
-            $this->session->set_flashdata('exception', validation_errors());
-            redirect("delivery_to_sales/".$quotation_id);
+            if ($this->form_validation->run() === true) {
+
+                $mailsetting  = $this->db->select('*')->from('email_config')->get()->result_array();
+                $product_id   = $this->input->post('product_id', TRUE);
+                $customer_id  = $this->input->post('customer_id', TRUE);
+                $invoice_id   = $this->number_generator();
+                $createby     = $this->session->userdata('id');
+                $createdate   = date('Y-m-d H:i:s');
+                $quantity     = $this->input->post('product_quantity', TRUE);
+                $squantity    = $this->input->post('service_quantity', TRUE);
+                $tablecolumn  = $this->db->list_fields('tax_collection');
+                $num_column   = count($tablecolumn) - 4;
+                $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+                $no_of_credit_day = $cusifo->no_of_credit_days;
+                // $headn        = $customer_id.'-'.$cusifo->customer_name;
+                // $coainfo      = $this->db->select('*')->from('acc_coa')->where('HeadName',$headn)->get()->row();
+                // $customer_headcode = $coainfo->HeadCode;
+                $bank_id      = $this->input->post('bank_id', TRUE);
+                if (!empty($bank_id)) {
+                    $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
+                    $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+                } else {
+                    $bankcoaid = '';
+                }
+
+                $multipaytype   = $this->input->post('multipaytype', TRUE);
+
+                if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
+                    echo '<script>alert("Credit is not available");</script>';
+                    //                echo '<script>setTimeout(function(){ window.location.href = "'.$base_url.'quotation_to_sales/'.$quotation_id.'"; }, 1000);</script>';
+                    echo '<script>setTimeout(function(){ window.history.back(); }, 1000);</script>';
+                    exit();
+                }
+
+                if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
+                    $grand_total_price = $this->input->post('grand_total_price', TRUE);
+                    $paid_amount = $this->input->post('paid_amount', TRUE);
+                    $due_amount = $grand_total_price - $paid_amount;
+                } else {
+                    $due_amount = '';
+                }
+
+
+                $quotdata = array('invoice_status'  => 2,);
+                $this->db->where('quotation_main_id', $quotation_id);
+                $this->db->update('delivery', $quotdata);
+
+                $transection_id = $this->occational->generator(15);
+                $fixordyn   = $this->db->select('*')->from('vat_tax_setting')->get()->row();
+                $is_fixed   = '';
+                $is_dynamic = '';
+
+                if ($fixordyn->fixed_tax == 1) {
+                    $is_fixed   = 1;
+                    $is_dynamic = 0;
+                    $paid_tax = $this->input->post('total_vat_amnt', TRUE);
+                } elseif ($fixordyn->dynamic_tax == 1) {
+                    $is_fixed   = 0;
+                    $is_dynamic = 1;
+                    $paid_tax = $this->input->post('total_tax', TRUE);
+                }
+
+                $datainvmain = array(
+                    'invoice_id'      => $invoice_id,
+                    'customer_id'     => $customer_id,
+                    'date'            => (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d')),
+                    'total_amount'    => $this->input->post('grand_total_price', TRUE),
+                    'paid_amount'     => $this->input->post('paid_amount', TRUE),
+                    'total_tax'       => $this->input->post('total_tax', TRUE),
+                    'invoice'         => $invoice_id,
+                    'invoice_details' => $quotation_id,
+                    'invoice_discount' => $this->input->post('invoice_discount', TRUE),
+                    'total_discount'  => $this->input->post('total_discount', TRUE),
+                    'total_vat_amnt'  => $this->input->post('total_vat_amnt', TRUE),
+                    'prevous_due'     => '',
+                    'due_amount'      => $due_amount,
+                    'shipping_cost'   => '',
+                    'sales_by'        => $this->session->userdata('id'),
+                    'status'          => 1,
+                    'payment_type'    =>  1,
+                    'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
+                    'is_fixed'        =>  $is_fixed,
+                    'is_dynamic'      =>  $is_dynamic,
+                    'no_of_credit_days' =>  $no_of_credit_day,
+                );
+
+
+                $prinfo  = $this->db->select('product_id,Avg(rate) as product_rate')->from('product_purchase_details')->where_in('product_id', $product_id)->group_by('product_id')->get()->result();
+                $purchase_ave = [];
+                $i = 0;
+                foreach ($prinfo as $avg) {
+                    $purchase_ave[] =  $avg->product_rate * $quantity[$i];
+                    $i++;
+                }
+                $sumval = array_sum($purchase_ave);
+
+                for ($j = 0; $j < $num_column; $j++) {
+                    $taxfield = 'tax' . $j;
+                    $taxvalue = 'total_tax' . $j;
+                    $taxdata[$taxfield] = $this->input->post($taxvalue);
+                }
+                $taxdata['customer_id'] = $customer_id;
+                $taxdata['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
+                $taxdata['relation_id'] = $invoice_id;
+
+
+                if (!empty($quantity)) {
+                    $this->db->insert('invoice', $datainvmain);
+                    $inv_insert_id =  $this->db->insert_id();
+                    $this->db->insert('tax_collection', $taxdata);
+
+
+                    $multipayamount = $this->input->post('pamount_by_method', TRUE);
+                    $multipaytype   = $this->input->post('multipaytype', TRUE);
+                }
+
+                $predefine_account  = $this->db->select('*')->from('acc_predefine_account')->get()->row();
+                $Narration          = "Sales Voucher";
+                $Comment            = "Sales Voucher for customer";
+                $reVID              = $predefine_account->salesCode;
+
+                if ($multipaytype && $multipayamount) {
+
+                    $is_credit = NULL;
+                    $amnt_type = 'Debit';
+                    for ($i = 0; $i < count($multipaytype); $i++) {
+
+                        $COAID = $multipaytype[$i];
+                        $amount_pay = $multipayamount[$i];
+
+                        $this->insert_sale_creditvoucher($is_credit, $invoice_id, $COAID, $amnt_type, $amount_pay, $Narration, $Comment, $reVID);
+                    }
+                }
+                // for inventory & cost of goods sold start
+                $goodsCOAID     = $predefine_account->costs_of_good_solds;
+                $purchasevalue  = $sumval;
+                $goodsNarration = "Sales cost of goods Voucher";
+                $goodsComment   = "Sales cost of goods Voucher for customer";
+                $goodsreVID     = $predefine_account->inventoryCode;
+
+                $this->insert_sale_inventory_voucher($invoice_id, $goodsCOAID, $purchasevalue, $goodsNarration, $goodsComment, $goodsreVID);
+                // for inventory & cost of goods sold end
+
+                // for taxs start
+                $taxCOAID     = $predefine_account->tax;
+                $taxvalue     = $paid_tax;
+                $taxNarration = "Tax for Sales Voucher";
+                $taxComment   = "Tax for Sales Voucher for customer";
+                $taxreVID     = $predefine_account->prov_state_tax;
+
+                $this->insert_sale_taxvoucher($invoice_id, $taxCOAID, $taxvalue, $taxNarration, $taxComment, $taxreVID);
+                // for taxs end
+
+
+                $rate                = $this->input->post('product_rate', TRUE);
+                $p_id                = $this->input->post('product_id', TRUE);
+                $total_amount        = $this->input->post('total_price', TRUE);
+                $discount_rate       = $this->input->post('discountvalue', TRUE);
+                $discount_per        = $this->input->post('discount', TRUE);
+                $vat_amnt            = $this->input->post('vatvalue', TRUE);
+                $vat_amnt_pcnt       = $this->input->post('vatpercent', TRUE);
+                $tax_amount          = $this->input->post('tax', TRUE);
+                $invoice_description = $this->input->post('desc', TRUE);
+                $serial_n            = $this->input->post('serial_no', TRUE);
+                $supplier_price      = $this->input->post('supplier_price', TRUE);
+
+                for ($i = 0, $n = count($p_id); $i < $n; $i++) {
+                    $product_quantity = $quantity[$i];
+                    $product_rate     = $rate[$i];
+                    $product_id       = $p_id[$i];
+                    $serial_no        = $serial_n[$i];
+                    $total_price      = $total_amount[$i];
+                    $supplier_rate    = $supplier_price[$i];
+                    $disper           = $discount_per[$i];
+                    $discount         = $discount_rate[$i];
+                    $vatamnt          = $vat_amnt[$i];
+                    $vatamntpcnt      = $vat_amnt_pcnt[$i];
+                    $tax              = $tax_amount[$i];
+                    $description      = $invoice_description[$i];
+
+                    $invoiceDetails = array(
+                        'invoice_details_id' => $this->generator(15),
+                        'invoice_id'         => $inv_insert_id,
+                        'product_id'         => $product_id,
+                        'batch_id'           => $serial_no,
+                        'quantity'           => $product_quantity,
+                        'rate'               => $product_rate,
+                        'discount'           => $discount,
+                        'description'        => $description,
+                        'discount_per'       => $disper,
+                        'vat_amnt'           => $vatamnt,
+                        'vat_amnt_per'       => $vatamntpcnt,
+                        'tax'                => $tax,
+                        'paid_amount'        => $this->input->post('grand_total_price', TRUE),
+                        'due_amount'         => '',
+                        'supplier_rate'      => $supplier_rate,
+                        'total_price'        => $total_price,
+                        'status'             => 1
+                    );
+
+                    $product_price = array(
+
+                        'price' => $product_rate
+                    );
+                    if (!empty($product_quantity)) {
+                        $this->db->insert('invoice_details', $invoiceDetails);
+                        $this->db->where('product_id', $product_id)->update('product_information', $product_price);
+                    }
+                }
+                if (!empty($quantity)) {
+
+                    $setting_data = $this->db->select('is_autoapprove_v')->from('web_setting')->where('setting_id', 1)->get()->result_array();
+                    if ($setting_data[0]['is_autoapprove_v'] == 1) {
+
+                        $new = $this->autoapprove($invoice_id);
+                    }
+                    if ($mailsetting[0]['isinvoice'] == 1) {
+                        $mail = $this->invoice_pdf_generate($invoice_id);
+                        if ($mail == 0) {
+                            $data['message2'] = $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
+                        }
+                    }
+                }
+
+                ##==== SERVICE PART START ====###
+
+                //service invoice
+                $fixordyn = $this->db->select('*')->from('vat_tax_setting')->get()->row();
+                $is_fixed   = '';
+                $is_dynamic = '';
+                $srinvoice_id = $this->voucher_no_generator();
+
+                if ($fixordyn->fixed_tax == 1) {
+                    $is_fixed   = 1;
+                    $is_dynamic = 0;
+                    $service_paid_tax = $this->input->post('service_total_vat_amnt', TRUE);
+                } elseif ($fixordyn->dynamic_tax == 1) {
+                    $is_fixed   = 0;
+                    $is_dynamic = 1;
+                    $service_paid_tax = $this->input->post('total_service_tax', TRUE);
+                }
+                $serviceinvoice = array(
+                    'employee_id'     => '',
+                    'customer_id'     => $customer_id,
+                    'date'            => (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d')),
+                    'total_amount'    => $this->input->post('grand_total_service_amount', TRUE),
+                    'total_tax'       => $this->input->post('total_service_tax', TRUE),
+                    'voucher_no'      => $srinvoice_id,
+                    'details'         => (!empty($this->input->post('details', TRUE)) ? $this->input->post('details', TRUE) : 'Service From Quotation'),
+                    'invoice_discount' => $this->input->post('service_discount', TRUE),
+                    'total_vat_amnt'  => $this->input->post('service_total_vat_amnt', true),
+                    'total_discount'  => $this->input->post('totalServiceDicount', TRUE),
+                    'shipping_cost'   => '',
+                    'paid_amount'     => $this->input->post('grand_total_service_amount', TRUE),
+                    'due_amount'      => 0,
+                    'previous'        => '',
+                    'is_fixed'        => $is_fixed,
+                    'is_dynamic'      => $is_dynamic,
+
+                );
+
+
+                if (!empty($squantity) && $squantity[0] != '') {
+                    $this->db->insert('service_invoice', $serviceinvoice);
+                    $serv_insert_id =  $this->db->insert_id();
+
+                    $smultipayamount = $this->input->post('ser_pamount_by_method', TRUE);
+                    $smultipaytype = $this->input->post('ser_multipaytype', TRUE);
+                    $i = 0;
+                }
+
+
+                $predefine_account  = $this->db->select('*')->from('acc_predefine_account')->get()->row();
+                $Narrationserv      = "Service Sales Voucher";
+                $Commentserv        = "Service Sales Voucher for customer";
+                $reVIDserv          = $predefine_account->serviceCode;
+
+                if ($smultipaytype && $smultipayamount) {
+
+                    $amnt_type = 'Debit';
+                    for ($i = 0; $i < count($smultipaytype); $i++) {
+
+                        $COAIDserv = $smultipaytype[$i];
+                        $amount_payserv = $smultipayamount[$i];
+
+                        $this->insert_servsale_creditvoucher($is_credit, $srinvoice_id, $COAIDserv, $amnt_type, $amount_payserv, $Narrationserv, $Commentserv, $reVIDserv);
+                    }
+                }
+
+                // for taxs start
+                $taxCOAIDserv     = $predefine_account->tax;
+                $taxvalueserv     = $service_paid_tax;
+                $taxNarrationserv = "Tax for Service Sales Voucher";
+                $taxCommentserv   = "Tax for Service Sales Voucher for customer";
+                $taxreVIDserv     = $predefine_account->prov_state_tax;
+
+                $this->insert_servsale_taxvoucher($srinvoice_id, $taxCOAIDserv, $taxvalueserv, $taxNarrationserv, $taxCommentserv, $taxreVIDserv);
+                // for taxs end
+
+                $qty                 = $this->input->post('service_quantity', TRUE);
+                $srate               = $this->input->post('service_rate', TRUE);
+                $serv_id             = $this->input->post('service_id', TRUE);
+                $total_serviceamount = $this->input->post('total_service_amount', TRUE);
+                $sdiscount_rate      = $this->input->post('service_discountvalue', TRUE);
+                $sdiscount_per       = $this->input->post('sdiscount', TRUE);
+                $svat_rate           = $this->input->post('service_vatvalue', TRUE);
+                $svat_per            = $this->input->post('service_vatpercent', TRUE);
+                $tax_amount          = $this->input->post('stax', TRUE);
+                $invoice_description = $this->input->post('details', TRUE);
+
+                for ($i = 0, $n   = count($serv_id); $i < $n; $i++) {
+                    $service_qty  = $qty[$i];
+                    $service_rate = $srate[$i];
+                    $service_id   = $serv_id[$i];
+                    $total_amount = $total_serviceamount[$i];
+                    $sdisper       = $sdiscount_per[$i];
+                    $sdisamnt      = $sdiscount_rate[$i];
+                    $svatper       = $svat_per[$i];
+                    $svatamnt      = $svat_rate[$i];
+                    $coa_info      = $this->db->select('HeadCode')->from('acc_coa')->where('service_id', $service_id)->get()->row();
+
+                    $service_details = array(
+                        'service_inv_id'     => $serv_insert_id,
+                        'service_id'         => $service_id,
+                        'qty'                => $service_qty,
+                        'charge'             => $service_rate,
+                        'discount'           => $sdisper,
+                        'discount_amount'    => $sdisamnt,
+                        'vat'                => $svatper,
+                        'vat_amnt'           => $svatamnt,
+                        'total'              => $total_amount,
+                    );
+
+                    if (!empty($service_qty)) {
+                        $this->db->insert('service_invoice_details', $service_details);
+                    }
+                }
+                if (!empty($squantity)) {
+                    $setting_data = $this->db->select('is_autoapprove_v')->from('web_setting')->where('setting_id', 1)->get()->result_array();
+                    if ($setting_data[0]['is_autoapprove_v'] == 1) {
+
+                        $new = $this->autoapprove($srinvoice_id);
+                    }
+                    if ($mailsetting[0]['isservice'] == 1) {
+                        $mail = $this->service_pdf_generate($srinvoice_id);
+                        if ($mail == 0) {
+                            $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
+                        }
+                    }
+                }
+
+                for ($j = 0; $j < $num_column; $j++) {
+                    $taxfield = 'tax' . $j;
+                    $taxvalue = 'total_service_tax' . $j;
+                    $taxdata[$taxfield] = $this->input->post($taxvalue);
+                }
+                $taxdata['customer_id'] = $customer_id;
+                $taxdata['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
+                $taxdata['relation_id'] = $srinvoice_id;
+                $this->db->insert('tax_collection', $taxdata);
+                $this->session->set_flashdata(array('message' => display('successfully_added')));
+                redirect(base_url('manage_delivery'));
+            } else {
+                $this->session->set_flashdata('exception', validation_errors());
+                redirect("delivery_to_sales/" . $quotation_id);
+            }
         }
     }
-    }
 
-    public function voucher_no_generator() {
+    public function voucher_no_generator()
+    {
         $pieces = null;
         $data = $this->db->select('max(id) as voucher_sl')->from('service_invoice')->get()->row();
-        if (!empty($data->voucher_sl)){
+        if (!empty($data->voucher_sl)) {
             $invoice_no = $data->voucher_sl + 1;
-        }
-        else {
+        } else {
             $invoice_no = 1;
         }
-        return 'serv-'.$invoice_no;
+        return 'serv-' . $invoice_no;
         return $data;
     }
     // insert sales debitvoucher
-    public function insert_sale_creditvoucher($is_credit = null,$invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){
+    public function insert_sale_creditvoucher($is_credit = null, $invoice_id = null, $dbtid = null, $amnt_type = null, $amnt = null, $Narration = null, $Comment = null, $reVID = null, $subcode = null)
+    {
 
         $fyear = financial_year();
         $VDate = date('Y-m-d');
-        $CreateBy=$this->session->userdata('id');
-        $createdate=date('Y-m-d H:i:s');
+        $CreateBy = $this->session->userdata('id');
+        $createdate = date('Y-m-d H:i:s');
         // Cash & credit voucher insert
         if ($is_credit == 1) {
-            $maxid = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');
-            $vaucherNo = "JV-". ($maxid +1);
+            $maxid = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'JV', 'VNo');
+            $vaucherNo = "JV-" . ($maxid + 1);
 
             $debitinsert = array(
                 'fyear'          =>  $fyear,
@@ -931,11 +929,9 @@ class Delivery extends MX_Controller {
                 'CreateDate'     =>  $createdate,
                 'status'         =>  0,
             );
-
-
-        }else {
-            $maxid = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','CV','VNo');
-            $vaucherNo = "CV-". ($maxid +1);
+        } else {
+            $maxid = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'CV', 'VNo');
+            $vaucherNo = "CV-" . ($maxid + 1);
             $debitinsert = array(
                 'fyear'          =>  $fyear,
                 'VNo'            =>  $vaucherNo,
@@ -951,32 +947,32 @@ class Delivery extends MX_Controller {
                 'CreateDate'     => $createdate,
                 'status'         => 0,
             );
-
         }
-        if($amnt_type == 'Debit'){
+        if ($amnt_type == 'Debit') {
 
             $debitinsert['Debit']  = $amnt;
             $debitinsert['Credit'] =  0.00;
-        }else{
+        } else {
 
             $debitinsert['Debit']  = 0.00;
             $debitinsert['Credit'] =  $amnt;
         }
 
-        $this->db->insert('acc_vaucher',$debitinsert);
+        $this->db->insert('acc_vaucher', $debitinsert);
 
-	    return true;
-	}
-    public function insert_sale_inventory_voucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+        return true;
+    }
+    public function insert_sale_inventory_voucher($invoice_id = null, $dbtid = null, $amnt = null, $Narration = null, $Comment = null, $reVID = null)
+    {
 
         $fyear = financial_year();
         $VDate = date('Y-m-d');
-        $CreateBy=$this->session->userdata('id');
-        $createdate=date('Y-m-d H:i:s');
+        $CreateBy = $this->session->userdata('id');
+        $createdate = date('Y-m-d H:i:s');
 
         // cost of goods sold voucher insert
-        $maxidforgoods = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');
-        $vaucherNogoods = "JV-". ($maxidforgoods +1);
+        $maxidforgoods = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'JV', 'VNo');
+        $vaucherNogoods = "JV-" . ($maxidforgoods + 1);
         $debitinsert = array(
             'fyear'          =>  $fyear,
             'VNo'            =>  $vaucherNogoods,
@@ -994,21 +990,22 @@ class Delivery extends MX_Controller {
             'status'         => 0,
         );
 
-        $this->db->insert('acc_vaucher',$debitinsert);
+        $this->db->insert('acc_vaucher', $debitinsert);
 
-	    // return $this->db->last_query();;
-	    return true;
-	}
-    public function insert_sale_taxvoucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+        // return $this->db->last_query();;
+        return true;
+    }
+    public function insert_sale_taxvoucher($invoice_id = null, $dbtid = null, $amnt = null, $Narration = null, $Comment = null, $reVID = null)
+    {
 
         $fyear = financial_year();
         $VDate = date('Y-m-d');
-        $CreateBy=$this->session->userdata('id');
-        $createdate=date('Y-m-d H:i:s');
+        $CreateBy = $this->session->userdata('id');
+        $createdate = date('Y-m-d H:i:s');
 
         // cost of goods sold voucher insert
-        $maxidtax = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');
-        $vauchertax = "JV-". ($maxidtax +1);
+        $maxidtax = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'JV', 'VNo');
+        $vauchertax = "JV-" . ($maxidtax + 1);
         $debitinsert = array(
             'fyear'          =>  $fyear,
             'VNo'            =>  $vauchertax,
@@ -1026,24 +1023,25 @@ class Delivery extends MX_Controller {
             'status'         => 0,
         );
 
-        $this->db->insert('acc_vaucher',$debitinsert);
+        $this->db->insert('acc_vaucher', $debitinsert);
 
-	    // return $this->db->last_query();;
-	    return true;
-	}
+        // return $this->db->last_query();;
+        return true;
+    }
 
 
     // insert sales debitvoucher
-    public function insert_servsale_creditvoucher($is_credit = null,$invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){
+    public function insert_servsale_creditvoucher($is_credit = null, $invoice_id = null, $dbtid = null, $amnt_type = null, $amnt = null, $Narration = null, $Comment = null, $reVID = null, $subcode = null)
+    {
 
         $fyear = financial_year();
         $VDate = date('Y-m-d');
-        $CreateBy=$this->session->userdata('id');
-        $createdate=date('Y-m-d H:i:s');
+        $CreateBy = $this->session->userdata('id');
+        $createdate = date('Y-m-d H:i:s');
         // Cash & credit voucher insert
         if ($is_credit == 1) {
-            $maxid = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');
-            $vaucherNo = "JV-". ($maxid +1);
+            $maxid = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'JV', 'VNo');
+            $vaucherNo = "JV-" . ($maxid + 1);
 
             $debitinsert = array(
                 'fyear'          =>  $fyear,
@@ -1062,11 +1060,9 @@ class Delivery extends MX_Controller {
                 'CreateDate'     =>  $createdate,
                 'status'         =>  0,
             );
-
-
-        }else {
-            $maxid = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','CV','VNo');
-            $vaucherNo = "CV-". ($maxid +1);
+        } else {
+            $maxid = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'CV', 'VNo');
+            $vaucherNo = "CV-" . ($maxid + 1);
             $debitinsert = array(
                 'fyear'          =>  $fyear,
                 'VNo'            =>  $vaucherNo,
@@ -1082,34 +1078,34 @@ class Delivery extends MX_Controller {
                 'CreateDate'     => $createdate,
                 'status'         => 0,
             );
-
         }
-        if($amnt_type == 'Debit'){
+        if ($amnt_type == 'Debit') {
 
             $debitinsert['Debit']  = $amnt;
             $debitinsert['Credit'] =  0.00;
-        }else{
+        } else {
 
             $debitinsert['Debit']  = 0.00;
             $debitinsert['Credit'] =  $amnt;
         }
 
-        $this->db->insert('acc_vaucher',$debitinsert);
+        $this->db->insert('acc_vaucher', $debitinsert);
 
-	    return true;
-	}
+        return true;
+    }
 
 
-    public function insert_servsale_taxvoucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+    public function insert_servsale_taxvoucher($invoice_id = null, $dbtid = null, $amnt = null, $Narration = null, $Comment = null, $reVID = null)
+    {
 
         $fyear = financial_year();
         $VDate = date('Y-m-d');
-        $CreateBy=$this->session->userdata('id');
-        $createdate=date('Y-m-d H:i:s');
+        $CreateBy = $this->session->userdata('id');
+        $createdate = date('Y-m-d H:i:s');
 
         // cost of goods sold voucher insert
-        $maxidtax = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');
-        $vauchertax = "JV-". ($maxidtax +1);
+        $maxidtax = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'JV', 'VNo');
+        $vauchertax = "JV-" . ($maxidtax + 1);
         $debitinsert = array(
             'fyear'          =>  $fyear,
             'VNo'            =>  $vauchertax,
@@ -1127,30 +1123,31 @@ class Delivery extends MX_Controller {
             'status'         =>  0,
         );
 
-        $this->db->insert('acc_vaucher',$debitinsert);
+        $this->db->insert('acc_vaucher', $debitinsert);
 
 
-	    return true;
-	}
+        return true;
+    }
 
-    public function getMaxFieldNumber($field, $table,$where=null,$type=null,$fild2=null) {
+    public function getMaxFieldNumber($field, $table, $where = null, $type = null, $fild2 = null)
+    {
 
         $this->db->select("$field,$fild2");
         $this->db->from($table);
-        if($where != null) {
+        if ($where != null) {
             $this->db->where($where, $type);
         }
-        $this->db->order_by('id','desc')->limit(1) ;
-        $record = $this->db->get() ;
-        if($record->num_rows() >0) {
-         if($fild2 != null) {
-            $num = $record->row($fild2);
-            list($txt, $intval) = explode('-', $num);
-            return $intval;
-         } else {
-         $num = $record->row($field);
-           return $num;
-         }
+        $this->db->order_by('id', 'desc')->limit(1);
+        $record = $this->db->get();
+        if ($record->num_rows() > 0) {
+            if ($fild2 != null) {
+                $num = $record->row($fild2);
+                list($txt, $intval) = explode('-', $num);
+                return $intval;
+            } else {
+                $num = $record->row($field);
+                return $num;
+            }
         } else {
             return 0;
         }
@@ -1158,18 +1155,19 @@ class Delivery extends MX_Controller {
 
 
 
-    public function invoice_pdf_generate($invoice_id = null) {
+    public function invoice_pdf_generate($invoice_id = null)
+    {
         $id = $invoice_id;
         $invoice_detail = $this->quotation_model->retrieve_invoice_html_data($invoice_id);
         $taxfield = $this->db->select('*')
-                ->from('tax_settings')
-                ->where('is_show',1)
-                ->get()
-                ->result_array();
-        $txregname ='';
-        foreach($taxfield as $txrgname){
-        $regname = $txrgname['tax_name'].' Reg No  - '.$txrgname['reg_no'].', ';
-        $txregname .= $regname;
+            ->from('tax_settings')
+            ->where('is_show', 1)
+            ->get()
+            ->result_array();
+        $txregname = '';
+        foreach ($taxfield as $txrgname) {
+            $regname = $txrgname['tax_name'] . ' Reg No  - ' . $txrgname['reg_no'] . ', ';
+            $txregname .= $regname;
         }
         $subTotal_quantity = 0;
         $subTotal_cartoon = 0;
@@ -1184,75 +1182,69 @@ class Delivery extends MX_Controller {
                 $invoice_detail[$k]['final_date'] = $this->occational->dateConvert($invoice_detail[$k]['date']);
                 $subTotal_quantity = $subTotal_quantity + $invoice_detail[$k]['quantity'];
                 $subTotal_ammount = $subTotal_ammount + $invoice_detail[$k]['total_price'];
-
             }
 
             $i = 0;
             foreach ($invoice_detail as $k => $v) {
                 $i++;
                 $invoice_detail[$k]['sl'] = $i;
-                if(!empty($invoice_detail[$k]['description'])){
-                    $descript = $descript+1;
-
+                if (!empty($invoice_detail[$k]['description'])) {
+                    $descript = $descript + 1;
                 }
-                 if(!empty($invoice_detail[$k]['serial_no'])){
-                    $isserial = $isserial+1;
-
+                if (!empty($invoice_detail[$k]['serial_no'])) {
+                    $isserial = $isserial + 1;
                 }
-                 if(!empty($invoice_detail[$k]['discount_per'])){
-                    $is_discount = $is_discount+1;
-
+                if (!empty($invoice_detail[$k]['discount_per'])) {
+                    $is_discount = $is_discount + 1;
                 }
 
-                if(!empty($invoice_detail[$k]['unit'])){
-                    $isunit = $isunit+1;
-
+                if (!empty($invoice_detail[$k]['unit'])) {
+                    $isunit = $isunit + 1;
                 }
-
             }
         }
 
         $currency_details = $this->quotation_model->setting_data();
         $company_info = $this->quotation_model->retrieve_company();
-        $totalbal = $invoice_detail[0]['total_amount']+$invoice_detail[0]['prevous_due'];
+        $totalbal = $invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'];
         $amount_inword = $this->numbertowords->convert_number($totalbal);
         $user_id = $invoice_detail[0]['sales_by'];
 
         $name    = $invoice_detail[0]['customer_name'];
         $email   = $invoice_detail[0]['customer_email'];
         $data = array(
-        'title'             => display('invoice_details'),
-        'invoice_id'        => $invoice_detail[0]['invoice_id'],
-        'customer_info'     => $invoice_detail,
-        'invoice_no'        => $invoice_detail[0]['invoice'],
-        'customer_name'     => $invoice_detail[0]['customer_name'],
-        'customer_address'  => $invoice_detail[0]['customer_address'],
-        'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
-        'customer_email'    => $invoice_detail[0]['customer_email'],
-        'final_date'        => $invoice_detail[0]['final_date'],
-        'invoice_details'   => $invoice_detail[0]['invoice_details'],
-        'total_amount'      => number_format($invoice_detail[0]['total_amount']+$invoice_detail[0]['prevous_due'], 2, '.', ','),
-        'subTotal_quantity' => $subTotal_quantity,
-        'total_discount'    => number_format($invoice_detail[0]['total_discount'], 2, '.', ','),
-        'total_tax'         => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
-        'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
-        'paid_amount'       => number_format($invoice_detail[0]['paid_amount'], 2, '.', ','),
-        'due_amount'        => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
-        'previous'          => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
-        'shipping_cost'     => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),
-        'invoice_all_data'  => $invoice_detail,
-        'company_info'      => $company_info,
-        'currency'          => $currency_details[0]['currency'],
-        'position'          => $currency_details[0]['currency_position'],
-        'discount_type'     => $currency_details[0]['discount_type'],
-        'currency_details'  => $currency_details,
-        'am_inword'         => $amount_inword,
-        'is_discount'       => $is_discount,
+            'title'             => display('invoice_details'),
+            'invoice_id'        => $invoice_detail[0]['invoice_id'],
+            'customer_info'     => $invoice_detail,
+            'invoice_no'        => $invoice_detail[0]['invoice'],
+            'customer_name'     => $invoice_detail[0]['customer_name'],
+            'customer_address'  => $invoice_detail[0]['customer_address'],
+            'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
+            'customer_email'    => $invoice_detail[0]['customer_email'],
+            'final_date'        => $invoice_detail[0]['final_date'],
+            'invoice_details'   => $invoice_detail[0]['invoice_details'],
+            'total_amount'      => number_format($invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'], 2, '.', ','),
+            'subTotal_quantity' => $subTotal_quantity,
+            'total_discount'    => number_format($invoice_detail[0]['total_discount'], 2, '.', ','),
+            'total_tax'         => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
+            'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
+            'paid_amount'       => number_format($invoice_detail[0]['paid_amount'], 2, '.', ','),
+            'due_amount'        => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
+            'previous'          => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
+            'shipping_cost'     => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),
+            'invoice_all_data'  => $invoice_detail,
+            'company_info'      => $company_info,
+            'currency'          => $currency_details[0]['currency'],
+            'position'          => $currency_details[0]['currency_position'],
+            'discount_type'     => $currency_details[0]['discount_type'],
+            'currency_details'  => $currency_details,
+            'am_inword'         => $amount_inword,
+            'is_discount'       => $is_discount,
 
-        'tax_regno'         => $txregname,
-        'is_desc'           => $descript,
-        'is_serial'         => $isserial,
-        'is_unit'           => $isunit,
+            'tax_regno'         => $txregname,
+            'is_desc'           => $descript,
+            'is_serial'         => $isserial,
+            'is_unit'           => $isunit,
         );
 
         $this->load->library('pdfgenerator');
@@ -1267,30 +1259,28 @@ class Delivery extends MX_Controller {
         if (!empty($email)) {
             $send_email = $this->setmail($email, $file_path, $invoice_detail[0]['invoice'], $name);
 
-            if($send_email){
-           return 1;
-            }else{
-               return 0;
-
+            if ($send_email) {
+                return 1;
+            } else {
+                return 0;
             }
-
         }
-      return 0;
-
+        return 0;
     }
 
 
-//service details pdf sent to mail after adding invoice
- public function service_pdf_generate($invoice_id = null) {
+    //service details pdf sent to mail after adding invoice
+    public function service_pdf_generate($invoice_id = null)
+    {
         $id = $invoice_id;
         $currency_details = $this->quotation_model->setting_data();
         $service_inv_main = $this->service_model->service_invoice_updata($invoice_id);
         $customer_info    =  $this->service_model->customer_info($service_inv_main[0]['customer_id']);
         $taxinfo          = $this->service_model->service_invoice_taxinfo($invoice_id);
         $taxfield         = $this->db->select('tax_name,default_value')
-                ->from('tax_settings')
-                ->get()
-                ->result_array();
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
         $company_info = $this->quotation_model->retrieve_company();
 
         $subTotal_quantity = 0;
@@ -1319,27 +1309,27 @@ class Delivery extends MX_Controller {
             'customer_id'   => $service_inv_main[0]['customer_id'],
             'customer_info' => $customer_info,
             'customer_name' => $customer_info->customer_name,
-            'customer_address'=> $customer_info->customer_address,
-            'customer_mobile'=> $customer_info->customer_mobile,
-            'customer_email'=> $customer_info->customer_email,
+            'customer_address' => $customer_info->customer_address,
+            'customer_mobile' => $customer_info->customer_mobile,
+            'customer_email' => $customer_info->customer_email,
             'details'       => $service_inv_main[0]['details'],
             'total_amount'  => $service_inv_main[0]['total_amount'],
-            'total_discount'=> $service_inv_main[0]['total_discount'],
-            'invoice_discount'=> $service_inv_main[0]['invoice_discount'],
-            'subTotal_ammount'=> number_format($subTotal_ammount, 2, '.', ','),
-            'subTotal_quantity'=>number_format($subTotal_quantity, 2, '.', ','),
+            'total_discount' => $service_inv_main[0]['total_discount'],
+            'invoice_discount' => $service_inv_main[0]['invoice_discount'],
+            'subTotal_ammount' => number_format($subTotal_ammount, 2, '.', ','),
+            'subTotal_quantity' => number_format($subTotal_quantity, 2, '.', ','),
             'total_tax'     => $service_inv_main[0]['total_tax'],
             'paid_amount'   => $service_inv_main[0]['paid_amount'],
             'due_amount'    => $service_inv_main[0]['due_amount'],
             'shipping_cost' => $service_inv_main[0]['shipping_cost'],
-            'invoice_detail'=> $service_inv_main,
+            'invoice_detail' => $service_inv_main,
             'taxvalu'       => $taxinfo,
             'discount_type' => $currency_details[0]['discount_type'],
-            'currency_details'=>$currency_details,
+            'currency_details' => $currency_details,
             'currency'      => $currency_details[0]['currency'],
             'position'      => $currency_details[0]['currency_position'],
             'taxes'         => $taxfield,
-            'stotal'        => $service_inv_main[0]['total_amount']-$service_inv_main[0]['previous'],
+            'stotal'        => $service_inv_main[0]['total_amount'] - $service_inv_main[0]['previous'],
             'employees'     => $service_inv_main[0]['employee_id'],
             'previous'      => $service_inv_main[0]['previous'],
             'company_info'  => $company_info,
@@ -1357,26 +1347,22 @@ class Delivery extends MX_Controller {
         if (!empty($email)) {
             $send_email = $this->setmail($email, $file_path, $id, $name);
 
-            if($send_email){
+            if ($send_email) {
                 return 1;
+            } else {
 
-
-            }else{
-
-            return 0;
-
+                return 0;
             }
-
         }
         return 0;
-
     }
 
 
 
 
-        //This function is used to Generate Key
-    public function generator($lenth) {
+    //This function is used to Generate Key
+    public function generator($lenth)
+    {
         $number = array("1", "2", "3", "4", "5", "6", "7", "8", "9");
 
         for ($i = 0; $i < $lenth; $i++) {
@@ -1392,22 +1378,24 @@ class Delivery extends MX_Controller {
         return $con;
     }
 
-       //NUMBER GENERATOR
-    public function number_generator() {
-        $this->db->select_max('invoice', 'invoice_no');
+    //NUMBER GENERATOR
+    public function number_generator()
+    {
+        $this->db->select_max('id', 'id');
         $query = $this->db->get('invoice');
         $result = $query->result_array();
-        $invoice_no = $result[0]['invoice_no'];
+        $invoice_no = $result[0]['id'];
         if ($invoice_no != '') {
             $invoice_no = $invoice_no + 1;
         } else {
-            $invoice_no = 1000;
+            $invoice_no = 1;
         }
-        return $invoice_no;
+        return "IN-" . $invoice_no;
     }
 
 
-      public function quotation_details_data($quot_id = null) {
+    public function quotation_details_data($quot_id = null)
+    {
 
         $currency_details     = $this->quotation_model->setting_data();
         $data['currency_details'] = $currency_details;
@@ -1415,27 +1403,26 @@ class Delivery extends MX_Controller {
         $data['quot_main']    = $this->quotation_model->quot_main_edit($quot_id);
         $data['quot_product'] = $this->quotation_model->quot_product_detail($quot_id);
         $data['quot_service'] = $this->quotation_model->quot_service_detail($quot_id);
-        $data['customer_info']= $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
-       $data['discount_type'] = $currency_details[0]['discount_type'];
-       $data['company_info'] = $this->quotation_model->retrieve_company();
-       $data['module']        = "delivery";
-       $data['page']          = "quotation_details";
+        $data['customer_info'] = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
+        $data['discount_type'] = $currency_details[0]['discount_type'];
+        $data['company_info'] = $this->quotation_model->retrieve_company();
+        $data['module']        = "delivery";
+        $data['page']          = "quotation_details";
         echo modules::run('template/layout', $data);
     }
 
-     public function quotation_edit($quot_id = null) {
+    public function quotation_edit($quot_id = null)
+    {
         $vat_tax_info   = $this->quotation_model->vat_tax_setting();
         $data['quot_main']    = $this->quotation_model->quot_main_edit($quot_id);
 
-        if ($data['quot_main'][0]['is_dynamic'] ==1) {
+        if ($data['quot_main'][0]['is_dynamic'] == 1) {
             if ($data['quot_main'][0]['is_dynamic'] != $vat_tax_info->dynamic_tax) {
 
                 $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
                 redirect("manage_quotation");
             }
-
-        }
-        elseif ($data['quot_main'][0]['is_fixed'] ==1) {
+        } elseif ($data['quot_main'][0]['is_fixed'] == 1) {
             if ($data['quot_main'][0]['is_fixed'] != $vat_tax_info->fixed_tax) {
 
                 $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
@@ -1443,20 +1430,20 @@ class Delivery extends MX_Controller {
             }
         }
         $taxfield = $this->db->select('tax_name,default_value')
-                ->from('tax_settings')
-                ->get()
-                ->result_array();
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
 
         $tablecolumn          = $this->db->list_fields('tax_collection');
-        $num_column           = count($tablecolumn)-4;
+        $num_column           = count($tablecolumn) - 4;
         $currency_details     = $this->quotation_model->setting_data();
         $data['currency_details'] = $currency_details;
         $data['title']        = 'Delivery Note Edit';
         $data['quot_product'] = $this->quotation_model->quot_product_detail($quot_id);
         $data['quot_service'] = $this->quotation_model->quot_service_detail($quot_id);
-        $data['customer_info']= $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
+        $data['customer_info'] = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
         $data['itemtaxin']    = $this->quotation_model->itemtaxdetails($data['quot_main'][0]['quot_no']);
-        $data['servicetaxin']= $this->quotation_model->servicetaxdetails($data['quot_main'][0]['quot_no']);
+        $data['servicetaxin'] = $this->quotation_model->servicetaxdetails($data['quot_main'][0]['quot_no']);
         $data['taxes']       = $taxfield;
         $data['taxnumber']   = $num_column;
         $data['customers']   = $this->quotation_model->get_allcustomer();
@@ -1465,11 +1452,11 @@ class Delivery extends MX_Controller {
         $data['company_info'] = $this->quotation_model->retrieve_company();
         $data['module']       = "delivery";
         $vatortax              = $this->quotation_model->vat_tax_setting();
-        if($vatortax->fixed_tax == 1){
+        if ($vatortax->fixed_tax == 1) {
 
             $data['page']         = "quotation_update";
         }
-        if($vatortax->dynamic_tax == 1){
+        if ($vatortax->dynamic_tax == 1) {
             $data['page']          = "quotation_update_dynamic";
         }
 
@@ -1477,152 +1464,153 @@ class Delivery extends MX_Controller {
     }
 
 
-     public function update_quotation(){
-         $quot_id = $this->input->post('quotation_id',TRUE);
+    public function update_quotation()
+    {
+        $quot_id = $this->input->post('quotation_id', TRUE);
         $tablecolumn = $this->db->list_fields('delivery_taxinfo');
-        $num_column = count($tablecolumn)-4;
-            $customershow = 0;
-            $status = 1;
-            $data = array(
+        $num_column = count($tablecolumn) - 4;
+        $customershow = 0;
+        $status = 1;
+        $data = array(
             'quotation_id'        => $quot_id,
-            'customer_id'         => $this->input->post('customer_id',TRUE),
-            'quotdate'            => $this->input->post('qdate',TRUE),
-            'expire_date'         => $this->input->post('expiry_date',TRUE),
-            'item_total_amount'   => $this->input->post('grand_total_price',TRUE),
-            'item_total_dicount'  => $this->input->post('total_discount',TRUE),
-            'item_total_tax'      => $this->input->post('total_tax',TRUE),
-            'item_total_vat'      => $this->input->post('total_vat_amnt',TRUE),
-            'service_total_amount'=> $this->input->post('grand_total_service_amount',TRUE),
-            'service_total_discount'=> $this->input->post('totalServiceDicount',TRUE),
-            'service_total_vat'   => $this->input->post('service_total_vat_amnt',TRUE),
-            'service_total_tax'   => $this->input->post('total_service_tax',TRUE),
-            'quot_dis_item'       =>$this->input->post('invoice_discount',TRUE),
-            'quot_dis_service'    =>$this->input->post('service_discount',TRUE),
-            'quot_no'             => $this->input->post('quotation_no',TRUE),
+            'customer_id'         => $this->input->post('customer_id', TRUE),
+            'quotdate'            => $this->input->post('qdate', TRUE),
+            'expire_date'         => $this->input->post('expiry_date', TRUE),
+            'item_total_amount'   => $this->input->post('grand_total_price', TRUE),
+            'item_total_dicount'  => $this->input->post('total_discount', TRUE),
+            'item_total_tax'      => $this->input->post('total_tax', TRUE),
+            'item_total_vat'      => $this->input->post('total_vat_amnt', TRUE),
+            'service_total_amount' => $this->input->post('grand_total_service_amount', TRUE),
+            'service_total_discount' => $this->input->post('totalServiceDicount', TRUE),
+            'service_total_vat'   => $this->input->post('service_total_vat_amnt', TRUE),
+            'service_total_tax'   => $this->input->post('total_service_tax', TRUE),
+            'quot_dis_item'       => $this->input->post('invoice_discount', TRUE),
+            'quot_dis_service'    => $this->input->post('service_discount', TRUE),
+            'quot_no'             => $this->input->post('quotation_no', TRUE),
             'create_by'           => $this->session->userdata('id'),
-            'quot_description'    => $this->input->post('details',TRUE),
+            'quot_description'    => $this->input->post('details', TRUE),
             'status'              => $status,
-            );
+        );
 
-            $result = $this->quotation_model->quotation_update($data);
+        $result = $this->quotation_model->quotation_update($data);
 
-            if ($result == TRUE) {
+        if ($result == TRUE) {
 
-                  $this->db->where('quot_id', $quot_id);
-                  $this->db->delete('deli_products_used');
-                  $this->db->where('quot_id', $quot_id);
-                  $this->db->delete('delivery_service_used');
-                // Used Item Details Part
-                $item         = $this->input->post('product_id',TRUE);
-                $serial       = $this->input->post('serial_no',TRUE);
-                $descrp       = $this->input->post('desc',TRUE);
-                $item_rate    = $this->input->post('product_rate',TRUE);
-                $item_supp_rate= $this->input->post('supplier_price',TRUE);
-                $item_qty     = $this->input->post('product_quantity',TRUE);
-                $item_dis_per = $this->input->post('discount',TRUE);
-                $item_total_discount = $this->input->post('discountvalue',TRUE);
-                $vat_per      = $this->input->post('vatpercent',TRUE);
-                $vat_value    = $this->input->post('vatvalue',TRUE);
-                $item_tax     = $this->input->post('tax',TRUE);
-                $totalp       =  $this->input->post('total_price',TRUE);
-                for ($j = 0, $n = count($item); $j < $n; $j++) {
-                    $product_id    = $item[$j];
-                    $rate          = $item_rate[$j];
-                    $qty           = $item_qty[$j];
-                    $supplier_rate = $item_supp_rate[$j];
-                    $discount      = $item_dis_per[$j];
-                    $totaldiscount = $item_total_discount[$j];
-                    $vatper        = $vat_per[$j];
-                    $vatvalue      = $vat_value[$j];
-                    $tax           = $item_tax[$j];
-                    $srl           = $serial[$j];
-                    $dcript        = $descrp[$j];
-                    $total_price   = $totalp[$j];
-                    $quotitem = array(
-                        'quot_id'       => $quot_id,
-                        'product_id'    => $product_id,
-                        'batch_id'      => $srl,
-                        'description'   => $dcript,
-                        'rate'          => $rate,
-                        'supplier_rate' => $supplier_rate,
-                        'total_price'   => $total_price,
-                        'discount_per'  => $discount,
-                        'discount'      => $totaldiscount,
-                        'vat_amnt'      => $vatvalue,
-                        'vat_per'       => $vatper,
-                        'tax'           => $tax,
-                        'used_qty'      => $qty,
-                    );
-
-
-                    $this->db->insert('deli_products_used', $quotitem);
-                }
+            $this->db->where('quot_id', $quot_id);
+            $this->db->delete('deli_products_used');
+            $this->db->where('quot_id', $quot_id);
+            $this->db->delete('delivery_service_used');
+            // Used Item Details Part
+            $item         = $this->input->post('product_id', TRUE);
+            $serial       = $this->input->post('serial_no', TRUE);
+            $descrp       = $this->input->post('desc', TRUE);
+            $item_rate    = $this->input->post('product_rate', TRUE);
+            $item_supp_rate = $this->input->post('supplier_price', TRUE);
+            $item_qty     = $this->input->post('product_quantity', TRUE);
+            $item_dis_per = $this->input->post('discount', TRUE);
+            $item_total_discount = $this->input->post('discountvalue', TRUE);
+            $vat_per      = $this->input->post('vatpercent', TRUE);
+            $vat_value    = $this->input->post('vatvalue', TRUE);
+            $item_tax     = $this->input->post('tax', TRUE);
+            $totalp       =  $this->input->post('total_price', TRUE);
+            for ($j = 0, $n = count($item); $j < $n; $j++) {
+                $product_id    = $item[$j];
+                $rate          = $item_rate[$j];
+                $qty           = $item_qty[$j];
+                $supplier_rate = $item_supp_rate[$j];
+                $discount      = $item_dis_per[$j];
+                $totaldiscount = $item_total_discount[$j];
+                $vatper        = $vat_per[$j];
+                $vatvalue      = $vat_value[$j];
+                $tax           = $item_tax[$j];
+                $srl           = $serial[$j];
+                $dcript        = $descrp[$j];
+                $total_price   = $totalp[$j];
+                $quotitem = array(
+                    'quot_id'       => $quot_id,
+                    'product_id'    => $product_id,
+                    'batch_id'      => $srl,
+                    'description'   => $dcript,
+                    'rate'          => $rate,
+                    'supplier_rate' => $supplier_rate,
+                    'total_price'   => $total_price,
+                    'discount_per'  => $discount,
+                    'discount'      => $totaldiscount,
+                    'vat_amnt'      => $vatvalue,
+                    'vat_per'       => $vatper,
+                    'tax'           => $tax,
+                    'used_qty'      => $qty,
+                );
 
 
-            $taxdata['customer_id'] = $this->input->post('customer_id',TRUE);
-            $taxdata['date']        = (!empty($this->input->post('qdate',TRUE))?$this->input->post('qdate',TRUE):date('Y-m-d'));
-            $taxdata['relation_id'] = 'item'.$this->input->post('quotation_no',TRUE);
-            $this->db->insert('delivery_taxinfo',$taxdata);
-
-                    // Used Service Details Part
-                $service                = $this->input->post('service_id',TRUE);
-                $service_rate           = $this->input->post('service_rate',TRUE);
-                $service_qty            = $this->input->post('service_quantity',TRUE);
-                $service_dis_per        = $this->input->post('sdiscount',TRUE);
-                $service_total_discount = $this->input->post('service_discountvalue',TRUE);
-                $service_vatpercent     = $this->input->post('service_vatpercent',TRUE);
-                $service_vatvalue       = $this->input->post('service_vatvalue',TRUE);
-                $totalservicep          = $this->input->post('total_service_amount',TRUE);
-                $service_tax            = $this->input->post('stax',TRUE);
-                for ($k = 0, $n = count($service); $k < $n; $k++) {
-                    $service_id     = $service[$k];
-                    $charge         = $service_rate[$k];
-                    $sqty           = $service_qty[$k];
-                    $sdiscount      = $service_dis_per[$k];
-                    $stotaldiscount = $service_total_discount[$k];
-                    $service_vatper = $service_vatpercent[$k];
-                    $servicevatval  = $service_vatvalue[$k];
-                    $stax           = $service_tax[$k];
-                    $total_serviceprice = $totalservicep[$k];
-                    $quotservice = array(
-                        'quot_id'        => $quot_id,
-                        'service_id'     => $service_id,
-                        'charge'         => $charge,
-                        'total'          => $total_serviceprice,
-                        'discount'       => $sdiscount,
-                        'discount_amount'=> $stotaldiscount,
-                        'vat_per'        => $service_vatper,
-                        'vat_amnt'       => $servicevatval,
-                        'tax'            => 0,
-                        'qty'            => $qty,
-                    );
-                    $this->db->insert('delivery_service_used', $quotservice);
-                }
-
-            $servicetaxinfo['customer_id'] =$this->input->post('customer_id',TRUE);
-            $servicetaxinfo['date']        = (!empty($this->input->post('qdate',TRUE))?$this->input->post('qdate',TRUE):date('Y-m-d'));
-            $servicetaxinfo['relation_id'] = 'serv'.$this->input->post('quotation_no',TRUE);
-            $this->db->insert('delivery_taxinfo',$servicetaxinfo);
-
-       $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
-        if($mailsetting[0]['isquotation']==1){
-          $mail = $this->quotation_pdf_generate($quot_id);
-          if($mail == 0){
-            $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
-          }
-        }
-        $this->session->set_flashdata(array('message' => display('successfully_updated')));
-         redirect(base_url('manage_delivery'));
-
-            } else {
-                $this->session->set_flashdata(array('exception' => display('please_try_again')));
-                redirect(base_url('add_delivery'));
+                $this->db->insert('deli_products_used', $quotitem);
             }
+
+
+            $taxdata['customer_id'] = $this->input->post('customer_id', TRUE);
+            $taxdata['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
+            $taxdata['relation_id'] = 'item' . $this->input->post('quotation_no', TRUE);
+            $this->db->insert('delivery_taxinfo', $taxdata);
+
+            // Used Service Details Part
+            $service                = $this->input->post('service_id', TRUE);
+            $service_rate           = $this->input->post('service_rate', TRUE);
+            $service_qty            = $this->input->post('service_quantity', TRUE);
+            $service_dis_per        = $this->input->post('sdiscount', TRUE);
+            $service_total_discount = $this->input->post('service_discountvalue', TRUE);
+            $service_vatpercent     = $this->input->post('service_vatpercent', TRUE);
+            $service_vatvalue       = $this->input->post('service_vatvalue', TRUE);
+            $totalservicep          = $this->input->post('total_service_amount', TRUE);
+            $service_tax            = $this->input->post('stax', TRUE);
+            for ($k = 0, $n = count($service); $k < $n; $k++) {
+                $service_id     = $service[$k];
+                $charge         = $service_rate[$k];
+                $sqty           = $service_qty[$k];
+                $sdiscount      = $service_dis_per[$k];
+                $stotaldiscount = $service_total_discount[$k];
+                $service_vatper = $service_vatpercent[$k];
+                $servicevatval  = $service_vatvalue[$k];
+                $stax           = $service_tax[$k];
+                $total_serviceprice = $totalservicep[$k];
+                $quotservice = array(
+                    'quot_id'        => $quot_id,
+                    'service_id'     => $service_id,
+                    'charge'         => $charge,
+                    'total'          => $total_serviceprice,
+                    'discount'       => $sdiscount,
+                    'discount_amount' => $stotaldiscount,
+                    'vat_per'        => $service_vatper,
+                    'vat_amnt'       => $servicevatval,
+                    'tax'            => 0,
+                    'qty'            => $qty,
+                );
+                $this->db->insert('delivery_service_used', $quotservice);
+            }
+
+            $servicetaxinfo['customer_id'] = $this->input->post('customer_id', TRUE);
+            $servicetaxinfo['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
+            $servicetaxinfo['relation_id'] = 'serv' . $this->input->post('quotation_no', TRUE);
+            $this->db->insert('delivery_taxinfo', $servicetaxinfo);
+
+            $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
+            if ($mailsetting[0]['isquotation'] == 1) {
+                $mail = $this->quotation_pdf_generate($quot_id);
+                if ($mail == 0) {
+                    $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
+                }
+            }
+            $this->session->set_flashdata(array('message' => display('successfully_updated')));
+            redirect(base_url('manage_delivery'));
+        } else {
+            $this->session->set_flashdata(array('exception' => display('please_try_again')));
+            redirect(base_url('add_delivery'));
+        }
     }
 
 
-        // quotation delete
-    public function delete_quotation($quot_id = null) {
+    // quotation delete
+    public function delete_quotation($quot_id = null)
+    {
         if ($this->quotation_model->quotation_delete($quot_id)) {
             #set success message
             $this->session->set_flashdata('message', display('delete_successfully'));
@@ -1634,7 +1622,8 @@ class Delivery extends MX_Controller {
     }
 
 
-     public function quotation_download($quot_id = null) {
+    public function quotation_download($quot_id = null)
+    {
         $currency_details         = $this->quotation_model->setting_data();
         $data['currency_details'] = $currency_details;
         $data['title']            = 'Delivery note details';
@@ -1720,7 +1709,7 @@ class Delivery extends MX_Controller {
         $this->form_validation->set_rules('expiry_date', display('expiry_date'), 'required|max_length[50]');
         if ($this->form_validation->run()) {
 
-            $quot_id     = $this->delivery_model->delivery_quot_number_generator();
+            $quot_id     = $this->sale_order_model->sale_order_quot_number_generator();
             $quotation_id = $this->input->post('quotation_id', TRUE);
 
             $tablecolumn = $this->db->list_fields('sale_order_taxinfo');
@@ -1762,7 +1751,7 @@ class Delivery extends MX_Controller {
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
             );
-            
+
             $result = $this->sale_order_model->sale_order_entry($data);
 
             $quotdata = array('sale_order_status'  => 2);
@@ -1792,8 +1781,8 @@ class Delivery extends MX_Controller {
                     $discountval   = $item_total_discount[$j];
                     $vatper        = $vat_per[$j];
                     $vatvalue      = $vat_value[$j];
-                    $tax           = isset($item_tax[$j]) ?$item_tax[$j] : NULL;
-                    $srl           = isset($serial[$j]) ? $serial[$j]: NULL;
+                    $tax           = isset($item_tax[$j]) ? $item_tax[$j] : NULL;
+                    $srl           = isset($serial[$j]) ? $serial[$j] : NULL;
                     $dcript        = $descrp[$j];
                     $total_price   = $totalp[$j];
                     $quotitem = array(
@@ -1875,7 +1864,7 @@ class Delivery extends MX_Controller {
                 if ($mailsetting[0]['isquotation'] == 1) {
                     $mail = $this->quotation_pdf_generate($quotation_id);
                     if ($mail == 0) {
-                    $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
+                        $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
                     }
                 }
                 $this->session->set_flashdata(array('message' => display('successfully_added')));
@@ -1889,6 +1878,4 @@ class Delivery extends MX_Controller {
             redirect(base_url('manage_delivery'));
         }
     }
-
-
 }

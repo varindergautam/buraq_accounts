@@ -2,14 +2,17 @@
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/json/productquotation.js"></script>
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice.js" type="text/javascript"></script>
 
-<?php 
-    if($quot_main[0]['status'] == 2 || $quot_main[0]['delivery_status'] == 2 || $quot_main[0]['sale_order_status'] == 2) {
-        $readonly = 'readonly';
-        $disabled = 'disabled';
-    } else {
-        $readonly = '';
-        $disabled = '';
-    }
+<?php
+// if($quot_main[0]['status'] == 2 || $quot_main[0]['delivery_status'] == 2 || $quot_main[0]['sale_order_status'] == 2) {
+//     $readonly = 'readonly';
+//     $disabled = 'disabled';
+// } else {
+//     $readonly = '';
+//     $disabled = '';
+// }
+
+$readonly = 'readonly';
+$disabled = 'disabled';
 ?>
 
 <div class="row">
@@ -26,8 +29,8 @@
                     <div class="col-sm-6">
                         <label for="customer_id" class="col-sm-4 col-form-label"><?php echo display('customer') ?> <i class="text-danger">*</i></label>
                         <div class="col-sm-8">
-                            <?php if($disabled == 'disabled') { ?>
-                            <input type="hidden" name="customer_id" value="<?php echo $customer_info[0]['customer_id'] ?>">
+                            <?php if ($disabled == 'disabled') { ?>
+                                <input type="hidden" name="customer_id" value="<?php echo $customer_info[0]['customer_id'] ?>">
                             <?php } ?>
                             <select name="customer_id" id="customer_id" readonly required class="form-control" onchange="get_customer_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>" <?php echo $disabled; ?>>
                                 <option value=""></option>
@@ -160,21 +163,21 @@
                                                     <input type="hidden" class="baseUrl" value="<?php echo base_url(); ?>" />
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="desc[]" class="form-control text-right " value="<?php echo $item['description']; ?>" tabindex="6" <?php echo $readonly; ?>/>
+                                                    <input type="text" name="desc[]" class="form-control text-right " value="<?php echo $item['description']; ?>" tabindex="6" <?php echo $readonly; ?> />
                                                 <td>
-                                                    <input name="" id="" class="form-control text-right unit_<?php echo $sl; ?> valid" value="<?php echo $item['unit']; ?>"  aria-invalid="false" type="text" readonly>
+                                                    <input name="" id="" class="form-control text-right unit_<?php echo $sl; ?> valid" value="<?php echo $item['unit']; ?>" aria-invalid="false" type="text" readonly>
                                                 </td>
                                                 <td>
-                                                    <input type="text" required name="product_quantity[]" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" class="total_qntt_<?php echo $sl; ?> form-control text-right" id="total_qntt_<?php echo $sl; ?>" placeholder="0.00" min="0" tabindex="8" value="<?php echo $item['used_qty']; ?>" <?php echo $readonly; ?>/>
+                                                    <input type="text" required name="product_quantity[]" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" class="total_qntt_<?php echo $sl; ?> form-control text-right" id="total_qntt_<?php echo $sl; ?>" placeholder="0.00" min="0" tabindex="8" value="<?php echo $item['used_qty']; ?>" <?php echo $readonly; ?> />
                                                 </td>
                                                 <td class="invoice_fields">
-                                                    <input type="text" name="product_rate[]" required id="price_item_<?php echo $sl; ?>" class="price_item<?php echo $sl; ?> price_item form-control text-right" tabindex="9" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" value="<?php echo $item['rate']; ?>" placeholder="0.00" min="0" <?php echo $readonly; ?>/>
+                                                    <input type="text" name="product_rate[]" required id="price_item_<?php echo $sl; ?>" class="price_item<?php echo $sl; ?> price_item form-control text-right" tabindex="9" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" value="<?php echo $item['rate']; ?>" placeholder="0.00" min="0" <?php echo $readonly; ?> />
 
-                                                    <input type="hidden" name="supplier_price[]" id="supplier_price_<?php echo $sl; ?>" value="<?php echo $item['supplier_rate']; ?>" >
+                                                    <input type="hidden" name="supplier_price[]" id="supplier_price_<?php echo $sl; ?>" value="<?php echo $item['supplier_rate']; ?>">
                                                 </td>
                                                 <!-- Discount -->
                                                 <td>
-                                                    <input type="text" name="discount[]" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" id="discount_<?php echo $sl; ?>" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" value="<?php echo $item['discount_per']; ?>" <?php echo $readonly; ?>/>
+                                                    <input type="text" name="discount[]" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" id="discount_<?php echo $sl; ?>" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" value="<?php echo $item['discount_per']; ?>" <?php echo $readonly; ?> />
                                                     <input type="hidden" value="<?php echo $discount_type; ?>" name="discount_type" id="discount_type_<?php echo $sl; ?>">
 
                                                 </td>
@@ -185,7 +188,7 @@
 
                                                 <!-- VAT  -->
                                                 <td>
-                                                    <input type="text" name="vatpercent[]" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" id="vat_percent_<?php echo $sl; ?>" class="form-control text-right" min="0" value="<?php echo $item['vat_per']; ?>" tabindex="19" placeholder="0.00" <?php echo $readonly; ?>/>
+                                                    <input type="text" name="vatpercent[]" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" id="vat_percent_<?php echo $sl; ?>" class="form-control text-right" min="0" value="<?php echo $item['vat_per']; ?>" tabindex="19" placeholder="0.00" <?php echo $readonly; ?> />
 
 
                                                 </td>
@@ -200,8 +203,8 @@
                                                 </td>
 
                                                 <td>
-                                                <?php if($disabled != 'disabled') { ?>
-                                                    <button class='btn btn-danger' type='button' onclick='deleteRow(this)'><i class='fa fa-close'></i></button>
+                                                    <?php if ($disabled != 'disabled') { ?>
+                                                        <button class='btn btn-danger' type='button' onclick='deleteRow(this)'><i class='fa fa-close'></i></button>
                                                     <?php } ?>
                                                     <!-- Discount calculate start-->
                                                     <input type="hidden" id="total_discount_<?php echo $sl; ?>" class="" value="<?php echo $item['discount']; ?>" />
@@ -225,8 +228,8 @@
                                                 <input type="hidden" id="txfieldnum" value="<?php echo $taxnumber; ?>">
                                             </td>
 
-                                            <?php if($disabled != 'disabled') { ?>
-                                            <td><a id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField('addinvoiceItem');" tabindex="11" ><i class="fa fa-plus"></i></a></td>
+                                            <?php if ($disabled != 'disabled') { ?>
+                                                <td><a id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField('addinvoiceItem');" tabindex="11"><i class="fa fa-plus"></i></a></td>
                                             <?php } ?>
                                         </tr>
                                         <tr>
