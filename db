@@ -82,13 +82,13 @@ CREATE TABLE `sale_order_products_used` (
 -----------------------------------------------------------------------------
 
 quotation
-add delivery_status null, sale_order_status, 
+add delivery_status null, sale_order_status
 
 deliviery
-quotation_main_id int, delivery_note_status , sale_order_status
+quotation_main_id varchar, delivery_note_status , sale_order_status, payment_type,
 
 sale_orders
-delivery_note_status
+delivery_note_status, payment_type, quotation_main_id varchar,
 
 invoice
 invoice_id varchar

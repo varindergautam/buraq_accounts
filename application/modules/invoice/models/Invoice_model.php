@@ -1140,6 +1140,7 @@ class Invoice_model extends CI_Model
         $this->db->select(
             'a.total_tax,
                         a.*,
+                        a.invoice_id as InvoiceID,
                         b.*,
                         c.*,
                         d.product_id,

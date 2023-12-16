@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="col-xs-4 text-left ">
-                            <h2 class="m-t-0"><?php echo "Sale Order" ?></h2>
+                            <h2 class="m-t-0"><?php echo "Sales Order" ?></h2>
                             <div>
                                 <abbr class="font-bold">
                                     <?php echo display('invoice_no') ?>: <span dir="ltr"></span>

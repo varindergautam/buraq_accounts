@@ -567,7 +567,7 @@
                     <label for="example-text-input" class="col-sm-4 col-form-label"></label>
                     <div class="col-sm-12">
 
-                        <input type="submit" id="add_invoice" class="btn btn-success btn-large" name="add-quotation" value="<?php echo 'Add To Delivery'; ?>" />
+                        <input type="submit" id="add_invoice" class="btn btn-success btn-large" name="add-quotation" value="<?php echo 'Add To Sales Order'; ?>" />
 
                     </div>
                 </div>

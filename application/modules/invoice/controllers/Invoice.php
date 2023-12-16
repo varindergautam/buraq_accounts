@@ -158,7 +158,7 @@ class Invoice extends MX_Controller {
         $data = array(
         'title'             => display('invoice_details'),
         'invoice_id'        => $invoice_detail[0]['invoice_id'],
-        'invoice_no'        => $invoice_detail[0]['invoice'],
+        'invoice_no'        => $invoice_detail[0]['InvoiceID'],
         'customer_name'     => $invoice_detail[0]['customer_name'],
         'customer_address'  => $invoice_detail[0]['customer_address'],
         'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
