@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <label for="quotation_no" class="col-sm-4 col-form-label"><?php echo "Delivery No." ?>
+                        <label for="quotation_no" class="col-sm-4 col-form-label"><?php echo "Quotation No." ?>
                         </label>
                         <div class="col-sm-8">
                             <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo "Delivery No." ?>" value="<?php echo $quot_main[0]['quot_no']; ?>" readonly>
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <label for="qdate" class="col-sm-4 col-form-label"><?php echo "Delivery Date" ?>
+                        <label for="qdate" class="col-sm-4 col-form-label"><?php echo "Quotation Date" ?>
                         </label>
                         <div class="col-sm-8">
                             <input type="text" name="qdate" class="form-control" id="qdate" value="<?php echo $quot_main[0]['quotdate']; ?>" readonly>

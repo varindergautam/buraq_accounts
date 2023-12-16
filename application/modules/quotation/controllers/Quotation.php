@@ -1,6 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+// ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
+
 #------------------------------------    
 # Author: Bdtask Ltd
 # Author link: https://www.bdtask.com/
@@ -54,16 +60,16 @@ class Quotation extends MX_Controller
 
     public function quot_number_generator()
     {
-        $this->db->select_max('quot_no', 'quot_no');
+        $this->db->select_max('id', 'id');
         $query   = $this->db->get('quotation');
         $result  = $query->result_array();
-        $quot_no = $result[0]['quot_no'];
+        $quot_no = $result[0]['id'];
         if ($quot_no != '') {
             $quot_no = $quot_no + 1;
         } else {
-            $quot_no = 2000;
+            $quot_no = 1;
         }
-        return $quot_no;
+        return "QT-" . $quot_no;
     }
 
     public function autocompleteproductsearch()
@@ -1391,16 +1397,16 @@ class Quotation extends MX_Controller
     //NUMBER GENERATOR
     public function number_generator()
     {
-        $this->db->select_max('invoice', 'invoice_no');
+        $this->db->select_max('id', 'id');
         $query = $this->db->get('invoice');
         $result = $query->result_array();
-        $invoice_no = $result[0]['invoice_no'];
+        $invoice_no = $result[0]['id'];
         if ($invoice_no != '') {
             $invoice_no = $invoice_no + 1;
         } else {
-            $invoice_no = 1000;
+            $invoice_no = 1;
         }
-        return $invoice_no;
+        return "IN-" . $invoice_no;
     }
 
 
@@ -1733,16 +1739,16 @@ class Quotation extends MX_Controller
 
     public function delivery_quot_number_generator()
     {
-        $this->db->select_max('quot_no', 'quot_no');
+        $this->db->select_max('id', 'id');
         $query   = $this->db->get('delivery');
         $result  = $query->result_array();
-        $quot_no = $result[0]['quot_no'];
+        $quot_no = $result[0]['id'];
         if ($quot_no != '') {
             $quot_no = $quot_no + 1;
         } else {
-            $quot_no = 5000;
+            $quot_no = 1;
         }
-        return $quot_no;
+        return "DN-".$quot_no;
     }
 
     public function add_quotation_to_delivery()
@@ -1984,7 +1990,7 @@ class Quotation extends MX_Controller
         if ($this->form_validation->run()) {
 
             $quot_id     = $this->sale_order_model->sale_order_quot_number_generator();
-            
+
             $quotation_id = $this->input->post('quotation_id', TRUE);
 
             $tablecolumn = $this->db->list_fields('sale_order_taxinfo');
@@ -2026,7 +2032,7 @@ class Quotation extends MX_Controller
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
             );
-            
+
             $result = $this->sale_order_model->sale_order_entry($data);
 
             $quotdata = array('sale_order_status'  => 2);

@@ -6,19 +6,20 @@ class Sale_order_model extends CI_Model
 {
     public function sale_order_quot_number_generator()
     {
-        $this->db->select_max('quot_no', 'quot_no');
+        $this->db->select_max('id', 'id');
         $query   = $this->db->get('sale_orders');
         $result  = $query->result_array();
-        $quot_no = $result[0]['quot_no'];
+        $quot_no = $result[0]['id'];
         if ($quot_no != '') {
             $quot_no = $quot_no + 1;
         } else {
-            $quot_no = 2000;
+            $quot_no = 1;
         }
-        return $quot_no;
+        return 'SO-' . $quot_no;
     }
 
-    public function list($offset, $limit) {
+    public function list($offset, $limit)
+    {
         $this->db->select('a.*, b.customer_name');
         $this->db->from('sale_orders a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');

@@ -90,3 +90,5 @@ quotation_main_id int, delivery_note_status , sale_order_status
 sale_orders
 delivery_note_status
 
+invoice
+invoice_id varchar

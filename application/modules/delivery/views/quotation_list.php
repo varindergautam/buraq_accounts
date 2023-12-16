@@ -13,6 +13,7 @@
                             <tr>
                                 <th class="text-center"><?php echo display('sl') ?></th>
                                 <th class=""><?php echo display('customer_name') ?></th>
+                                <th class=""><?php echo 'Quotation no'; ?></th>
                                 <th class=""><?php echo 'Delivery Note no'; ?></th>
                                 <th class=""><?php echo 'Delivery Date'; ?></th>
                                 <th class=""><?php echo display('expiry_date') ?></th>
@@ -37,6 +38,9 @@
 
                                             <?php echo html_escape($quotation->customer_name); ?>
 
+                                        </td>
+                                        <td>
+                                                <?php echo html_escape($quotation->quotation_main_id); ?>
                                         </td>
                                         <td>
                                             <a href="<?php echo base_url('quotation_details/' . $quotation->quotation_id); ?>">
@@ -102,12 +106,12 @@
                                             <?php
                                             if ($quotation->status == 1) { ?>
                                                 <?php if ($this->permission1->method('manage_quotation', 'update')->access()) { ?>
-                                                    <a href="<?php echo base_url() . 'edit_delivery/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                                    <!-- <a href="<?php echo base_url() . 'edit_delivery/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a> -->
                                                 <?php } ?>
                                             <?php } ?>
 
                                             <?php if ($this->permission1->method('manage_quotation', 'delete')->access()) { ?>
-                                                <a href="<?php echo base_url() . 'delivery/delivery/delete_quotation/' . $quotation->quotation_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want to Delete ??')" title="<?php echo display('delete') ?>" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                <!-- <a href="<?php echo base_url() . 'delivery/delivery/delete_quotation/' . $quotation->quotation_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want to Delete ??')" title="<?php echo display('delete') ?>" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a> -->
                                             <?php } ?>
 
                                             <a href="<?php echo base_url('delivery/delivery/quotation_download/' . $quotation->quotation_id); ?>" class="btn btn-primary btn-sm" title="<?php echo display('download') ?>" data-original-title="<?php echo display('download') ?> "><i class="fa fa-download" aria-hidden="true"></i></a>

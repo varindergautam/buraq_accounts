@@ -1127,12 +1127,12 @@
                     </a>
                     <ul class="treeview-menu">
                         <?php if($this->permission1->method('add_quotation','create')->access()){ ?>
-                            <li class="treeview <?php if ($this->uri->segment('1') == ("add_delivery")){
+                            <!-- <li class="treeview <?php if ($this->uri->segment('1') == ("add_delivery")){
                                 echo "active";
                             } else {
                                 echo " ";
                             }?>"><a href="<?php echo base_url('add_delivery') ?>"><?php echo 'Add Delivery Note '; ?></a>
-                            </li>
+                            </li> -->
                         <?php }?>
                         <?php if($this->permission1->method('manage_quotation','read')->access()){ ?>
                             <li class="treeview <?php if ($this->uri->segment('1') == ("manage_delivery")){

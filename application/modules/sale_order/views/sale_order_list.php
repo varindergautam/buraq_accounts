@@ -92,13 +92,13 @@
                                             <?php
                                             if ($quotation->status == 1) { ?>
                                                 <?php if ($this->permission1->method('manage_quotation', 'update')->access()) { ?>
-                                                    <a href="<?php echo base_url() . 'edit_delivery/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                                    <!-- <a href="<?php echo base_url() . 'edit_delivery/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a> -->
                                                 <?php } ?>
                                             <?php } ?>
 
 
                                             <?php if ($this->permission1->method('manage_quotation', 'delete')->access()) { ?>
-                                                <a href="<?php echo base_url() . 'delivery/delivery/delete_quotation/' . $quotation->quotation_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want to Delete ??')" title="<?php echo display('delete') ?>" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                <!-- <a href="<?php echo base_url() . 'delivery/delivery/delete_quotation/' . $quotation->quotation_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want to Delete ??')" title="<?php echo display('delete') ?>" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a> -->
                                             <?php } ?>
 
                                             <a href="<?php echo base_url('sale_order/sale_order/sale_order_download/' . $quotation->quotation_id); ?>" class="btn btn-primary btn-sm" title="<?php echo display('download') ?>" data-original-title="<?php echo display('download') ?> "><i class="fa fa-download" aria-hidden="true"></i></a>
