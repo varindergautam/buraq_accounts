@@ -449,7 +449,7 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
     <input type="hidden" id="bestsalelabel" value='<?php echo html_escape($chart_label);?>' name="">
     <input type="hidden" id="bestsaledata" value='<?php echo html_escape($chart_data);?>' name="">
     <input type="hidden"
-        value='<?php $seperatedData = explode(',', $chart_data); echo html_escape(($seperatedData[0] + 10));?>' name=""
+        value='<?php //$seperatedData = explode(',', $chart_data); echo html_escape(($seperatedData[0] + 10));?>' name=""
         id="bestsalemax">
 
 </div>
