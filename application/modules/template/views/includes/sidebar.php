@@ -1202,20 +1202,28 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </span>
             </a>
-                <ul class="treeview-menu">
-                        <?php if($this->permission1->method('manage_performa','read')->access()){ ?>
-                        <li class="treeview <?php if ($this->uri->segment('1') == ("manage_performa")){
-                                echo "active";
-                            } else {
-                                echo " ";
-                            }?>"><a
-                                href="<?php echo base_url('manage_performa') ?>"><?php echo "Manage Performa Invoice" ?></a>
-                        </li>
-                        <?php } ?>
-                    </ul>
-                </li>
 
-                
+            <ul class="treeview-menu">
+                <?php if($this->permission1->method('add_performa','create')->access()){ ?>
+                <li class="treeview <?php if ($this->uri->segment('1') == ("add_performa")){
+                        echo "active";
+                    } else {
+                        echo " ";
+                    }?>"><a href="<?php echo base_url('performa/performa_form') ?>"><?php echo "Add Performa" ?></a>
+                </li>
+                <?php }?>
+                <?php if($this->permission1->method('manage_performa','read')->access()){ ?>
+                <li class="treeview <?php if ($this->uri->segment('1') == ("manage_performa")){
+                        echo "active";
+                    } else {
+                        echo " ";
+                    }?>"><a
+                        href="<?php echo base_url('manage_performa') ?>"><?php echo "Manage Performa Invoice" ?></a>
+                </li>
+                <?php } ?>
+            </ul>
+        </li>
+
         <?php }?>
         <!-- quotation Menu end -->
 

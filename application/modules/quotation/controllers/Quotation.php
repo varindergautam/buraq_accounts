@@ -1484,12 +1484,12 @@ class Quotation extends MX_Controller
     {
         $this->form_validation->set_rules('product_rate', display('product_rate'), 'required');
         $this->form_validation->set_rules('product_quantity', display('product_quantity'), 'required');
-        if ($this->form_validation->run()) {
-            echo ("jai shree ram");
-        } else {
-            echo ("jai shree ram 2");
-            exit();
-        }
+        // if ($this->form_validation->run()) {
+        //     echo ("jai shree ram");
+        // } else {
+        //     echo ("jai shree ram 2");
+        //     exit();
+        // }
 
         $quot_id = $this->input->post('quotation_id', TRUE);
         $tablecolumn = $this->db->list_fields('quotation_taxinfo');

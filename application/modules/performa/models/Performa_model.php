@@ -92,4 +92,39 @@ class Performa_model extends CI_Model
             return false;
         }
     }
+
+    public function itemTaxDetails($quot_no)
+    {
+        $taxdetector = 'item' . $quot_no;
+        return $this->db->select('*')
+            ->from('performa_taxinfo')
+            ->where('relation_id', $taxdetector)
+            ->get()
+            ->result_array();
+    }
+
+    public function serviceTaxDetails($quot_no)
+    {
+        $taxdetector = 'serv' . $quot_no;
+        return $this->db->select('*')
+            ->from('performa_taxinfo')
+            ->where('relation_id', $taxdetector)
+            ->get()
+            ->result_array();
+    }
+
+    public function update($data)
+    {
+        $this->db->select('*');
+        $this->db->from('performa');
+        $this->db->where('quotation_id', $data['quotation_id']);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            $this->db->where('quotation_id', $data['quotation_id']);
+            $this->db->update('performa', $data);
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 }
