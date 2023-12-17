@@ -87,15 +87,12 @@ class Performa extends MX_Controller
                 'create_by'           => $this->session->userdata('id'),
                 'quot_description'    => $this->input->post('details', TRUE),
                 'status'              => $status,
-                'delivery_status'              => $status,
-                'sale_order_status'              => $status,
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
             );
 
-            //            $result = $this->quotation_model->quotation_entry($data);
+            $result = $this->performa_model->performa_entry($data);
 
-            //            if ($result == TRUE) {
             // Used Item Details Part
             $item         = $this->input->post('product_id', TRUE);
             $serial       = $this->input->post('serial_no', TRUE);
@@ -124,7 +121,6 @@ class Performa extends MX_Controller
                 $dcript        = $descrp[$j];
                 $total_price   = $totalp[$j];
 
-
                 if ($rate < $supplier_rate) {
                     $this->db->where('quot_id', $quot_id);
                     $this->db->delete('quot_products_used');
@@ -132,7 +128,6 @@ class Performa extends MX_Controller
                     echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
                     exit();
                 }
-
 
                 $quotitem = array(
                     'quot_id'       => $quot_id,
@@ -150,10 +145,9 @@ class Performa extends MX_Controller
                     'used_qty'      => $qty,
                 );
 
-
-                $this->db->insert('quot_products_used', $quotitem);
+                $this->db->insert('performa_products_used', $quotitem);
             }
-            $result = $this->quotation_model->quotation_entry($data);
+
             //item tax info
             for ($l = 0; $l < $num_column; $l++) {
                 $taxfield = 'tax' . $l;
@@ -163,7 +157,7 @@ class Performa extends MX_Controller
             $taxdata['customer_id'] = $this->input->post('customer_id', TRUE);
             $taxdata['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
             $taxdata['relation_id'] = 'item' . $this->input->post('quotation_no', TRUE);
-            $this->db->insert('quotation_taxinfo', $taxdata);
+            $this->db->insert('performa_taxinfo', $taxdata);
 
             // Used Service Details Part
             $service                = $this->input->post('service_id', TRUE);
@@ -197,7 +191,7 @@ class Performa extends MX_Controller
                     'tax'            => $stax,
                     'qty'            => $sqty,
                 );
-                $this->db->insert('quotation_service_used', $quotservice);
+                $this->db->insert('performa_service_used', $quotservice);
             }
             //service taxinfo
 
@@ -209,7 +203,7 @@ class Performa extends MX_Controller
             $servicetaxinfo['customer_id'] = $this->input->post('customer_id', TRUE);
             $servicetaxinfo['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
             $servicetaxinfo['relation_id'] = 'serv' . $this->input->post('quotation_no', TRUE);
-            $this->db->insert('quotation_taxinfo', $servicetaxinfo);
+            $this->db->insert('performa_taxinfo', $servicetaxinfo);
 
             $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
             if ($mailsetting[0]['isquotation'] == 1) {
