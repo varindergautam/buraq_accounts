@@ -292,8 +292,17 @@ $disabled = 'disabled';
                                     <div class="form-group col-md-6">
                                         <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?></label>
 
-                                        <?php $card_type = 111000001;
-                                        echo form_dropdown('multipaytype[]', $all_pmethod, (!empty($card_type) ? $card_type : null), 'class="card_typesl postform resizeselect required form-control "  id="cardTypeSelect"') ?>
+                                        <?php $card_type = $quot_main[0]['payment_type'];
+                                        if (!empty($card_type)) {
+                                            $cardTypeDisable = 'disabled';
+                                        ?>
+                                            <input type="hidden" name="multipaytype[]" value="<?php echo $card_type; ?>">
+                                        <?php
+                                        } else {
+                                            $cardTypeDisable = '';
+                                        }
+
+                                        echo form_dropdown('multipaytype[]', $all_pmethod, (!empty($card_type) ? $card_type : null), 'class="card_typesl postform resizeselect required form-control "  id="cardTypeSelect"' . $cardTypeDisable) ?>
 
                                     </div>
                                     <div class="form-group col-md-6">

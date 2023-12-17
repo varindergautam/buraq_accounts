@@ -165,13 +165,16 @@ CREATE TABLE `performa_products_used` (
 -----------------------------------------------------------------------------
 
 quotation
-add delivery_status null, sale_order_status
+add delivery_status null, sale_order_status, payment_type varchar, 
 
 deliviery
-quotation_main_id varchar, delivery_note_status , sale_order_status default(1), payment_type, invoice_status default (1)
-
+quotation_main_id varchar, delivery_note_status , sale_order_status default(1), payment_type, invoice_status default (1), due_amount varchar, payment_type varchar
+ 
 sale_orders
-delivery_note_status, payment_type, quotation_main_id varchar,
+delivery_note_status, payment_type, quotation_main_id varchar, due_amount varchar, payment_type varchar
 
 invoice
 invoice_id varchar
+
+performa
+due_amount varchar, payment_type varchar

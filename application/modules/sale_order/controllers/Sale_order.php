@@ -106,6 +106,73 @@ class Sale_order extends MX_Controller
         redirect("manage_sale_order");
     }
 
+    public function setmail($email, $file_path, $id = null, $name = null)
+    {
+        $setting_detail = $this->db->select('*')->from('email_config')->get()->row();
+        $subject = 'Quotation Information';
+        $message = strtoupper($name) . '-' . $id;
+
+        $config = array(
+            'protocol'  => $setting_detail->protocol,
+            'smtp_host' => $setting_detail->smtp_host,
+            'smtp_port' => $setting_detail->smtp_port,
+            'smtp_user' => $setting_detail->smtp_user,
+            'smtp_pass' => $setting_detail->smtp_pass,
+            'mailtype'  => 'html',
+            'charset'   => 'utf-8',
+            'wordwrap'  => TRUE
+        );
+
+        $this->load->library('email');
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->set_mailtype("html");
+        $this->email->from($setting_detail->smtp_user);
+        $this->email->to($email);
+
+        $config = array(
+            'protocol'  => $setting_detail->protocol,
+            'smtp_host' => $setting_detail->smtp_host,
+            'smtp_port' => $setting_detail->smtp_port,
+            'smtp_user' => $setting_detail->smtp_user,
+            'smtp_pass' => $setting_detail->smtp_pass,
+            'mailtype'  => 'html',
+            'charset'   => 'utf-8',
+            'wordwrap'  => TRUE
+        );
+
+        $this->load->library('email');
+        $this->email->initialize($config);
+        $this->email->set_newline("\r\n");
+        $this->email->set_mailtype("html");
+        $this->email->from($setting_detail->smtp_user);
+        $this->email->to($email);
+        $this->email->subject($subject);
+        $this->email->message($message);
+        $this->email->attach($file_path);
+        $check_email = $this->test_input($email);
+        if (filter_var($check_email, FILTER_VALIDATE_EMAIL)) {
+            if ($this->email->send()) {
+                return true;
+            } else {
+                $this->session->set_flashdata(array('exception' => display('please_configure_your_mail.')));
+                return false;
+            }
+        } else {
+
+            return false;
+        }
+    }
+
+    //Email testing for email
+    public function test_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+
     //    ============ its for invoice pdf generate =======
     public function quotation_pdf_generate($quot_id = null)
     {
@@ -222,6 +289,35 @@ class Sale_order extends MX_Controller
             $status = 1;
             $deliver_status = 1;
             // $sale_order_status = 1;
+
+            $customer_id  = $this->input->post('customer_id', TRUE);
+
+            $multipaytype   = $this->input->post('multipaytype', TRUE);
+
+            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $no_of_credit_day = $cusifo->no_of_credit_days;
+            if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
+
+                echo '<script>alert("Credit is not available");</script>';
+                echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
+
+                exit();
+            }
+
+            if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
+                $grand_total_price = $this->input->post('grand_total_price', TRUE);
+                $paid_amount = $this->input->post('paid_amount', TRUE);
+                // $due_amount = $this->input->post('due_amount',TRUE);
+                $due_amount = $grand_total_price - $paid_amount;
+            } else {
+                $due_amount = '';
+            }
+
+            $quotdata = array('status'  => 2, 'payment_type' => $multipaytype[0]);
+            $this->db->where('quotation_id', $quotation_id);
+            $this->db->update('quotation', $quotdata);
+
+
             $data = array(
                 'quotation_id'        => $quot_id,
                 'customer_id'         => $this->input->post('customer_id', TRUE),
@@ -246,6 +342,9 @@ class Sale_order extends MX_Controller
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
+                'due_amount'      => $due_amount,
+                'payment_type'    =>  $multipaytype[0],
+                'no_of_credit_days' =>  $no_of_credit_day,
             );
 
 
@@ -515,6 +614,8 @@ class Sale_order extends MX_Controller
                     'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
                     'is_fixed'        =>  $is_fixed,
                     'is_dynamic'      =>  $is_dynamic,
+                    'due_amount'      => $due_amount,
+                    'payment_type'    =>  $multipaytype[0],
                     'no_of_credit_days' =>  $no_of_credit_day,
                 );
 

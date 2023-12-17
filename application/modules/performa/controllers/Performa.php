@@ -700,6 +700,28 @@ class Performa extends MX_Controller
             }
             $customershow = 0;
             $status = 1;
+
+            $customer_id  = $this->input->post('customer_id', TRUE);
+            $multipaytype   = $this->input->post('multipaytype', TRUE);
+            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $no_of_credit_day = $cusifo->no_of_credit_days;
+         
+            if ($multipaytype[0] == '0' && (!isset($no_of_credit_day) || $no_of_credit_day === null || $no_of_credit_day <= 0)) {
+
+                echo '<script>alert("Credit is not available");</script>';
+                echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
+
+                exit();
+            }
+
+            if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
+                $grand_total_price = $this->input->post('grand_total_price', TRUE);
+                $paid_amount = $this->input->post('paid_amount', TRUE);
+                $due_amount = $grand_total_price - $paid_amount;
+            } else {
+                $due_amount = '';
+            }
+
             $data = array(
                 'quotation_id'        => $quot_id,
                 'customer_id'         => $this->input->post('customer_id', TRUE),
@@ -722,6 +744,9 @@ class Performa extends MX_Controller
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
+                'due_amount'      => $due_amount,
+                'payment_type'    =>  $multipaytype[0],
+                'no_of_credit_days' =>  $no_of_credit_day,
             );
 
             $customer_id  = $this->input->post('customer_id', TRUE);
@@ -748,6 +773,10 @@ class Performa extends MX_Controller
             }
 
             $result = $this->performa_model->performa_entry($data);
+
+            $quotdata = array('payment_type' => $multipaytype[0]);
+            $this->db->where('quotation_id', $quotation_id);
+            $this->db->update('quotation', $quotdata);
 
             if ($result == TRUE) {
                 // Used Item Details Part

@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
-// ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
+ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
 
 #------------------------------------    
 # Author: Bdtask Ltd
@@ -558,12 +558,9 @@ class Quotation extends MX_Controller
                 }
                 $multipaytype   = $this->input->post('multipaytype', TRUE);
 
-
                 if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
-
                     echo '<script>alert("Credit is not available");</script>';
                     echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
-
                     exit();
                 }
 
@@ -576,7 +573,7 @@ class Quotation extends MX_Controller
                     $due_amount = '';
                 }
 
-                $quotdata = array('status'  => 2,);
+                $quotdata = array('status'  => 2, 'payment_type' => $multipaytype[0]);
                 $this->db->where('quotation_id', $quotation_id);
                 $this->db->update('quotation', $quotdata);
 
@@ -1749,7 +1746,7 @@ class Quotation extends MX_Controller
         } else {
             $quot_no = 1;
         }
-        return "DN-".$quot_no;
+        return "DN-" . $quot_no;
     }
 
     public function add_quotation_to_delivery()
@@ -1779,6 +1776,28 @@ class Quotation extends MX_Controller
             $status = 2;
             // $deliver_status = 1;
             // $sale_order_status = 1;
+            $customer_id  = $this->input->post('customer_id', TRUE);
+
+            $multipaytype   = $this->input->post('multipaytype', TRUE);
+
+            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $no_of_credit_day = $cusifo->no_of_credit_days;
+            if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
+
+                echo '<script>alert("Credit is not available");</script>';
+                echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
+
+                exit();
+            }
+
+            if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
+                $grand_total_price = $this->input->post('grand_total_price', TRUE);
+                $paid_amount = $this->input->post('paid_amount', TRUE);
+                // $due_amount = $this->input->post('due_amount',TRUE);
+                $due_amount = $grand_total_price - $paid_amount;
+            } else {
+                $due_amount = '';
+            }
             $data = array(
                 'quotation_id'        => $quot_id,
                 'customer_id'         => $this->input->post('customer_id', TRUE),
@@ -1803,12 +1822,15 @@ class Quotation extends MX_Controller
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
+                'due_amount'      => $due_amount,
+                'payment_type'    =>  $multipaytype[0],
+                'no_of_credit_days' =>  $no_of_credit_day,
             );
 
 
             $result = $this->quotation_model->delivery_entry($data);
 
-            $quotdata = array('delivery_status'  => 2);
+            $quotdata = array('delivery_status'  => 2, 'payment_type' => $multipaytype[0]);
             $this->db->where('quotation_id', $quotation_id);
             $this->db->update('quotation', $quotdata);
 
@@ -2008,6 +2030,28 @@ class Quotation extends MX_Controller
             }
             $customershow = 0;
             $status = 1;
+            $customer_id  = $this->input->post('customer_id', TRUE);
+
+            $multipaytype   = $this->input->post('multipaytype', TRUE);
+
+            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $no_of_credit_day = $cusifo->no_of_credit_days;
+            if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
+
+                echo '<script>alert("Credit is not available");</script>';
+                echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
+
+                exit();
+            }
+
+            if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
+                $grand_total_price = $this->input->post('grand_total_price', TRUE);
+                $paid_amount = $this->input->post('paid_amount', TRUE);
+                // $due_amount = $this->input->post('due_amount',TRUE);
+                $due_amount = $grand_total_price - $paid_amount;
+            } else {
+                $due_amount = '';
+            }
             $data = array(
                 'quotation_id'        => $quot_id,
                 'customer_id'         => $this->input->post('customer_id', TRUE),
@@ -2031,11 +2075,14 @@ class Quotation extends MX_Controller
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
+                'due_amount'      => $due_amount,
+                'payment_type'    =>  $multipaytype[0],
+                'no_of_credit_days' =>  $no_of_credit_day,
             );
 
             $result = $this->sale_order_model->sale_order_entry($data);
 
-            $quotdata = array('sale_order_status'  => 2);
+            $quotdata = array('sale_order_status'  => 2, 'payment_type' => $multipaytype[0]);
             $this->db->where('quotation_id', $quotation_id);
             $this->db->update('quotation', $quotdata);
 
