@@ -13,6 +13,7 @@
                             <tr>
                                 <th class="text-center"><?php echo display('sl') ?></th>
                                 <th class=""><?php echo display('customer_name') ?></th>
+                                <th class=""><?php echo 'Quotation no'; ?></th>
                                 <th class=""><?php echo 'Performa no'; ?></th>
                                 <th class=""><?php echo 'Delivery Date'; ?></th>
                                 <th class=""><?php echo display('expiry_date') ?></th>
@@ -35,6 +36,9 @@
                                         <td><?php echo $sl; ?></td>
                                         <td>
                                             <?php echo html_escape($quotation->customer_name); ?>
+                                        </td>
+                                        <td>
+                                            <?php echo html_escape($quotation->quotation_main_id); ?>
                                         </td>
                                         <td>
                                             <a href="<?php echo base_url('performa_details/' . $quotation->quotation_id); ?>">
@@ -60,18 +64,29 @@
                                         <td>
                                             <?php
                                             $que_id = $quotation->quotation_main_id;
-                                            $queId = $quotation->by_order;
+                                            $performaID = $quotation->quotation_id;
+                                            $btOrder = $quotation->by_order;
 
-                                            $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)
-                                            ->or_where('invoice_details', $queId)
+                                            $invinfo = $this->db->select('*')->from('invoice')
+                                            ->where('invoice_details', $que_id)
+                                            ->or_where('invoice_details', $btOrder)
+                                            ->or_where('invoice_details', $performaID)
+                                            ->or_where('by_order', $btOrder)
+                                            ->or_where('by_order', $que_id)
                                             ->get()->row();
 
                                             $saleOrderInfo = $this->db->select('*')->from('sale_orders')->where('quotation_main_id', $que_id)
-                                            ->or_where('quotation_main_id', $queId)
+                                            ->or_where('by_order', $btOrder)
+                                            ->or_where('by_order', $que_id)
+                                            ->or_where('quotation_main_id', $btOrder)
+                                            ->or_where('quotation_main_id', $performaID)
                                             ->get()->row();
 
                                             $deliveryOrderInfo = $this->db->select('*')->from('delivery')->where('quotation_main_id', $que_id)
-                                            ->or_where('quotation_main_id', $queId)
+                                            ->or_where('by_order', $btOrder)
+                                            ->or_where('by_order', $que_id)
+                                            ->or_where('quotation_main_id', $btOrder)
+                                            ->or_where('quotation_main_id', $performaID)
                                             ->get()->row();
 
                                             if (isset($invinfo) && !empty($invinfo)) {

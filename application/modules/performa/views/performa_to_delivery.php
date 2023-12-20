@@ -24,7 +24,7 @@ $card_type = $quot_main[0]['payment_type'];
                     <h4>Add To Delivery Note </h4>
                 </div>
             </div>
-            <?php echo form_open_multipart('perform/perform/add_quotation_to_delivery', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
+            <?php echo form_open_multipart('performa/performa/add_quotation_to_delivery', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
             <input type="hidden" name="type" value="<?php echo $type; ?>">
             <div class="panel-body">
                 <div class="form-group row">
@@ -55,6 +55,7 @@ $card_type = $quot_main[0]['payment_type'];
                         <div class="col-sm-8">
                             <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo "Delivery No." ?>" value="<?php echo $quot_main[0]['quot_no']; ?>" readonly>
                             <input type="hidden" name="quotation_id" id="quotation_id" class="form-control" value="<?php echo $quot_main[0]['quotation_id']; ?>" readonly>
+                            <input type="hidden" name="quotation_main_id" id="quotation_main_id" class="form-control" value="<?php echo $quot_main[0]['quotation_main_id']; ?>" readonly>
                         </div>
                     </div>
                 </div>

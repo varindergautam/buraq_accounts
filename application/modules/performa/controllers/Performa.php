@@ -19,7 +19,8 @@ class Performa extends MX_Controller
             'quotation/quotation_model',
             'performa_model',
             'delivery/delivery_model',
-            'invoice/invoice_model'
+            'invoice/invoice_model',
+            'sale_order/sale_order_model'
         ));
         if (!$this->session->userdata('isLogIn'))
             redirect('login');
@@ -68,6 +69,8 @@ class Performa extends MX_Controller
             }
             $customershow = 0;
             $status = 1;
+            
+            $quotation_main_id = $this->input->post('quotation_main_id', TRUE);
             $data = array(
                 'quotation_id'        => $quot_id,
                 'customer_id'         => $this->input->post('customer_id', TRUE),
@@ -89,6 +92,8 @@ class Performa extends MX_Controller
                 'status'              => $status,
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
+                'by_order'     => isset($quotation_main_id) ? $quotation_main_id : $quot_id,
+                'quotation_main_id'     => isset($quotation_main_id) ? $quotation_main_id : $quot_id,
             );
 
             $result = $this->performa_model->performa_entry($data);
@@ -703,7 +708,7 @@ class Performa extends MX_Controller
 
             $quot_id     = $this->performa_model->performa_quot_number_generator();
 
-            $quotation_id = $this->input->post('quotation_id', TRUE);
+            $quotation_id = $this->input->post('quotation_main_id', TRUE);
 
             $tablecolumn = $this->db->list_fields('performa_taxinfo');
             $num_column  = count($tablecolumn) - 4;
@@ -995,6 +1000,34 @@ class Performa extends MX_Controller
                 $is_fixed   = 0;
                 $is_dynamic = 1;
             }
+
+            $customer_id  = $this->input->post('customer_id', TRUE);
+            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $no_of_credit_day = $cusifo->no_of_credit_days;
+            // $headn        = $customer_id . '-' . $cusifo->customer_name;
+            // $coainfo      = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+            // $customer_headcode = $coainfo->HeadCode;
+            $bank_id      = $this->input->post('bank_id', TRUE);
+            if (!empty($bank_id)) {
+                $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
+                $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+            } else {
+                $bankcoaid = '';
+            }
+
+            $multipaytype   = $this->input->post('multipaytype', TRUE);
+
+            $this->updatePaymentType($quotation_id, $multipaytype);
+
+
+            if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
+                $grand_total_price = $this->input->post('grand_total_price', TRUE);
+                $paid_amount = $this->input->post('paid_amount', TRUE);
+                $due_amount = $grand_total_price - $paid_amount;
+            } else {
+                $due_amount = '';
+            }
+
             $customershow = 0;
             $status = 1;
             $data = array(
@@ -1020,6 +1053,10 @@ class Performa extends MX_Controller
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
+                'by_order'     => $this->input->post('quotation_main_id', TRUE),
+                'due_amount'      => $due_amount,
+                'no_of_credit_days' =>  $no_of_credit_day,
+                'payment_type' => $multipaytype[0],
             );
 
             $result = $this->sale_order_model->sale_order_entry($data);
@@ -1233,6 +1270,32 @@ class Performa extends MX_Controller
                 $is_fixed   = 0;
                 $is_dynamic = 1;
             }
+
+            $customer_id  = $this->input->post('customer_id', TRUE);
+            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $no_of_credit_day = $cusifo->no_of_credit_days;
+            
+            $bank_id      = $this->input->post('bank_id', TRUE);
+            if (!empty($bank_id)) {
+                $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
+                $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+            } else {
+                $bankcoaid = '';
+            }
+
+            $multipaytype   = $this->input->post('multipaytype', TRUE);
+            
+            $this->updatePaymentType($quotation_id, $multipaytype);
+
+
+            if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
+                $grand_total_price = $this->input->post('grand_total_price', TRUE);
+                $paid_amount = $this->input->post('paid_amount', TRUE);
+                $due_amount = $grand_total_price - $paid_amount;
+            } else {
+                $due_amount = '';
+            }
+
             $customershow = 0;
             $status = 2;
             // $deliver_status = 1;
@@ -1261,6 +1324,10 @@ class Performa extends MX_Controller
                 'is_fixed'            =>  $is_fixed,
                 'is_dynamic'          =>  $is_dynamic,
                 'quotation_main_id'     => $quotation_id,
+                'by_order'     => $this->input->post('quotation_main_id', TRUE),
+                'due_amount'      => $due_amount,
+                'no_of_credit_days' =>  $no_of_credit_day,
+                'payment_type' => $multipaytype[0],
             );
 
 
@@ -1452,7 +1519,6 @@ class Performa extends MX_Controller
 
                 $mailsetting  = $this->db->select('*')->from('email_config')->get()->result_array();
                 $product_id   = $this->input->post('product_id', TRUE);
-                $customer_id  = $this->input->post('customer_id', TRUE);
                 $invoice_id   = $this->invoice_model->number_generator();
                 $createby     = $this->session->userdata('id');
                 $createdate   = date('Y-m-d H:i:s');
@@ -1460,6 +1526,7 @@ class Performa extends MX_Controller
                 $squantity    = $this->input->post('service_quantity', TRUE);
                 $tablecolumn  = $this->db->list_fields('tax_collection');
                 $num_column   = count($tablecolumn) - 4;
+                $customer_id  = $this->input->post('customer_id', TRUE);
                 $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
                 $no_of_credit_day = $cusifo->no_of_credit_days;
                 // $headn        = $customer_id . '-' . $cusifo->customer_name;
@@ -1475,11 +1542,8 @@ class Performa extends MX_Controller
 
                 $multipaytype   = $this->input->post('multipaytype', TRUE);
 
-                if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
-                    echo '<script>alert("Credit is not available");</script>';
-                    echo '<script>setTimeout(function(){ window.history.back(); }, 1000);</script>';
-                    exit();
-                }
+                $this->updatePaymentType($quotation_id, $multipaytype);
+
 
                 if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
                     $grand_total_price = $this->input->post('grand_total_price', TRUE);
@@ -1531,6 +1595,9 @@ class Performa extends MX_Controller
                     'is_fixed'        =>  $is_fixed,
                     'is_dynamic'      =>  $is_dynamic,
                     'no_of_credit_days' =>  $no_of_credit_day,
+                    'payment_type' => $multipaytype[0],
+                    'by_order' =>  $quotation_id,
+                    'quotation_main_id' => $this->input->post('quotation_main_id', TRUE),
                 );
 
 
@@ -1814,5 +1881,15 @@ class Performa extends MX_Controller
                 redirect("manage_performa/" . $quotation_id);
             }
         }
+    }
+
+    public function updatePaymentType($performaId, $payment_type)
+    {
+        $data = array(
+            'payment_type' => $payment_type[0],
+        );
+
+        $this->db->where('quotation_id', $performaId);
+        $this->db->update('performa', $data);
     }
 }

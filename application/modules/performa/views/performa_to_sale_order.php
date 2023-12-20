@@ -24,7 +24,7 @@ $card_type = $quot_main[0]['payment_type'];
                     <h4>Add To Sale Order </h4>
                 </div>
             </div>
-            <?php echo form_open_multipart('/perform/add_quotation_to_sale_order', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
+            <?php echo form_open_multipart('performa/performa/add_performa_to_sale_order', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-sm-6">
@@ -52,8 +52,9 @@ $card_type = $quot_main[0]['payment_type'];
                         <label for="quotation_no" class="col-sm-4 col-form-label"><?php echo "Quotation No." ?>
                         </label>
                         <div class="col-sm-8">
-                            <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo "Delivery No." ?>" value="<?php echo $quot_main[0]['quot_no']; ?>" readonly>
+                            <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo "Delivery No." ?>" value="<?php echo $quot_main[0]['quotation_id']; ?>" readonly>
                             <input type="hidden" name="quotation_id" id="quotation_id" class="form-control" value="<?php echo $quot_main[0]['quotation_id']; ?>" readonly>
+                            <input type="hidden" name="quotation_main_id" id="quotation_main_id" class="form-control" value="<?php echo $quot_main[0]['quotation_main_id']; ?>" readonly>
                         </div>
                     </div>
                 </div>

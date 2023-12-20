@@ -1489,7 +1489,7 @@ class Invoice_model extends CI_Model
         if ($invoice_no != '') {
             $invoice_no = $invoice_no + 1;
         } else {
-            $invoice_no = 1000;
+            $invoice_no = 1;
         }
         return 'IN-'.$invoice_no;
     }

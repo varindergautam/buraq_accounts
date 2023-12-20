@@ -65,13 +65,34 @@
                                         </td>
                                         <td><?php
                                             $que_id = $quotation->quotation_id;
-                                            $saleOrderInfo = $this->db->select('*')->from('sale_orders')->where('quotation_main_id', $que_id)->get()->row();
+                                            $btOrder = $quotation->by_order;
 
-                                            $deliveryOrderInfo = $this->db->select('*')->from('delivery')->where('quotation_main_id', $que_id)->get()->row();
+                                            $invinfo = $this->db->select('*')->from('invoice')
+                                            ->where('invoice_details', $que_id)
+                                            ->or_where('invoice_details', $btOrder)
+                                            ->or_where('by_order', $btOrder)
+                                            ->or_where('by_order', $que_id)
+                                            ->or_where('quotation_main_id', $que_id)
+                                            ->get()->row();
 
-                                            $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)->get()->row();
+                                            $saleOrderInfo = $this->db->select('*')->from('sale_orders')->where('quotation_main_id', $que_id)
+                                            ->or_where('by_order', $btOrder)
+                                            ->or_where('by_order', $que_id)
+                                            ->or_where('quotation_main_id', $btOrder)
+                                            ->get()->row();
 
-                                            $performaInfo = $this->db->select('*')->from('performa')->where('quotation_main_id', $que_id)->or_where('by_order', $que_id)->get()->row();
+                                            $deliveryOrderInfo = $this->db->select('*')->from('delivery')->where('quotation_main_id', $que_id)
+                                            ->or_where('by_order', $btOrder)
+                                            ->or_where('by_order', $que_id)
+                                            ->or_where('quotation_main_id', $btOrder)
+                                            ->get()->row();
+
+                                            $performaInfo = $this->db->select('*')->from('performa')
+                                            ->where('quotation_main_id', $que_id)
+                                            ->or_where('by_order', $btOrder)
+                                            ->or_where('quotation_main_id', $btOrder)
+                                            ->or_where('by_order', $que_id)
+                                            ->get()->row();
 
                                             if (isset($invinfo) && !empty($invinfo)) {
                                                 echo '<a href="' . base_url() . 'invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';

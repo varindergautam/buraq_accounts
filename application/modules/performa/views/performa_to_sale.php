@@ -44,8 +44,9 @@ $card_type = $quot_main[0]['payment_type'];
                         <label for="quotation_no" class="col-sm-4 col-form-label"><?php echo display('quotation_no') ?>
                         </label>
                         <div class="col-sm-8">
-                            <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo display('quotation_no') ?>" value="<?php echo $quot_main[0]['quotation_main_id']; ?>" readonly>
-                            <input type="hidden" name="quotation_id" id="quotation_id" class="form-control" value="<?php echo $quot_main[0]['quotation_main_id']; ?>" readonly>
+                            <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo display('quotation_no') ?>" value="<?php echo $quot_main[0]['quotation_id']; ?>" readonly>
+                            <input type="hidden" name="quotation_id" id="quotation_id" class="form-control" value="<?php echo $quot_main[0]['quotation_id']; ?>" readonly>
+                            <input type="hidden" name="quotation_main_id" id="quotation_main_id" class="form-control" value="<?php echo $quot_main[0]['quotation_main_id']; ?>" readonly>
                         </div>
                     </div>
                 </div>
