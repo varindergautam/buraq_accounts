@@ -5,7 +5,7 @@
       <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type');?></label>
           
       <?php $card_type=111000001;
-          echo form_dropdown('ser_multipaytype[]',$all_pmethod,(!empty($card_type)?$card_type:null),'class="card_typesl postform resizeselect form-control "') ?> 
+          echo form_dropdown('ser_multipaytype[]',$all_pmethod,(isset($card_type)?$card_type:null),'class="card_typesl postform resizeselect form-control "') ?> 
   
   </div>
   <div class="form-group col-md-6">

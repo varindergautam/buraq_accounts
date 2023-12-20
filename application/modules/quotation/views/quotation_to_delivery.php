@@ -13,6 +13,8 @@
 
 $readonly = 'readonly';
 $disabled = 'disabled';
+
+$card_type = $quot_main[0]['payment_type'];
 ?>
 
 <div class="row">
@@ -253,14 +255,28 @@ $disabled = 'disabled';
                                             <td class="text-right" colspan="11"><b>Paid Amount:</b></td>
                                             <td class="text-right">
                                                 <input type="hidden" name="baseUrl" class="baseUrl" value="https://buraq.smartaccount.online/">
-                                                <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="22" value="<?php echo $quot_main[0]['item_total_amount']; ?>" data-listener-added_fa723d9e="true" data-listener-added_4789e008="true" readonly>
+                                                <?php if ($card_type == 0) {
+                                                ?>
+                                                    <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="22" value="0" data-listener-added_fa723d9e="true" data-listener-added_4789e008="true" readonly>
+
+                                                <?php
+                                                } else { ?>
+                                                    <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="22" value="<?php echo $quot_main[0]['item_total_amount']; ?>" data-listener-added_fa723d9e="true" data-listener-added_4789e008="true" readonly>
+                                                <?php } ?>
                                             </td>
                                         </tr>
 
                                         <tr>
                                             <td class="text-right" colspan="11"><b><?php echo 'due'; ?>:</b></td>
                                             <td class="text-right">
-                                                <input type="text" id="dueAmmount" class="form-control text-right" name="due_amount" value="" readonly="readonly" />
+                                                <?php if ($card_type == 0) {
+                                                ?>
+                                                    <input type="text" id="dueAmmount" class="form-control text-right" name="due_amount" value="<?php echo $quot_main[0]['item_total_amount']; ?>" readonly="readonly" />
+                                                <?php
+                                                } else { ?>
+                                                    <input type="text" id="dueAmmount" class="form-control text-right" name="due_amount" value="" readonly="readonly" />
+                                                <?php } ?>
+
                                             </td>
                                         </tr>
 
@@ -292,7 +308,7 @@ $disabled = 'disabled';
                                         <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?></label>
 
                                         <?php $card_type = $quot_main[0]['payment_type'];
-                                        if (!empty($card_type)) {
+                                        if (isset($card_type)) {
                                             $cardTypeDisable = 'disabled';
                                         ?>
                                             <input type="hidden" name="multipaytype[]" value="<?php echo $card_type; ?>">
@@ -301,14 +317,19 @@ $disabled = 'disabled';
                                             $cardTypeDisable = '';
                                         }
 
-                                        echo form_dropdown('multipaytype[]', $all_pmethod, (!empty($card_type) ? $card_type : null), 'class="card_typesl postform resizeselect required form-control "  id="cardTypeSelect"' . $cardTypeDisable) ?>
+                                        echo form_dropdown('multipaytype[]', $all_pmethod, (isset($card_type) ? $card_type : null), 'class="card_typesl postform resizeselect required form-control "  id="cardTypeSelect"' . $cardTypeDisable) ?>
 
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="4digit" class="col-form-label pb-2"><?php echo display('paid_amount'); ?></label>
 
-                                        <input type="text" id="pamount_by_method" class="form-control number pay " name="pamount_by_method[]" onkeyup="changedueamount()" value="<?php echo $quot_main[0]['item_total_amount']; ?>" placeholder="0" readonly />
-
+                                        <?php
+                                        if ($card_type == 0) {
+                                        ?>
+                                            <input type="text" id="pamount_by_method" class="form-control number pay " name="pamount_by_method[]" onkeyup="changedueamount()" value="0" placeholder="0" readonly />
+                                        <?php } else { ?>
+                                            <input type="text" id="pamount_by_method" class="form-control number pay " name="pamount_by_method[]" onkeyup="changedueamount()" value="<?php echo $quot_main[0]['item_total_amount']; ?>" placeholder="0" readonly />
+                                        <?php } ?>
                                     </div>
                                 </div>
 
@@ -543,7 +564,7 @@ $disabled = 'disabled';
                                         <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?></label>
 
                                         <?php $card_type = 111000001;
-                                        echo form_dropdown('ser_multipaytype[]', $all_pmethod, (!empty($card_type) ? $card_type : null), 'class="card_typesl required postform resizeselect form-control "') ?>
+                                        echo form_dropdown('ser_multipaytype[]', $all_pmethod, (isset($card_type) ? $card_type : null), 'class="card_typesl required postform resizeselect form-control "') ?>
 
                                     </div>
                                     <div class="form-group col-md-6">

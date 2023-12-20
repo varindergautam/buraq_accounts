@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
     #------------------------------------    
     # Author: Bdtask Ltd
     # Author link: https://www.bdtask.com/
@@ -1630,16 +1635,16 @@ class Invoice extends MX_Controller {
     }
    /*invoice no generator*/
       public function number_generator() {
-        $this->db->select_max('invoice', 'invoice_no');
+        $this->db->select_max('id', 'id');
         $query      = $this->db->get('invoice');
         $result     = $query->result_array();
-        $invoice_no = $result[0]['invoice_no'];
+        $invoice_no = $result[0]['id'];
         if ($invoice_no != '') {
             $invoice_no = $invoice_no + 1;
         } else {
-            $invoice_no = 1000;
+            $invoice_no = 1;
         }
-        return $invoice_no;
+        return "IN-" . $invoice_no;
     }
 
  public function bdtask_customer_autocomplete(){

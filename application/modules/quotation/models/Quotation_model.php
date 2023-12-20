@@ -321,7 +321,7 @@ class Quotation_model extends CI_Model {
 
         $list[''] = 'Select Method';
        if (!empty($data)) {
-           $list[11111] = 'Credit Sale';
+           $list[0] = 'Credit Sale';
            foreach($data as $value)
                $list[$value->HeadCode] = $value->HeadName;
            return $list;
