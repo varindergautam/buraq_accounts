@@ -39,7 +39,7 @@ class Purchase_model extends CI_Model {
 
    $list[''] = 'Select Method';
    if (!empty($data)) {
-    $list[0] = 'Credit Purchase';
+    $list[11111] = 'Credit Purchase';
        foreach($data as $value)
            $list[$value->HeadCode] = $value->HeadName;
        return $list;

@@ -621,8 +621,16 @@ class Performa extends MX_Controller
 
     public function to_performa($quot_id = null)
     {
+        $data['type'] = isset($_GET['type']) ? $_GET['type'] : NULL;
         $vat_tax_info   = $this->quotation_model->vat_tax_setting();
-        $data['quot_main']       = $this->quotation_model->quot_main_edit($quot_id);
+
+        if ($data['type'] == 'quotation') {
+            $data['quot_main']       = $this->quotation_model->quot_main_edit($quot_id);
+        } elseif ($data['type'] == 'delivery') {
+            $data['quot_main']       = $this->delivery_model->quot_main_edit($quot_id);
+        } elseif ($data['type'] == 'sale_order') {
+            $data['quot_main']       = $this->sale_order_model->sale_order_main_edit($quot_id);
+        }
 
         if ($data['quot_main'][0]['is_dynamic'] == 1) {
             if ($data['quot_main'][0]['is_dynamic'] != $vat_tax_info->dynamic_tax) {
@@ -647,11 +655,28 @@ class Performa extends MX_Controller
         $currency_details        = $this->quotation_model->setting_data();
         $data['currency_details'] = $currency_details;
         $data['title']           = display('quotation_to_delivery');
-        $data['quot_product']    = $this->quotation_model->quot_product_detail($quot_id);
-        $data['quot_service']    = $this->quotation_model->quot_service_detail($quot_id);
-        $data['customer_info']   = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
-        $data['itemtaxin']       = $this->quotation_model->itemtaxdetails($data['quot_main'][0]['quot_no']);
-        $data['servicetaxin']    = $this->quotation_model->servicetaxdetails($data['quot_main'][0]['quot_no']);
+
+        if ($data['type'] == 'quotation') {
+            $data['quot_product']    = $this->quotation_model->quot_product_detail($quot_id);
+            $data['quot_service']    = $this->quotation_model->quot_service_detail($quot_id);
+            $data['customer_info']   = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
+            $data['itemtaxin']       = $this->quotation_model->itemtaxdetails($data['quot_main'][0]['quot_no']);
+            $data['servicetaxin']    = $this->quotation_model->servicetaxdetails($data['quot_main'][0]['quot_no']);
+        } elseif ($data['type'] == 'delivery') {
+            $data['quot_product']    = $this->delivery_model->quot_product_detail($quot_id);
+            $data['quot_service']    = $this->delivery_model->quot_service_detail($quot_id);
+            $data['customer_info']   = $this->delivery_model->customerinfo($data['quot_main'][0]['customer_id']);
+            $data['itemtaxin']       = $this->delivery_model->itemtaxdetails($data['quot_main'][0]['quot_no']);
+            $data['servicetaxin']    = $this->delivery_model->servicetaxdetails($data['quot_main'][0]['quot_no']);
+        } elseif ($data['type'] == 'sale_order') {
+            $data['quot_product']    = $this->sale_order_model->sale_order_product_detail($quot_id);
+            $data['quot_service']    = $this->sale_order_model->sale_order_service_detail($quot_id);
+            $data['customer_info']   = $this->sale_order_model->customerinfo($data['quot_main'][0]['customer_id']);
+            $data['itemtaxin']       = $this->quotation_model->itemtaxdetails($data['quot_main'][0]['quot_no']);
+            $data['servicetaxin']    = $this->quotation_model->servicetaxdetails($data['quot_main'][0]['quot_no']);
+        }
+
+
         $data['taxes']           = $taxfield;
         $data['taxnumber']       = $num_column;
         $data['customers']       = $this->quotation_model->get_allcustomer();
@@ -670,6 +695,7 @@ class Performa extends MX_Controller
 
     public function save_performa()
     {
+        $type = $this->input->post('type');
         $this->form_validation->set_rules('customer_id', display('customer_name'), 'required|max_length[50]');
         $this->form_validation->set_rules('qdate', display('quotation_date'), 'required|max_length[50]');
         $this->form_validation->set_rules('expiry_date', display('expiry_date'), 'required|max_length[50]');
@@ -699,14 +725,14 @@ class Performa extends MX_Controller
             $multipaytype   = $this->input->post('multipaytype', TRUE);
             $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
             $no_of_credit_day = $cusifo->no_of_credit_days;
-         
-            if ($multipaytype[0] == '0' && (!isset($no_of_credit_day) || $no_of_credit_day === null || $no_of_credit_day <= 0)) {
 
-                echo '<script>alert("Credit is not available");</script>';
-                echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
+            // if ($multipaytype[0] == '0' && (!isset($no_of_credit_day) || $no_of_credit_day === null || $no_of_credit_day <= 0)) {
 
-                exit();
-            }
+            //     echo '<script>alert("Credit is not available");</script>';
+            //     echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
+
+            //     exit();
+            // }
 
             if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
                 $grand_total_price = $this->input->post('grand_total_price', TRUE);
@@ -741,30 +767,8 @@ class Performa extends MX_Controller
                 'due_amount'      => $due_amount,
                 'payment_type'    =>  $multipaytype[0],
                 'no_of_credit_days' =>  $no_of_credit_day,
+                'by_order' =>  $this->input->post('quotation_main_id', TRUE),
             );
-
-            $customer_id  = $this->input->post('customer_id', TRUE);
-            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
-            $no_of_credit_day = $cusifo->no_of_credit_days;
-            $multipaytype   = $this->input->post('multipaytype', TRUE);
-
-
-            if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
-
-                echo '<script>alert("Credit is not available");</script>';
-                echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
-
-                exit();
-            }
-
-            if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
-                $grand_total_price = $this->input->post('grand_total_price', TRUE);
-                $paid_amount = $this->input->post('paid_amount', TRUE);
-                // $due_amount = $this->input->post('due_amount',TRUE);
-                $due_amount = $grand_total_price - $paid_amount;
-            } else {
-                $due_amount = '';
-            }
 
             $result = $this->performa_model->performa_entry($data);
 
@@ -882,14 +886,39 @@ class Performa extends MX_Controller
                     }
                 }
                 $this->session->set_flashdata(array('message' => display('successfully_added')));
-                redirect(base_url('manage_performa'));
+
+                if ($type == 'quotation') {
+                    redirect(base_url('manage_quotation'));
+                } elseif ($type == 'delivery') {
+                    redirect(base_url('manage_delivery'));
+                } elseif ($type == 'sale_order') {
+                    redirect(base_url('manage_sale_order'));
+                } else {
+                    redirect(base_url('manage_performa'));
+                }
             } else {
                 $this->session->set_flashdata(array('exception' => display('already_inserted')));
-                redirect(base_url('manage_performa'));
+                if ($type == 'quotation') {
+                    redirect(base_url('manage_quotation'));
+                } elseif ($type == 'delivery') {
+                    redirect(base_url('manage_delivery'));
+                } elseif ($type == 'sale_order') {
+                    redirect(base_url('manage_sale_order'));
+                } else {
+                    redirect(base_url('manage_performa'));
+                }
             }
         } else {
             $this->session->set_flashdata(array('exception' => validation_errors()));
-            redirect(base_url('manage_performa'));
+            if ($type == 'quotation') {
+                redirect(base_url('manage_quotation'));
+            } elseif ($type == 'delivery') {
+                redirect(base_url('manage_delivery'));
+            } elseif ($type == 'sale_order') {
+                redirect(base_url('manage_sale_order'));
+            } else {
+                redirect(base_url('manage_performa'));
+            }
         }
     }
 
@@ -1118,6 +1147,7 @@ class Performa extends MX_Controller
 
     public function performa_to_delivery($quot_id = null)
     {
+        $data['type'] = isset($_GET['type']) ? $_GET['type'] : NULL;
         $vat_tax_info   = $this->quotation_model->vat_tax_setting();
         $data['quot_main']       = $this->performa_model->performa_main_edit($quot_id);
 

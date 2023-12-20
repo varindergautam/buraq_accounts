@@ -108,6 +108,7 @@ CREATE TABLE `performa` (
   `status` tinyint(4) NOT NULL,
   `cust_show` tinyint(4) DEFAULT NULL,
   `quotation_main_id` varchar(255) DEFAULT NULL,
+  `by_order` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -168,13 +169,13 @@ quotation
 add delivery_status null, sale_order_status, payment_type varchar, 
 
 deliviery
-quotation_main_id varchar, delivery_note_status , sale_order_status default(1), payment_type, invoice_status default (1), due_amount varchar, payment_type varchar
+quotation_main_id varchar, delivery_note_status , sale_order_status default(1), payment_type, invoice_status default (1), due_amount varchar, payment_type varchar, by_order varchar
  
 sale_orders
-delivery_note_status, payment_type, quotation_main_id varchar, due_amount varchar, payment_type varchar
+delivery_note_status, payment_type, quotation_main_id varchar, due_amount varchar, payment_type varchar, by_order varchar
 
 invoice
-invoice_id varchar
+invoice_id varchar, invoice varchar, by_order varchar
 
 performa
 due_amount varchar, payment_type varchar

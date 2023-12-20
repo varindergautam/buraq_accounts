@@ -67,9 +67,14 @@
                                         </td>
                                         <td><?php
                                         $que_id = $quotation->quotation_main_id;
+                                        $delivery_id = $quotation->quotation_id ;
                                         $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)->get()->row();
 
                                         $saleOrderInfo = $this->db->select('*')->from('sale_orders')->where('quotation_main_id', $que_id)->get()->row();
+
+                                        $performaInfo = $this->db->select('*')->from('performa')->where('quotation_main_id', $que_id)
+                                        ->or_where('quotation_main_id', $delivery_id)->get()->row();
+
 
                                             if (isset($invinfo) && !empty($invinfo)) {
                                                 echo '<a href="' . base_url() . 'invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
@@ -82,6 +87,14 @@
                                             } else {
                                             ?>
                                                 <a href="<?php echo base_url() . 'delivery/delivery_to_sale_order/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo "Add To Sale Order" ?> ">Add To Sale Order</a>
+                                            <?php
+                                            }
+
+                                            if (isset($performaInfo) && !empty($performaInfo)) {
+                                                echo '<a href=" ' . base_url() . 'performa_details/' . $performaInfo->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Performa"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $performaInfo->quotation_id . '';
+                                            } else {
+                                            ?>
+                                                <a href="<?php echo base_url() . '/performa/to_performa/' . $quotation->quotation_id . '?type=delivery'; ?>" class="btn btn-success btn-sm" title="" style="margin-top:5px;" data-original-title="<?php echo "Add To Performa" ?> ">Add To Performa</a>
                                             <?php
                                             }
                                             ?>

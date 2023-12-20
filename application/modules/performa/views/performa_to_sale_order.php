@@ -23,7 +23,7 @@ $disabled = 'disabled';
                     <h4>Add To Sale Order </h4>
                 </div>
             </div>
-            <?php echo form_open_multipart('/quotation/add_quotation_to_sale_order', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
+            <?php echo form_open_multipart('/perform/add_quotation_to_sale_order', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-sm-6">

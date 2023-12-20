@@ -60,7 +60,7 @@
                                         <td>
                                             <?php
                                             $que_id = $quotation->quotation_main_id;
-                                            $queId = $quotation->quotation_id;
+                                            $queId = $quotation->by_order;
 
                                             $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)
                                             ->or_where('invoice_details', $queId)
@@ -77,14 +77,14 @@
                                             if (isset($invinfo) && !empty($invinfo)) {
                                                 echo '<a href="' . base_url() . 'invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
                                             } else { ?>
-                                                <a href="<?php echo base_url() . 'performa/to_sales/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> "><?php echo display('add_to_invoice') ?></a>
+                                                <a href="<?php echo base_url() . 'performa/to_sales/' . $quotation->quotation_id .'?type=sale' ; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo display('add_to_invoice') ?> "><?php echo display('add_to_invoice') ?></a>
                                             <?php }
 
                                             if (isset($deliveryOrderInfo) && !empty($deliveryOrderInfo)) {
                                                 echo '<a href=" ' . base_url() . 'delivery_details/' . $deliveryOrderInfo->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Delivery Note"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $deliveryOrderInfo->quotation_id . '';
                                             } else { ?>
                                                 <?php if ($this->permission1->method('to_delivery_note', 'create')->access()) { ?>
-                                                    <a href="<?php echo base_url() . 'performa/performa_to_delivery/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo "Delivery Note" ?> "><?php echo "Delivery Note" ?></a>
+                                                    <a href="<?php echo base_url() . 'performa/performa_to_delivery/' . $quotation->quotation_id.'?type=delivery'; ?>" class="btn btn-success btn-sm" title="" data-original-title="<?php echo "Delivery Note" ?> "><?php echo "Delivery Note" ?></a>
                                                 <?php } ?>
                                             <?php } 
 
@@ -92,7 +92,7 @@
                                                 echo '<a href=" ' . base_url() . 'sale_order_details/' . $saleOrderInfo->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale Order"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $saleOrderInfo->quotation_id . '';
                                             } else {
                                             ?>
-                                                <a href="<?php echo base_url() . 'performa/performa_to_sale_order/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" style="margin-top:5px;" data-original-title="<?php echo "Add To Sale Order" ?> ">Add To Sale Order</a>
+                                                <a href="<?php echo base_url() . 'performa/performa_to_sale_order/' . $quotation->quotation_id .'?type=sale_order'; ?>" class="btn btn-success btn-sm" title="" style="margin-top:5px;" data-original-title="<?php echo "Add To Sale Order" ?> ">Add To Sale Order</a>
                                             <?php } ?>
                                         </td>
 

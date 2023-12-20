@@ -296,13 +296,13 @@ class Sale_order extends MX_Controller
 
             $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
             $no_of_credit_day = $cusifo->no_of_credit_days;
-            if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
+            // if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
 
-                echo '<script>alert("Credit is not available");</script>';
-                echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
+            //     echo '<script>alert("Credit is not available");</script>';
+            //     echo '<script>setTimeout(function(){ window.history.back(); location.reload(true); }, 1000);</script>';
 
-                exit();
-            }
+            //     exit();
+            // }
 
             if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
                 $grand_total_price = $this->input->post('grand_total_price', TRUE);
@@ -345,6 +345,7 @@ class Sale_order extends MX_Controller
                 'due_amount'      => $due_amount,
                 'payment_type'    =>  $multipaytype[0],
                 'no_of_credit_days' =>  $no_of_credit_day,
+                'by_order' =>  $this->input->post('quotation_main_id', TRUE),
             );
 
 
@@ -559,11 +560,11 @@ class Sale_order extends MX_Controller
 
                 $multipaytype   = $this->input->post('multipaytype', TRUE);
 
-                if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
-                    echo '<script>alert("Credit is not available");</script>';
-                    echo '<script>setTimeout(function(){ window.history.back(); }, 1000);</script>';
-                    exit();
-                }
+                // if ($multipaytype[0] == '0' && ($no_of_credit_day === null || $no_of_credit_day <= 0)) {
+                //     echo '<script>alert("Credit is not available");</script>';
+                //     echo '<script>setTimeout(function(){ window.history.back(); }, 1000);</script>';
+                //     exit();
+                // }
 
                 if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
                     $grand_total_price = $this->input->post('grand_total_price', TRUE);
@@ -617,6 +618,7 @@ class Sale_order extends MX_Controller
                     'due_amount'      => $due_amount,
                     'payment_type'    =>  $multipaytype[0],
                     'no_of_credit_days' =>  $no_of_credit_day,
+                    'by_order' =>  $this->input->post('quotation_main_id', TRUE),
                 );
 
 

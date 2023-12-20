@@ -10,7 +10,7 @@
                     <h4>Add To Delivery Note </h4>
                 </div>
             </div>
-            <?php echo form_open_multipart('quotation/quotation/add_quotation_to_delivery', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
+            <?php echo form_open_multipart('perform/perform/add_quotation_to_delivery', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-sm-6">

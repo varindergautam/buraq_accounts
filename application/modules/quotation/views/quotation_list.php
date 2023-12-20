@@ -71,7 +71,7 @@
 
                                             $invinfo = $this->db->select('*')->from('invoice')->where('invoice_details', $que_id)->get()->row();
 
-                                            $performaInfo = $this->db->select('*')->from('performa')->where('quotation_main_id', $que_id)->get()->row();
+                                            $performaInfo = $this->db->select('*')->from('performa')->where('quotation_main_id', $que_id)->or_where('by_order', $que_id)->get()->row();
 
                                             if (isset($invinfo) && !empty($invinfo)) {
                                                 echo '<a href="' . base_url() . 'invoice_details/' . $invinfo->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sale"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $invinfo->invoice_id . '';
@@ -98,7 +98,7 @@
                                                 echo '<a href=" ' . base_url() . 'performa_details/' . $performaInfo->quotation_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Performa"><i class="fa fa-window-restore" aria-hidden="true"></i></a> ' . $performaInfo->quotation_id . '';
                                             } else {
                                             ?>
-                                                <a href="<?php echo base_url() . '/performa/to_performa/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="" style="margin-top:5px;" data-original-title="<?php echo "Add To Performa" ?> ">Add To Performa</a>
+                                                <a href="<?php echo base_url() . '/performa/to_performa/' . $quotation->quotation_id . '?type=quotation'; ?>" class="btn btn-success btn-sm" title="" style="margin-top:5px;" data-original-title="<?php echo "Add To Performa" ?> ">Add To Performa</a>
                                             <?php
                                             }
                                             ?>

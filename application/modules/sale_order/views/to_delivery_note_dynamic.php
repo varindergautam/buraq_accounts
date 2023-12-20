@@ -39,6 +39,7 @@
                         <div class="col-sm-8">
                             <input type="text" name="quotation_no" id="quotation_no" class="form-control" placeholder="<?php echo "Delivery No." ?>" value="<?php echo $quot_main[0]['quot_no']; ?>" readonly>
                             <input type="hidden" name="quotation_id" id="quotation_id" class="form-control" value="<?php echo $quot_main[0]['quotation_id']; ?>" readonly>
+                            <input type="hidden" name="quotation_main_id" id="quotation_main_id" class="form-control" value="<?php echo $quot_main[0]['quotation_main_id']; ?>" readonly>
                         </div>
                     </div>
                 </div>
