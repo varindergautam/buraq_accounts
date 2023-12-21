@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$route['performa_details/(:any)']= "performa/performa/performa_details/$1";
-$route['add_performa']            = "performa/performa/performa_form";
-$route['manage_performa']         = "performa/performa/manage_performa";
-$route['quotation_download/(:any)']= "performa/performa/quotation_download/$1";
+$route['purchase_order_details/(:any)']= "purchase_order/purchase_order/purchase_order_details/$1";
+$route['add_purchase_order']            = "purchase_order/purchase_order/purchase_order_form";
+$route['manage_purchase_order']         = "purchase_order/purchase_order/manage_purchase_order";
+$route['quotation_download/(:any)']= "purchase_order/purchase_order/quotation_download/$1";
