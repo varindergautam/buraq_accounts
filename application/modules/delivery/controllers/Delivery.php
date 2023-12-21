@@ -602,6 +602,8 @@ class Delivery extends MX_Controller
                     'is_fixed'        =>  $is_fixed,
                     'is_dynamic'      =>  $is_dynamic,
                     'no_of_credit_days' =>  $no_of_credit_day,
+                    'by_order' =>  $quotation_id,
+                    'quotation_main_id' => $this->input->post('quotation_main_id', TRUE),
                 );
 
 

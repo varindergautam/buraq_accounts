@@ -130,16 +130,15 @@
                                             <a href="<?php echo base_url() . 'quotation_details/' . $quotation->quotation_id; ?>" class="btn btn-info btn-sm" title="<?php echo display('details') ?>" data-original-title="<?php echo display('details') ?> "><i class="fa fa-eye" aria-hidden="true"></i></a>
                                             <?php
 
-                                            if (empty($saleOrderInfo) || empty($invinfo) || empty($deliveryOrderInfo)) {
-                                                if ($quotation->status == 1) { ?>
-                                                    <?php if ($this->permission1->method('manage_quotation', 'update')->access()) { ?>
+                                            if (empty($saleOrderInfo) && empty($invinfo) && empty($deliveryOrderInfo) && empty($performaInfo)) {
+                                                 if ($this->permission1->method('manage_quotation', 'update')->access()) { ?>
                                                         <a href="<?php echo base_url() . 'edit_quotation/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                                    <?php } ?>
+                                                    
                                             <?php }
                                             } ?>
 
                                             <?php
-                                            if (empty($saleOrderInfo) || empty($invinfo) || empty($deliveryOrderInfo)) {
+                                            if (empty($saleOrderInfo) && empty($invinfo) && empty($deliveryOrderInfo) && empty($performaInfo)) {
                                                 if ($this->permission1->method('manage_quotation', 'delete')->access()) { ?>
                                                     <a href="<?php echo base_url() . 'quotation/quotation/delete_quotation/' . $quotation->quotation_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want to Delete ??')" title="<?php echo display('delete') ?>" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             <?php }

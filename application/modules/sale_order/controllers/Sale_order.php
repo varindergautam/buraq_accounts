@@ -619,6 +619,7 @@ class Sale_order extends MX_Controller
                     'payment_type'    =>  $multipaytype[0],
                     'no_of_credit_days' =>  $no_of_credit_day,
                     'by_order' =>  $this->input->post('quotation_main_id', TRUE),
+                    'quotation_main_id' => $this->input->post('quotation_main_id', TRUE),
                 );
 
 

@@ -116,9 +116,13 @@
 
                                             <a href="<?php echo base_url('performa/performa_download/' . $quotation->quotation_id); ?>" class="btn btn-primary btn-sm" title="<?php echo display('download') ?>" data-original-title="<?php echo display('download') ?> "><i class="fa fa-download" aria-hidden="true"></i></a>
 
-                                            <?php if ($this->permission1->method('manage_quotation', 'update')->access()) { ?>
+                                            <?php 
+                                            
+                                            if (empty($saleOrderInfo) && empty($invinfo) && empty($deliveryOrderInfo)) {
+                                                if ($this->permission1->method('manage_quotation', 'update')->access()) { ?>
                                                         <a href="<?php echo base_url() . 'performa/edit_performa/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                                    <?php } ?>
+                                                    <?php }
+                                                    } ?>
                                         </td>
                                     </tr>
                             <?php

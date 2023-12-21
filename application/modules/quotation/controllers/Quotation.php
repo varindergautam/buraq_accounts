@@ -577,6 +577,8 @@ class Quotation extends MX_Controller
                 $this->db->where('quotation_id', $quotation_id);
                 $this->db->update('quotation', $quotdata);
 
+                $this->updatePaymentType($quotation_id, $multipaytype);
+
                 $transection_id = $this->occational->generator(15);
                 $fixordyn   = $this->db->select('*')->from('vat_tax_setting')->get()->row();
                 $is_fixed   = '';
@@ -617,6 +619,7 @@ class Quotation extends MX_Controller
                     'is_dynamic'      =>  $is_dynamic,
                     'no_of_credit_days' =>  $no_of_credit_day,
                     'by_order' =>  $quotation_id,
+                    'quotation_main_id' => $this->input->post('quotation_main_id', TRUE),
                 );
 
 
@@ -1520,10 +1523,10 @@ class Quotation extends MX_Controller
 
         //            if ($result == TRUE) {
 
-        /*$this->db->where('quot_id', $quot_id);
+        $this->db->where('quot_id', $quot_id);
                   $this->db->delete('quot_products_used');
                   $this->db->where('quot_id', $quot_id);
-                  $this->db->delete('quotation_service_used');*/
+                  $this->db->delete('quotation_service_used');
         // Used Item Details Part
         $item         = $this->input->post('product_id', TRUE);
         $serial       = $this->input->post('serial_no', TRUE);
@@ -1837,6 +1840,8 @@ class Quotation extends MX_Controller
             $this->db->where('quotation_id', $quotation_id);
             $this->db->update('quotation', $quotdata);
 
+            $this->updatePaymentType($quotation_id, $multipaytype);
+
             if ($result == TRUE) {
                 // Used Item Details Part
                 $item         = $this->input->post('product_id', TRUE);
@@ -2090,6 +2095,8 @@ class Quotation extends MX_Controller
             $this->db->where('quotation_id', $quotation_id);
             $this->db->update('quotation', $quotdata);
 
+            $this->updatePaymentType($quotation_id, $multipaytype);
+
             if ($result == TRUE) {
                 // Used Item Details Part
                 $item         = $this->input->post('product_id', TRUE);
@@ -2209,5 +2216,15 @@ class Quotation extends MX_Controller
             $this->session->set_flashdata(array('exception' => validation_errors()));
             redirect(base_url('manage_quotation'));
         }
+    }
+
+    public function updatePaymentType($performaId, $payment_type)
+    {
+        $data = array(
+            'payment_type' => $payment_type[0],
+        );
+
+        $this->db->where('quotation_id', $performaId);
+        $this->db->update('quotation', $data);
     }
 }

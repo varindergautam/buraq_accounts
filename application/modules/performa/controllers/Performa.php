@@ -319,10 +319,10 @@ class Performa extends MX_Controller
 
         //            if ($result == TRUE) {
 
-        /*$this->db->where('quot_id', $quot_id);
-                  $this->db->delete('quot_products_used');
+        $this->db->where('quot_id', $quot_id);
+                  $this->db->delete('performa_products_used');
                   $this->db->where('quot_id', $quot_id);
-                  $this->db->delete('quotation_service_used');*/
+                  $this->db->delete('performa_service_used');
         // Used Item Details Part
         $item         = $this->input->post('product_id', TRUE);
         $serial       = $this->input->post('serial_no', TRUE);
