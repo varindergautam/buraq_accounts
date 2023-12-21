@@ -8,26 +8,26 @@ $user_id = $this->session->userdata('id'); ?>
         <div class="panel panel-bd lobidrag">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <h4><?php echo "Add Performa" ?> </h4>
+                    <h4><?php echo "Add Purchase Order" ?> </h4>
                 </div>
             </div>
-            <?php echo form_open('performa/save_performa_form', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?>
+
+            <?php echo form_open('purchase_order/save_purchase_order_form', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?>
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label for="customer" class="col-sm-4 col-form-label"><?php echo display('customer') ?> <i class="text-danger">*</i></label>
                         <div class="col-sm-8">
-
                             <?php if ($user_type == 3) { ?>
                                 <input type="text" name="cname" value="<?php echo $this->session->userdata('user_name') ?>" class="form-control" readonly>
-                                <input type="hidden" name="customer_id" value="<?php echo $this->session->userdata('user_id') ?>" class="form-control">
+                                <input type="hidden" name="supplier_id" value="<?php echo $this->session->userdata('user_id') ?>" class="form-control">
                             <?php } else { ?>
-                                <select name="customer_id" required class="form-control" onchange="get_customer_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>">
+                                <select name="supplier_id" required class="form-control" onchange="get_customer_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>">
                                     <option value=""></option>
                                     <?php
                                     foreach ($customers as $customer) {
                                     ?>
-                                        <option value="<?php echo $customer['customer_id'] ?>">
+                                        <option value="<?php echo $customer['supplier_id'] ?>">
                                             <?php echo $customer['customer_name'] ?>
                                         </option>
                                     <?php } ?>
@@ -66,10 +66,8 @@ $user_id = $this->session->userdata('id'); ?>
                             <input type="text" name="mobile" class="form-control" value="" id="mobile" readonly>
                         </div>
                     </div>
-
-
-
                 </div>
+
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <label for="details" class="col-sm-2 col-form-label"><?php echo display('details') ?> <i class="text-danger"></i></label>
@@ -89,10 +87,6 @@ $user_id = $this->session->userdata('id'); ?>
                                             <i class="text-danger">*</i>
                                         </th>
                                         <th class="text-center"><?php echo display('item_description') ?></th>
-                                        <!--                                        <th class="text-center">--><?php //#echo display('batch_no')
-                                                                                                                ?><!--</th>-->
-                                        <!--                                        <th class="text-center">--><?php //echo display('available_qnty') 
-                                                                                                                ?><!--</th>-->
                                         <th class="text-center"><?php echo display('unit') ?></th>
                                         <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
                                         <th class="text-center invoice_fields"><?php echo display('rate') ?> <i class="text-danger">*</i></th>
@@ -126,15 +120,7 @@ $user_id = $this->session->userdata('id'); ?>
                                         <td>
                                             <input type="text" name="desc[]" class="form-control text-right " tabindex="6" />
                                         </td>
-                                        <!--                                        <td class="invoice_fields">-->
-                                        <!--                                            <select class="form-control" required id="serial_no_1"-->
-                                        <!--                                                onchange="invoice_product_batch(1)" name="serial_no[]" tabindex="7">-->
-                                        <!--                                                <option></option>-->
-                                        <!--                                            </select>-->
-                                        <!--                                        </td>-->
-                                        <!--                                        <td>-->
                                         <input type="hidden" name="available_quantity[]" class="form-control text-right available_quantity_1" value="0" readonly="" />
-                                        <!--                                        </td>-->
                                         <td>
                                             <input name="" id="" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
                                         </td>
@@ -146,7 +132,6 @@ $user_id = $this->session->userdata('id'); ?>
                                             <input type="hidden" name="supplier_price[]" id="supplier_price_1">
                                             <span id="minValueMsg_1" style="display: none; color: red;"></span>
                                         </td>
-                                        <!-- Discount -->
                                         <td>
                                             <input type="text" name="discount[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
                                             <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_1">
@@ -214,8 +199,6 @@ $user_id = $this->session->userdata('id'); ?>
                                             <input type="text" id="total_vat_amnt" class="form-control text-right" name="total_vat_amnt" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
-
-
                                     <tr>
                                         <td colspan="11" class="text-right"><b><?php echo display('grand_total') ?>:</b>
                                         </td>
@@ -223,16 +206,9 @@ $user_id = $this->session->userdata('id'); ?>
                                             <input type="text" id="grandTotal" class="form-control text-right" name="grand_total_price" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
-
-
-
-
-
                                 </tfoot>
                             </table>
                         </div>
-
-
                     </div>
                 </div>
 
@@ -243,7 +219,6 @@ $user_id = $this->session->userdata('id'); ?>
 
                 <div class="row" id="quotation_service">
                     <div class="col-sm-12">
-
                         <div class="table-responsive margin-top10">
                             <table class="table table-bordered table-hover" id="serviceInvoice">
                                 <thead>
