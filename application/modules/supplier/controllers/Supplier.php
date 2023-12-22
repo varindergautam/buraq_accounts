@@ -306,4 +306,11 @@ class Supplier extends MX_Controller
         $data['page']      = "supplier_ledger";
         echo Modules::run('template/layout', $data);
     }
+
+    public function get_supplier_info()
+    {
+        $supplier_id = $this->input->post('supplier_id', TRUE);
+        $get_supplier_info = $this->db->select('*')->from('supplier_information')->where('supplier_id', $supplier_id)->get()->row();
+        echo json_encode($get_supplier_info);
+    }
 }

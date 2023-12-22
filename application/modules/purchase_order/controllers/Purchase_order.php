@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
 
@@ -30,14 +30,14 @@ class Purchase_order extends MX_Controller
 
     function purchase_order_form()
     {
-        $data['title']           = "Add purchase_order";
+        $data['title']           = "Add purchase order";
         $data['quotation_no']    = $this->purchase_order_model->purchase_order_quot_number_generator();
         $data['taxes']           = taxFields();
         $data['customers']       = $this->supplier_model->allsupplier();
-        $data['get_productlist'] = getAllProducts();
+   
+        // $data['get_productlist'] = getAllProducts();
         $vatortax                = vatTaxSetting();
         if ($vatortax->fixed_tax == 1) {
-
             $data['page']        = "purchase_order_form";
         }
         if ($vatortax->dynamic_tax == 1) {
@@ -49,7 +49,7 @@ class Purchase_order extends MX_Controller
 
     public function save_purchase_order_form()
     {
-        $this->form_validation->set_rules('customer_id', display('customer_name'), 'required|max_length[50]');
+        $this->form_validation->set_rules('supplier_id', display('supplier_name'), 'required|max_length[50]');
         $this->form_validation->set_rules('qdate', display('quotation_date'), 'required|max_length[50]');
         $this->form_validation->set_rules('expiry_date', display('expiry_date'), 'required|max_length[50]');
         if ($this->form_validation->run()) {
@@ -69,13 +69,12 @@ class Purchase_order extends MX_Controller
                 $is_fixed   = 0;
                 $is_dynamic = 1;
             }
-            $customershow = 0;
             $status = 1;
             
             $quotation_main_id = $this->input->post('quotation_main_id', TRUE);
             $data = array(
                 'quotation_id'        => $quot_id,
-                'customer_id'         => $this->input->post('customer_id', TRUE),
+                'supplier_id'         => $this->input->post('supplier_id', TRUE),
                 'quotdate'            => $this->input->post('qdate', TRUE),
                 'expire_date'         => $this->input->post('expiry_date', TRUE),
                 'item_total_amount'   => $this->input->post('grand_total_price', TRUE),
@@ -123,8 +122,8 @@ class Purchase_order extends MX_Controller
                 $discountval   = $item_total_discount[$j];
                 $vatper        = $vat_per[$j];
                 $vatvalue      = $vat_value[$j];
-                $tax           = $item_tax[$j];
-                $srl           = $serial[$j];
+                $tax           = isset($item_tax[$j]) ? $item_tax[$j] : NULL;
+                $srl           = isset($serial[$j]) ? $serial[$j] : NULL;
                 $dcript        = $descrp[$j];
                 $total_price   = $totalp[$j];
 
@@ -161,7 +160,7 @@ class Purchase_order extends MX_Controller
                 $taxvalue = 'total_tax' . $l;
                 $taxdata[$taxfield] = $this->input->post($taxvalue);
             }
-            $taxdata['customer_id'] = $this->input->post('customer_id', TRUE);
+            $taxdata['supplier_id'] = $this->input->post('supplier_id', TRUE);
             $taxdata['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
             $taxdata['relation_id'] = 'item' . $this->input->post('quotation_no', TRUE);
             $this->db->insert('purchase_order_taxinfo', $taxdata);
@@ -176,6 +175,7 @@ class Purchase_order extends MX_Controller
             $service_vatvalue       = $this->input->post('service_vatvalue', TRUE);
             $totalservicep          = $this->input->post('total_service_amount', TRUE);
             $service_tax            = $this->input->post('stax', TRUE);
+          
             for ($k = 0, $n = count($service); $k < $n; $k++) {
                 $service_id     = $service[$k];
                 $charge         = $service_rate[$k];
@@ -184,7 +184,7 @@ class Purchase_order extends MX_Controller
                 $stotaldiscount = $service_discountvalue[$k];
                 $service_vatper = $service_vatpercent[$k];
                 $servicevatval  = $service_vatvalue[$k];
-                $stax           = $service_tax[$k];
+                $stax           = isset($service_tax) ? $service_tax[$k] : NULL;
                 $total_serviceprice = $totalservicep[$k];
                 $quotservice = array(
                     'quot_id'        => $quot_id,
@@ -207,7 +207,7 @@ class Purchase_order extends MX_Controller
                 $taxvalue = 'total_service_tax' . $m;
                 $servicetaxinfo[$taxfield] = $this->input->post($taxvalue);
             }
-            $servicetaxinfo['customer_id'] = $this->input->post('customer_id', TRUE);
+            $servicetaxinfo['supplier_id'] = $this->input->post('supplier_id', TRUE);
             $servicetaxinfo['date']        = (!empty($this->input->post('qdate', TRUE)) ? $this->input->post('qdate', TRUE) : date('Y-m-d'));
             $servicetaxinfo['relation_id'] = 'serv' . $this->input->post('quotation_no', TRUE);
             $this->db->insert('purchase_order_taxinfo', $servicetaxinfo);
@@ -257,12 +257,12 @@ class Purchase_order extends MX_Controller
         $data['title']        = "purchase_order Edit";
         $data['quot_product'] = $this->purchase_order_model->purchase_order_product_detail($quot_id);
         $data['quot_service'] = $this->purchase_order_model->purchase_order_service_detail($quot_id);
-        $data['customer_info'] = $this->purchase_order_model->customerinfo($data['quot_main'][0]['customer_id']);
+        $data['customer_info'] = $this->purchase_order_model->supplierinfo($data['quot_main'][0]['supplier_id']);
         $data['itemtaxin']    = $this->purchase_order_model->itemTaxDetails($data['quot_main'][0]['quot_no']);
         $data['servicetaxin'] = $this->purchase_order_model->serviceTaxDetails($data['quot_main'][0]['quot_no']);
         $data['taxes']       = $taxfield;
         $data['taxnumber']   = $num_column;
-        $data['customers']   = $this->quotation_model->get_allcustomer();
+        $data['customers']   = $this->supplier_model->allsupplier();;
         $data['get_productlist'] = $this->quotation_model->get_allproduct();
         $data['discount_type'] = $currency_details[0]['discount_type'];
         $data['company_info'] = $this->quotation_model->retrieve_company();

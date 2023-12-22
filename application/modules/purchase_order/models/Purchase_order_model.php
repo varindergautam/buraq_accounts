@@ -15,14 +15,14 @@ class Purchase_order_model extends CI_Model
         } else {
             $quot_no = 1;
         }
-        return 'PI-' . $quot_no;
+        return 'PO-' . $quot_no;
     }
 
     public function list($offset, $limit)
     {
-        $this->db->select('a.*, b.customer_name');
+        $this->db->select('a.*, b.supplier_name');
         $this->db->from('purchase_order a');
-        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->join('supplier_information b', 'b.supplier_id = a.supplier_id');
         $this->db->order_by('a.id', 'desc');
         $this->db->limit($offset, $limit);
         $query = $this->db->get();
@@ -66,11 +66,11 @@ class Purchase_order_model extends CI_Model
             ->result_array();
     }
 
-    public function customerinfo($customer_id)
+    public function supplierinfo($supplier_id)
     {
         return $this->db->select('*')
-            ->from('customer_information')
-            ->where('customer_id', $customer_id)
+            ->from('supplier_information')
+            ->where('supplier_id', $supplier_id)
             ->get()
             ->result_array();
     }

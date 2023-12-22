@@ -19,15 +19,15 @@ $user_id = $this->session->userdata('id');
                         <label for="customer" class="col-sm-4 col-form-label"><?php echo display('customer') ?> <i class="text-danger">*</i></label>
                         <div class="col-sm-8">
 
-                            <select name="supplier_id" required class="form-control" onchange="get_customer_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>">
+                        <select name="supplier_id" required class="form-control" onchange="get_customer_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>">
                                 <option value=""></option>
                                 <?php
                                 foreach ($customers as $customer) {
                                 ?>
-                                    <option value="<?php echo $customer['supplier_id'] ?>" <?php if ($customer_info[0]['supplier_id'] == $customer['supplier_id']) {
+                                    <option value="<?php echo $customer->supplier_id ?>" <?php if ($customer_info[0]['supplier_id'] == $customer->supplier_id) {
                                                                                                 echo 'selected';
                                                                                             } ?>>
-                                        <?php echo $customer['customer_name'] ?>
+                                        <?php echo $customer->supplier_name ?>
                                     </option>
                                 <?php } ?>
                             </select>
@@ -48,7 +48,7 @@ $user_id = $this->session->userdata('id');
                     <div class="col-sm-6">
                         <label for="address" class="col-sm-4 col-form-label"><?php echo display('address') ?> <i class="text-danger"></i></label>
                         <div class="col-sm-8">
-                            <input type="text" name="address" class="form-control" value="<?php echo $customer_info[0]['customer_address']; ?>" id="address" readonly>
+                            <input type="text" name="address" class="form-control" value="<?php echo $customer_info[0]['address']; ?>" id="address" readonly>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -64,7 +64,7 @@ $user_id = $this->session->userdata('id');
                     <div class="col-sm-6">
                         <label for="mobile" class="col-sm-4 col-form-label"><?php echo display('mobile') ?> <i class="text-danger"></i></label>
                         <div class="col-sm-8">
-                            <input type="text" name="mobile" class="form-control" value="<?php echo  $customer_info[0]['customer_mobile'] ?>" id="mobile" readonly>
+                            <input type="text" name="mobile" class="form-control" value="<?php echo  $customer_info[0]['mobile'] ?>" id="mobile" readonly>
                         </div>
                     </div>
                     <div class="col-sm-6">

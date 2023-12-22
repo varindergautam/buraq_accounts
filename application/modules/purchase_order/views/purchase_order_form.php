@@ -16,19 +16,19 @@ $user_id = $this->session->userdata('id'); ?>
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label for="customer" class="col-sm-4 col-form-label"><?php echo display('customer') ?> <i class="text-danger">*</i></label>
+                        <label for="customer" class="col-sm-4 col-form-label"><?php echo display('Supplier') ?> <i class="text-danger">*</i></label>
                         <div class="col-sm-8">
                             <?php if ($user_type == 3) { ?>
                                 <input type="text" name="cname" value="<?php echo $this->session->userdata('user_name') ?>" class="form-control" readonly>
                                 <input type="hidden" name="supplier_id" value="<?php echo $this->session->userdata('user_id') ?>" class="form-control">
                             <?php } else { ?>
-                                <select name="supplier_id" required class="form-control" onchange="get_customer_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>">
+                                <select name="supplier_id" required class="form-control" onchange="get_supplier_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>">
                                     <option value=""></option>
                                     <?php
                                     foreach ($customers as $customer) {
                                     ?>
-                                        <option value="<?php echo $customer['supplier_id'] ?>">
-                                            <?php echo $customer['customer_name'] ?>
+                                        <option value="<?php echo $customer->supplier_id ?>">
+                                            <?php echo $customer->supplier_name ?>
                                         </option>
                                     <?php } ?>
                                 </select>
@@ -358,6 +358,7 @@ $user_id = $this->session->userdata('id'); ?>
 </div>
 
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/json/quotation.js"></script>
+<script src="<?php echo base_url() ?>my-assets/js/admin_js/supplier.js"></script>
 
 <script>
     let timeoutReference;
