@@ -51,3 +51,25 @@ function retrieve_company()
     }
     return false;
 }
+
+function pmethod_dropdown()
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $data = $ci->db->select('*')
+        ->from('acc_coa')
+        ->where('PHeadName', 'Cash')
+        ->or_where('PHeadName', 'Cash at Bank')
+        ->get()
+        ->result();
+
+    $list[''] = 'Select Method';
+    if (!empty($data)) {
+        $list[0] = 'Credit Sale';
+        foreach ($data as $value)
+            $list[$value->HeadCode] = $value->HeadName;
+        return $list;
+    } else {
+        return false;
+    }
+}

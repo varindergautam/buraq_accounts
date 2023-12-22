@@ -15,13 +15,9 @@ class Purchase_order extends MX_Controller
         parent::__construct();
         $this->load->model(array(
             'supplier/supplier_model',
-            'service/service_model',
             'account/Accounts_model',
-            'quotation/quotation_model',
             'purchase_order_model',
-            'delivery/delivery_model',
-            'invoice/invoice_model',
-            'sale_order/sale_order_model'
+            'purchase/purchase_model'
         ));
 
         if (!$this->session->userdata('isLogIn'))
@@ -424,7 +420,8 @@ class Purchase_order extends MX_Controller
         redirect(base_url('manage_purchase_order'));
     }
 
-    public function delete($quot_id) {
+    public function delete($quot_id)
+    {
         $this->db->where('quot_id', $quot_id);
         $this->db->delete('purchase_order');
         $this->db->where('quot_id', $quot_id);
@@ -449,7 +446,7 @@ class Purchase_order extends MX_Controller
         $data['company_info'] = retrieve_company();
 
         $data['title']        = 'Purchase Order Details';
-        
+
         $data['module']        = "purchase_order";
         $data['page']          = "purchase_order_details";
         echo modules::run('template/layout', $data);
@@ -630,5 +627,106 @@ class Purchase_order extends MX_Controller
 
         $this->db->where('quotation_id', $purchase_orderId);
         $this->db->update('purchase_order', $data);
+    }
+
+
+    public function to_purchase($quot_id = null)
+    {
+        $currency_details     = setting_data();
+        $data['currency_details'] = $currency_details;
+        $data['quot_main']    = $this->purchase_order_model->purchase_order_main_edit($quot_id);
+        $data['quot_product'] = $this->purchase_order_model->purchase_order_product_detail($quot_id);
+        $data['quot_service'] = $this->purchase_order_model->purchase_order_service_detail($quot_id);
+        $data['customer_info'] = $this->purchase_order_model->supplierinfo($data['quot_main'][0]['supplier_id']);
+        $data['itemtaxin']    = $this->purchase_order_model->itemTaxDetails($data['quot_main'][0]['quot_no']);
+        $data['servicetaxin'] = $this->purchase_order_model->serviceTaxDetails($data['quot_main'][0]['quot_no']);
+        $data['customers']   = $this->supplier_model->allsupplier();;
+        $data['get_productlist'] = getAllProducts();
+        $data['discount_type'] = $currency_details[0]['discount_type'];
+        $data['company_info'] = retrieve_company();
+
+
+        $vat_tax_info   = $this->quotation_model->vat_tax_setting();
+        $data['quot_main']    = $this->purchase_order_model->purchase_order_main_edit($quot_id);
+        if ($data['quot_main'][0]['is_dynamic'] == 1) {
+            if ($data['quot_main'][0]['is_dynamic'] != $vat_tax_info->dynamic_tax) {
+
+                $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
+                redirect("manage_performa");
+            }
+        } elseif ($data['quot_main'][0]['is_fixed'] == 1) {
+            if ($data['quot_main'][0]['is_fixed'] != $vat_tax_info->fixed_tax) {
+
+                $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
+                redirect("manage_performa");
+            }
+        }
+        $taxfield = taxFields();
+
+        $tablecolumn = $this->db->list_fields('tax_collection');
+        $num_column = count($tablecolumn) - 4;
+        $currency_details        = setting_data();
+        $data['currency_details'] = $currency_details;
+        $data['title']           = "Delivery to Purchase";
+        $data['quot_product'] = $this->purchase_order_model->purchase_order_product_detail($quot_id);
+        $data['quot_service'] = $this->purchase_order_model->purchase_order_service_detail($quot_id);
+        $data['customer_info'] = $this->purchase_order_model->supplierinfo($data['quot_main'][0]['supplier_id']);
+        $data['itemtaxin']    = $this->purchase_order_model->itemTaxDetails($data['quot_main'][0]['quot_no']);
+        $data['servicetaxin'] = $this->purchase_order_model->serviceTaxDetails($data['quot_main'][0]['quot_no']);
+        $data['taxes']           = $taxfield;
+        $data['taxnumber']       = $num_column;
+        $data['customers']   = $this->supplier_model->allsupplier();;
+        $data['get_productlist'] = getAllProducts();
+        $data['all_pmethod']     = pmethod_dropdown();
+        $data['module']          = "purchase_order";
+        $vatortax              = vatTaxSetting();
+        if ($vatortax->fixed_tax == 1) {
+            $data['page']            = "to_purchase";
+        }
+        if ($vatortax->dynamic_tax == 1) {
+            $data['page']          = "to_purchase_dynamic";
+        }
+        echo modules::run('template/layout', $data);
+    }
+
+    public function save_to_purchase()
+    {
+        $this->form_validation->set_rules('supplier_id', display('supplier'), 'required|max_length[15]');
+        $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]|is_unique[product_purchase.chalan_no]');
+        $this->form_validation->set_rules('product_id[]', display('product'), 'required|max_length[20]');
+        $this->form_validation->set_rules('multipaytype[]', display('payment_type'), 'required');
+        $this->form_validation->set_rules('product_quantity[]', display('quantity'), 'required|max_length[20]');
+        $this->form_validation->set_rules('product_rate[]', display('rate'), 'required|max_length[20]');
+        $discount_per = $this->input->post('discount_per', TRUE);
+        $finyear = $this->input->post('finyear', true);
+        if ($finyear <= 0) {
+            $this->session->set_flashdata('exception', 'Please Create Financial Year First From Accounts > Financial Year.');
+            redirect("add_purchase");
+        } else {
+
+            if ($this->form_validation->run() === true) {
+
+                $purchase_data = $this->purchase_model->insert_purchase();
+
+                if ($purchase_data == 1) {
+
+                    $this->session->set_flashdata('message', display('save_successfully'));
+                    redirect("manage_purchase_order");
+                }
+                if ($purchase_data == 2) {
+
+                    $this->session->set_flashdata('exception', 'Paid Amount Should Equal To Payment Amount');
+                    redirect("manage_purchase_order");
+                }
+                if ($purchase_data == 3) {
+
+                    $this->session->set_flashdata('exception', display('ooops_something_went_wrong'));
+                    redirect("manage_purchase_order");
+                }
+            } else {
+                $this->session->set_flashdata('exception', validation_errors());
+                redirect("manage_purchase_order");
+            }
+        }
     }
 }

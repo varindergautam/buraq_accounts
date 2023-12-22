@@ -13,27 +13,27 @@ $card_type = $quot_main[0]['payment_type'];
         <div class="panel panel-bd lobidrag">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <h4><?php echo display('add_to_invoice') ?> </h4>
+                    <h4><?php echo "Add To Purchase" ?> </h4>
                 </div>
             </div>
-            <?php echo form_open_multipart('performa/save_performa_to_sales', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
+            <?php echo form_open_multipart('purchase_order/save_to_purchase', array('class' => 'form-vertical', 'id' => 'insert_quotation_to_invoice', 'name' => 'insert_quotation_to_invoice')) ?>
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-sm-6">
-                        <label for="customer_id" class="col-sm-4 col-form-label"><?php echo display('customer') ?> <i class="text-danger">*</i></label>
+                        <label for="supplier_id" class="col-sm-4 col-form-label"><?php echo display('supplier') ?> <i class="text-danger">*</i></label>
                         <div class="col-sm-8">
                             <?php if ($disabled == 'disabled') { ?>
-                                <input type="hidden" name="customer_id" value="<?php echo $customer_info[0]['customer_id'] ?>">
+                                <input type="hidden" name="supplier_id" value="<?php echo $customer_info[0]['supplier_id'] ?>">
                             <?php } ?>
-                            <select name="customer_id" id="customer_id" required class="form-control" onchange="get_customer_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>" <?php echo $disabled; ?>>
+                            <select name="supplier_id" id="supplier_id" required class="form-control" onchange="get_supplier_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>" <?php echo $disabled; ?>>
                                 <option value=""></option>
                                 <?php
                                 foreach ($customers as $customer) {
                                 ?>
-                                    <option value="<?php echo $customer['customer_id'] ?>" <?php if ($customer_info[0]['customer_id'] == $customer['customer_id']) {
+                                    <option value="<?php echo $customer['supplier_id'] ?>" <?php if ($customer_info[0]['supplier_id'] == $customer['supplier_id']) {
                                                                                                 echo 'selected';
                                                                                             } ?>>
-                                        <?php echo $customer['customer_name'] ?>
+                                        <?php echo $customer['supplier_name'] ?>
                                     </option>
                                 <?php } ?>
                             </select>
@@ -55,7 +55,7 @@ $card_type = $quot_main[0]['payment_type'];
                     <div class="col-sm-6">
                         <label for="address" class="col-sm-4 col-form-label"><?php echo display('address') ?> <i class="text-danger"></i></label>
                         <div class="col-sm-8">
-                            <input type="text" name="address" class="form-control" value="<?php echo $customer_info[0]['customer_address']; ?>" id="address" readonly>
+                            <input type="text" name="address" class="form-control" value="<?php echo $customer_info[0]['address']; ?>" id="address" readonly>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -71,7 +71,7 @@ $card_type = $quot_main[0]['payment_type'];
                     <div class="col-sm-6">
                         <label for="mobile" class="col-sm-4 col-form-label"><?php echo display('mobile') ?> <i class="text-danger"></i></label>
                         <div class="col-sm-8">
-                            <input type="text" name="mobile" class="form-control" value="<?php echo  $customer_info[0]['customer_mobile'] ?>" id="mobile" readonly>
+                            <input type="text" name="mobile" class="form-control" value="<?php echo  $customer_info[0]['mobile'] ?>" id="mobile" readonly>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -81,8 +81,6 @@ $card_type = $quot_main[0]['payment_type'];
                             <input type="text" name="expiry_date" class="form-control" id="expiry_date" value="<?php echo $quot_main[0]['expire_date']; ?>" readonly>
                         </div>
                     </div>
-
-
                 </div>
 
                 <div class="form-group row">
@@ -109,10 +107,6 @@ $card_type = $quot_main[0]['payment_type'];
                                                 <i class="text-danger">*</i>
                                             </th>
                                             <th class="text-center"><?php echo display('item_description') ?></th>
-                                            <!--                                        <th class="text-center">--><?php //echo display('batch_no')
-                                                                                                                    ?><!--<i class="text-danger">*</i></th>-->
-                                            <!--                                        <th class="text-center">--><?php //echo display('available_qnty') 
-                                                                                                                    ?><!--</th>-->
                                             <th class="text-center"><?php echo display('unit') ?></th>
                                             <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
                                             <th class="text-center"><?php echo display('rate') ?> <i class="text-danger">*</i></th>
@@ -138,7 +132,6 @@ $card_type = $quot_main[0]['payment_type'];
                                         $sl = 1;
                                         $amount = 0;
                                         foreach ($quot_product as $item) {
-
                                             $product_id = $item['product_id'];
                                             $this->db->select('SUM(a.quantity) as total_purchase');
                                             $this->db->from('product_purchase_details a');
@@ -209,8 +202,6 @@ $card_type = $quot_main[0]['payment_type'];
                                                     <input type="hidden" id="total_discount_<?php echo $sl; ?>" class="" value="<?php echo $item['discount']; ?>" />
                                                     <input type="hidden" id="all_discount_<?php echo $sl; ?>" class="total_discount dppr" name="discount_amount[]" value="<?php echo $item['discount']; ?>" />
                                                     <!-- Discount calculate end -->
-
-
                                                 </td>
                                             </tr>
                                         <?php $sl++;
@@ -250,7 +241,8 @@ $card_type = $quot_main[0]['payment_type'];
                                         <tr>
                                             <td class="text-right" colspan="11"><b>Paid Amount:</b></td>
                                             <td class="text-right">
-                                                <input type="hidden" name="baseUrl" class="baseUrl" value="https://buraq.smartaccount.online/">
+                                                <!-- <input type="hidden" name="baseUrl" class="baseUrl" value="https://buraq.smartaccount.online/"> -->
+                                                <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>">
                                                 <?php if ($card_type == 0) {
                                                 ?>
                                                     <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="22" value="0" data-listener-added_fa723d9e="true" data-listener-added_4789e008="true" readonly>
@@ -319,12 +311,12 @@ $card_type = $quot_main[0]['payment_type'];
                                     <div class="form-group col-md-6">
                                         <label for="4digit" class="col-form-label pb-2"><?php echo display('paid_amount'); ?></label>
 
-                                        <?php 
-                                        if($card_type == 0) {
+                                        <?php
+                                        if ($card_type == 0) {
                                         ?>
-                                        <input type="text" id="pamount_by_method" class="form-control number pay " name="pamount_by_method[]" onkeyup="changedueamount()" value="0" placeholder="0" readonly />
-                                        <?php } else  { ?>
-                                        <input type="text" id="pamount_by_method" class="form-control number pay " name="pamount_by_method[]" onkeyup="changedueamount()" value="<?php echo $quot_main[0]['item_total_amount']; ?>" placeholder="0" readonly />
+                                            <input type="text" id="pamount_by_method" class="form-control number pay " name="pamount_by_method[]" onkeyup="changedueamount()" value="0" placeholder="0" readonly />
+                                        <?php } else { ?>
+                                            <input type="text" id="pamount_by_method" class="form-control number pay " name="pamount_by_method[]" onkeyup="changedueamount()" value="<?php echo $quot_main[0]['item_total_amount']; ?>" placeholder="0" readonly />
                                         <?php } ?>
 
                                     </div>
