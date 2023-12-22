@@ -1188,9 +1188,10 @@
         <!-- quotation Menu end -->
 
         <!-- Quotation Menu Start -->
-        <?php if($this->permission1->method('add_sale_order','create')->access() || $this->permission1->method('manage_performa','read')->access()){?>
+        <?php if($this->permission1->method('performa_form','create')->access() || $this->permission1->method('manage_performa','read')->access()){?>
         <li class="treeview <?php
-            if ($this->uri->segment('1') == ("add_sale_order") || $this->uri->segment('1') == ("manage_performa")|| $this->uri->segment('1') == ("sale_order_to_sales")) {
+        
+            if ($this->uri->segment('2') == ("performa_form") || $this->uri->segment('2') == ("manage_performa")|| $this->uri->segment('1') == ("performa")) {
                 echo "active";
             } else {
                 echo " ";
@@ -1204,8 +1205,8 @@
             </a>
 
             <ul class="treeview-menu">
-                <?php if($this->permission1->method('add_performa','create')->access()){ ?>
-                <li class="treeview <?php if ($this->uri->segment('1') == ("add_performa")){
+                <?php if($this->permission1->method('performa_form','create')->access()){ ?>
+                <li class="treeview <?php if ($this->uri->segment('2') == ("performa_form")){
                         echo "active";
                     } else {
                         echo " ";
@@ -1226,6 +1227,47 @@
 
         <?php }?>
         <!-- quotation Menu end -->
+
+        <!-- purchase order -->
+        <?php if($this->permission1->method('purchase_order_form','create')->access() || $this->permission1->method('manage_purchase_order','read')->access()){?>
+        <li class="treeview <?php
+        
+            if ($this->uri->segment('2') == ("purchase_order_form") || $this->uri->segment('2') == ("manage_purchase_order")|| $this->uri->segment('1') == ("purchase_order")) {
+                echo "active";
+            } else {
+                echo " ";
+            }
+            ?>">
+            <a href="#">
+                <i class="fa fa-book"></i><span><?php echo "Purchase order" ?></span>
+                <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+
+            <ul class="treeview-menu">
+                <?php if($this->permission1->method('purchase_order_form','create')->access()){ ?>
+                <li class="treeview <?php if ($this->uri->segment('2') == ("purchase_order_form")){
+                        echo "active";
+                    } else {
+                        echo " ";
+                    }?>"><a href="<?php echo base_url('purchase_order/purchase_order_form') ?>"><?php echo "Add Purchase order" ?></a>
+                </li>
+                <?php }?>
+                <?php if($this->permission1->method('manage_purchase_order','read')->access()){ ?>
+                <li class="treeview <?php if ($this->uri->segment('1') == ("manage_purchase_order")){
+                        echo "active";
+                    } else {
+                        echo " ";
+                    }?>"><a
+                        href="<?php echo base_url('manage_purchase_order') ?>"><?php echo "Manage purchase order Invoice" ?></a>
+                </li>
+                <?php } ?>
+            </ul>
+        </li>
+
+        <?php }?>
+
 
         <!-- Tax menu start -->
         <?php if($this->permission1->method('add_incometax','create')->access() || $this->permission1->method('manage_income_tax','read')->access()|| $this->permission1->method('tax_settings','create')->access() || $this->permission1->method('tax_report','read')->access() || $this->permission1->method('invoice_wise_tax_report','read')->access() || $this->permission1->method('tax_settings','read')->access() || $this->permission1->method('vat_tax_setting','read')->access()){?>

@@ -27,3 +27,27 @@ function taxFields()
         ->get()
         ->result_array();
 }
+
+function setting_data()
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    return $ci->db->select('*')
+        ->from('web_setting')
+        ->get()
+        ->result_array();
+}
+
+function retrieve_company()
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $ci->db->select('*');
+    $ci->db->from('company_information');
+    $ci->db->limit('1');
+    $query = $ci->db->get();
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
+    }
+    return false;
+}
