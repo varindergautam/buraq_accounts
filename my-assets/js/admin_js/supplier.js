@@ -10,6 +10,7 @@ function get_supplier_info(t) {
             $("#address").val(r.address);
             $("#mobile").val(r.mobile);
             $("#website").val(r.emailnumber);
+            
         }
     });
    
