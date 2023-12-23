@@ -85,7 +85,7 @@
                             <abbr class="font-bold">
                                 <?php echo display('invoice_no') ?>: 
                             </abbr>
-                            <?php echo $purchase_all_data[0]['purchase_id'];?>
+                            <?php echo $purchase_id;?>
                         </div>
                         <div class="m-b-15">
                         <abbr class="font-bold"><?php echo display('billing_date') ?>: </abbr>

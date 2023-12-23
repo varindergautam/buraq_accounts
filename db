@@ -195,6 +195,9 @@ CREATE TABLE `purchase_order` (
   `cust_show` tinyint(4) DEFAULT NULL,
   `quotation_main_id` varchar(255) DEFAULT NULL,
   `by_order` varchar(255) DEFAULT NULL,
+  `payment_type` varchar(255) DEFAULT NULL,
+  `no_of_credit_days` varchar(255) DEFAULT NULL,
+  `due_amount` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 

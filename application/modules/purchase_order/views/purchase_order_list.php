@@ -60,6 +60,23 @@
                                             <?php echo html_escape((($position == 0) ? "$currency $quotation->service_total_amount" : "$quotation->service_total_amount $currency")); ?>
                                         </td>
                                         <td>
+                                            <?php
+                                            $que_id = $quotation->quotation_id;
+                                            $btOrder = $quotation->by_order;
+
+                                            $purchaseInfo = $this->db->select('*')->from('product_purchase')
+                                                ->where('by_order', $que_id)
+                                                ->or_where('quotation_main_id', $btOrder)
+                                                ->or_where('by_order', $que_id)
+                                                ->or_where('quotation_main_id', $que_id)
+                                                ->get()->row();
+                                            
+                                            if (isset($purchaseInfo) && !empty($purchaseInfo)) {
+                                                echo '<a href="' . base_url() . 'purchase_details/' . $purchaseInfo->purchase_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Purchase"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $purchaseInfo->purchase_id . '';
+                                            } else { ?>
+                                            <a href="<?php echo base_url() . 'purchase_order/to_purchase/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="<?php echo "Add to Purchase" ?>" data-original-title="<?php echo "Add to Purchase" ?> ">Add to Purchase</a>
+
+                                            <?php } ?>
 
                                         </td>
 
@@ -68,12 +85,12 @@
 
                                             <a href="<?php echo base_url('purchase_order/purchase_order_download/' . $quotation->quotation_id); ?>" class="btn btn-primary btn-sm" title="<?php echo display('download') ?>" data-original-title="<?php echo display('download') ?> "><i class="fa fa-download" aria-hidden="true"></i></a>
 
+                                            
                                             <?php
-
-                                        
+                                            if (!isset($purchaseInfo) && empty($purchaseInfo)) {
                                             if ($this->permission1->method('manage_purchase_order', 'update')->access()) { ?>
                                                 <a href="<?php echo base_url() . 'purchase_order/edit_purchase_order/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                            <?php }
+                                            <?php } }
                                             ?>
                                         </td>
                                     </tr>

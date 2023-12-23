@@ -1,5 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+ini_set('error_reporting', E_ALL & ~E_DEPRECATED);
+
 #------------------------------------    
 # Author: Bdtask Ltd
 # Author link: https://www.bdtask.com/
@@ -25,8 +32,7 @@ class Purchase extends MX_Controller
     {
         $supplier_id = $_REQUEST['supplier_id'];
         $data = $this->purchase_model->getCustomerList_purchase($supplier_id);
-        print_r($data);
-        die;
+   
         echo json_encode($data);
     }
 
@@ -68,6 +74,7 @@ class Purchase extends MX_Controller
     {
         $purchase_detail = $this->purchase_model->purchase_details_data($purchase_id);
 
+
         if (!empty($purchase_detail)) {
             $i = 0;
             foreach ($purchase_detail as $k => $v) {
@@ -82,7 +89,7 @@ class Purchase extends MX_Controller
 
         $data = array(
             'title'            => display('purchase_details'),
-            'purchase_id'      => $purchase_detail[0]['purchase_id'],
+            'purchase_id'      => $purchase_detail[0]['purchaseID'],
             'purchase_details' => $purchase_detail[0]['purchase_details'],
             'supplier_name'    => $purchase_detail[0]['supplier_name'],
             'address'          => $purchase_detail[0]['address'],
@@ -99,6 +106,7 @@ class Purchase extends MX_Controller
             'due_amount'      => number_format($purchase_detail[0]['due_amount'], 2),
             'purchase_all_data' => $purchase_detail,
         );
+
         $data['module']     = "purchase";
         $data['page']       = "purchase_detail";
         echo modules::run('template/layout', $data);

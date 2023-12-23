@@ -258,20 +258,21 @@ public function getCustomerList_purchase($supplier_id){
                 }
              }
 
-     
 
          $purchase_ids ='<a href="'.$base_url.'purchase_details/'.$record->purchase_id.'">'.$record->purchase_id.'</a>';
-             $no_of_credit_days = $record->no_of_credit_days;
+             $no_of_credit_days = isset($record->no_of_credit_days) ? $record->no_of_credit_days : 0;
              $due_amount = $record->due_amount;
 
              if ($due_amount > 0) {
 
                  if ($no_of_credit_days == '') {
-                     $rem_time = '';
+                     $rem_time = 0;
                  } else {
                      $rem_time = $record->rem_time;
                  }
-                 $days_overdue = $rem_time - $no_of_credit_days;
+                 
+                 $days_overdue = $rem_time - (int)$no_of_credit_days;
+                
                  $rem_time_display = $rem_time > $no_of_credit_days ? '<span style="color: red;">' .  $days_overdue . '</span>' : $rem_time;
              }else{
                  $rem_time_display = '';
@@ -305,15 +306,17 @@ public function getCustomerList_purchase($supplier_id){
     }
 
     public function purchase_details_data($purchase_id) {
-        $this->db->select('a.*,b.*,c.*,e.purchase_details,d.product_id,d.product_name,d.product_model');
+        
+        $this->db->select('a.*,b.*,c.*,e.purchase_details,d.product_id,d.product_name,d.product_model, a.purchase_id as purchaseID');
         $this->db->from('product_purchase a');
         $this->db->join('supplier_information b', 'b.supplier_id = a.supplier_id');
         $this->db->join('product_purchase_details c', 'c.purchase_id = a.id');
         $this->db->join('product_information d', 'd.product_id = c.product_id');
-        $this->db->join('product_purchase e', 'e.purchase_id = c.purchase_id');
+        $this->db->join('product_purchase e', 'e.id = c.purchase_id');
         $this->db->where('a.purchase_id', $purchase_id);
         $this->db->group_by('d.product_id');
         $query = $this->db->get();
+ 
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
@@ -322,7 +325,7 @@ public function getCustomerList_purchase($supplier_id){
 
     /*invoice no generator*/
     public function number_generator() {
-        $this->db->select_max('purchase_id', 'invoice_no');
+        $this->db->select_max('id', 'invoice_no');
         $query      = $this->db->get('product_purchase');
         $result     = $query->result_array();
         $invoice_no = $result[0]['invoice_no'];
@@ -331,7 +334,7 @@ public function getCustomerList_purchase($supplier_id){
         } else {
             $invoice_no = 1;
         }
-        return $invoice_no;
+        return 'PU-' . $invoice_no;
     }
 
     public function insert_purchase(){
