@@ -434,4 +434,22 @@ class Purchase_order_model extends CI_Model
         }
         return false;
     }
+
+    public function purchase_order_details_data($purchase_id) {
+        
+        $this->db->select('a.*,b.*,c.*,e.purchase_details,d.product_id,d.product_name,d.product_model, a.purchase_id as purchaseID');
+        $this->db->from('purchase_order a');
+        $this->db->join('supplier_information b', 'b.supplier_id = a.supplier_id');
+        $this->db->join('purchase_order_details c', 'c.purchase_id = a.id');
+        $this->db->join('product_information d', 'd.product_id = c.product_id');
+        $this->db->join('purchase_order e', 'e.id = c.purchase_id');
+        $this->db->where('a.purchase_id', $purchase_id);
+        $this->db->group_by('d.product_id');
+        $query = $this->db->get();
+ 
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
 }

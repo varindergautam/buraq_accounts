@@ -20,7 +20,7 @@
                                 <i class="text-danger">*</i>
                             </label>
                             <div class="col-sm-6">
-                                <select name="supplier_id" id="supplier_id" class="form-control " required="">
+                                <select name="supplier_id" id="supplier_id1" class="form-control " required="">
                                     <option value="">Select Supplier</option>
                                     <?php foreach ($supplier_list as $suppliers) { ?>
                                         <option value="<?php echo  $suppliers['supplier_id'] ?>" <?php if ($suppliers['supplier_id'] == $supplier_id) {
@@ -256,21 +256,21 @@
                     <p hidden id="pay-amount"><?php echo $paid_amount; ?></p>
                     <p hidden id="change-amount"></p>
                     <div class="col-sm-6 table-bordered p-20">
-                        <div id="adddiscount" class="display-none">
+                        <div id="adddiscount" class="">
 
-                            <input type="hidden" id="purchase_edit_page" value="1">
+                            <!-- <input type="hidden" id="purchase_edit_page" value="1"> -->
                             <input type="hidden" id="is_credit_edit" value="<?php echo $is_credit ?>">
-                            <div class="" id="add_new_payment">
+                            <div class="" id="add_new_payment1">
 
                                 <div class="row no-gutters">
                                     <div class="form-group col-md-6">
                                         <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?></label>
 
-                                        <?php 
+                                        <?php
                                         echo form_dropdown('multipaytype[]', $all_pmethodwith_cr, (isset($payment_type) ? $payment_type : null), 'class="card_typesl postform resizeselect required form-control "  id="cardTypeSelect"') ?>
 
                                         <!-- <?php
-                                        echo form_dropdown('multipaytype[]', $all_pmethodwith_cr, 0, 'onchange = "check_creditsale()" required class="card_typesl postform resizeselect form-control "') ?> -->
+                                                echo form_dropdown('multipaytype[]', $all_pmethodwith_cr, 0, 'onchange = "check_creditsale()" required class="card_typesl postform resizeselect form-control "') ?> -->
 
                                     </div>
                                     <div class="form-group col-md-6">
@@ -280,9 +280,6 @@
 
                                     </div>
                                 </div>
-
-
-
                             </div>
                             <div class="form-group text-right">
                                 <div class="col-sm-12 pr-0">

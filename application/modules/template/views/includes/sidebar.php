@@ -1260,7 +1260,7 @@
                     } else {
                         echo " ";
                     }?>"><a
-                        href="<?php echo base_url('manage_purchase_order') ?>"><?php echo "Manage purchase order Invoice" ?></a>
+                        href="<?php echo base_url('manage_purchase_order') ?>"><?php echo "Manage purchase order" ?></a>
                 </li>
                 <?php } ?>
             </ul>

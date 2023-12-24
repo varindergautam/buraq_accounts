@@ -38,7 +38,7 @@ class Purchase_order extends MX_Controller
     public function save_purchase_order_form()
     {
         $this->form_validation->set_rules('supplier_id', display('supplier'), 'required|max_length[15]');
-        $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]|is_unique[product_purchase.chalan_no]');
+        $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]|is_unique[purchase_order.chalan_no]');
         $this->form_validation->set_rules('product_id[]', display('product'), 'required|max_length[20]');
         $this->form_validation->set_rules('multipaytype[]', display('payment_type'), 'required');
         $this->form_validation->set_rules('product_quantity[]', display('quantity'), 'required|max_length[20]');
@@ -62,16 +62,16 @@ class Purchase_order extends MX_Controller
                 if ($purchase_data == 2) {
 
                     $this->session->set_flashdata('exception', 'Paid Amount Should Equal To Payment Amount');
-                    redirect("purchase_order_form");
+                    redirect("manage_purchase_order");
                 }
                 if ($purchase_data == 3) {
 
                     $this->session->set_flashdata('exception', display('ooops_something_went_wrong'));
-                    redirect("purchase_order_form");
+                    redirect("manage_purchase_order");
                 }
             } else {
                 $this->session->set_flashdata('exception', validation_errors());
-                redirect("purchase_order_form");
+                redirect("manage_purchase_order");
             }
         }
     }
@@ -314,20 +314,43 @@ class Purchase_order extends MX_Controller
         $this->db->delete('purchase_order_service_used');
     }
 
-    public function purchase_order_details($quot_id = null)
+    public function purchase_order_details($purchase_id = null)
     {
-        $currency_details     = setting_data();
-        $data['currency_details'] = $currency_details;
-        $data['quot_main']    = $this->purchase_order_model->purchase_order_main_edit($quot_id);
-        $data['quot_product'] = $this->purchase_order_model->purchase_order_product_detail($quot_id);
-        $data['quot_service'] = $this->purchase_order_model->purchase_order_service_detail($quot_id);
-        $data['customer_info'] = $this->purchase_order_model->supplierinfo($data['quot_main'][0]['supplier_id']);
-        $data['itemtaxin']    = $this->purchase_order_model->itemTaxDetails($data['quot_main'][0]['quot_no']);
-        $data['servicetaxin'] = $this->purchase_order_model->serviceTaxDetails($data['quot_main'][0]['quot_no']);
-        $data['customers']   = $this->supplier_model->allsupplier();;
-        $data['get_productlist'] = getAllProducts();
-        $data['discount_type'] = $currency_details[0]['discount_type'];
-        $data['company_info'] = retrieve_company();
+        $purchase_detail = $this->purchase_order_model->purchase_order_details_data($purchase_id);
+
+
+        if (!empty($purchase_detail)) {
+            $i = 0;
+            foreach ($purchase_detail as $k => $v) {
+                $i++;
+                $purchase_detail[$k]['sl'] = $i;
+            }
+
+            foreach ($purchase_detail as $k => $v) {
+                $purchase_detail[$k]['convert_date'] = $purchase_detail[$k]['purchase_date'];
+            }
+        }
+
+        $data = array(
+            'title'            => display('purchase_details'),
+            'purchase_id'      => $purchase_detail[0]['purchaseID'],
+            'purchase_details' => $purchase_detail[0]['purchase_details'],
+            'supplier_name'    => $purchase_detail[0]['supplier_name'],
+            'address'          => $purchase_detail[0]['address'],
+            'mobile'           => $purchase_detail[0]['mobile'],
+            'vat_no'           => $purchase_detail[0]['email_address'],
+            'final_date'       => $purchase_detail[0]['convert_date'],
+            'sub_total_amount' => number_format($purchase_detail[0]['grand_total_amount'], 2, '.', ','),
+            'chalan_no'        => $purchase_detail[0]['chalan_no'],
+            'total'            =>  number_format($purchase_detail[0]['grand_total_amount'] + (!empty($purchase_detail[0]['total_discount']) ? $purchase_detail[0]['total_discount'] : 0), 2),
+            'discount'         => number_format((!empty($purchase_detail[0]['total_discount']) ? $purchase_detail[0]['total_discount'] : 0), 2),
+            'invoice_discount' => number_format((!empty($purchase_detail[0]['invoice_discount']) ? $purchase_detail[0]['invoice_discount'] : 0), 2),
+            'ttl_val'          => number_format((!empty($purchase_detail[0]['total_vat_amnt']) ? $purchase_detail[0]['total_vat_amnt'] : 0), 2),
+            'paid_amount'      => number_format($purchase_detail[0]['paid_amount'], 2),
+            'due_amount'      => number_format($purchase_detail[0]['due_amount'], 2),
+            'purchase_all_data' => $purchase_detail,
+        );
+
 
         $data['title']        = 'Purchase Order Details';
 

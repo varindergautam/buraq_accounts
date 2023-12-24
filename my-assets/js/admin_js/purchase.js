@@ -54,7 +54,9 @@ function addPurchaseOrderField1(divName) {
       count +
       '" placeholder="0.00" readonly/> </td><td class="wt"><input type="text" name="expiry_date[]"   id="expiry_date_' +
       count +
-      '" class="form-control datepicker" placeholder="Expiry Date"/>  </td><td class="text-right"><input type="text" name="product_quantity[]" tabindex="' +
+      '" class="form-control datepicker" placeholder="Expiry Date"/>  </td><td class="wt"><input type="text" name="batch_no[]"   id="batch_no' +
+      count +
+      '" class="form-control datepicker" placeholder="Batch No."/>  </td><td class="text-right"><input type="text" name="product_quantity[]" tabindex="' +
       tab2 +
       '" required  id="cartoon_' +
       count +

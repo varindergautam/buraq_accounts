@@ -11,7 +11,7 @@
             </div>
 
             <div class="panel-body">
-                <?php echo form_open_multipart('purchase_order/save_purchase_order_form',array('class' => 'form-vertical', 'id' => 'insert_purchase','name' => 'insert_purchase'))?>
+                <?php echo form_open_multipart('save_purchase_order_form',array('class' => 'form-vertical', 'id' => 'insert_purchase','name' => 'insert_purchase'))?>
 
 
                 <div class="row">
@@ -22,7 +22,7 @@
                             </label>
 
                             <div class="col-sm-6">
-                                <select name="supplier_id" id="supplier_id" class="form-control " required=""
+                                <select name="supplier_id" id="supplier_id1" class="form-control " required=""
                                     tabindex="1" onchange="handleSelectChange(this)">
                                     <option value=" "><?php echo display('select_one') ?></option>
                                     <?php foreach($all_supplier as $suppliers){?>

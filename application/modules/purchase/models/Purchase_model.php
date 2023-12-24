@@ -92,7 +92,7 @@ public function getCustomerList_purchase($supplier_id){
                 ->like('b.product_name', $product_name, 'both')
                 ->group_by('a.product_id')
                 ->order_by('b.product_name','asc')
-                ->limit(15)
+                // ->limit(15)
                 ->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
