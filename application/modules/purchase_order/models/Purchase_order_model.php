@@ -349,6 +349,13 @@ class Purchase_order_model extends CI_Model
         $sl = 1;
         foreach ($records as $record) {
 
+            $purchaseInfo = $this->db->select('*')->from('product_purchase')
+                ->where('by_order', $record->purchase_id)
+                // ->or_where('quotation_main_id', $record->purchase_id)
+                // ->or_where('by_order', $record->purchase_id)
+                // ->or_where('quotation_main_id', $record->purchase_id)
+                ->get()->row();
+
             $button = '';
             $status = '';
             $base_url = base_url();
@@ -358,9 +365,10 @@ class Purchase_order_model extends CI_Model
             if ($this->permission1->method('manage_purchase_order', 'update')->access()) {
                 $approve = $this->db->select('status,referenceNo')->from('acc_vaucher')->where('referenceNo', $record->purchase_id)->where('status', 1)->get()->num_rows();
                 // if ($approve == 0) {
+                if (!isset($purchaseInfo) && empty($purchaseInfo)) {
 
                 $button .= ' <a href="' . $base_url . 'edit_purchase_order/' . $record->purchase_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
-                // }
+                }
             }
 
 
@@ -382,13 +390,6 @@ class Purchase_order_model extends CI_Model
             } else {
                 $rem_time_display = '';
             }
-
-            $purchaseInfo = $this->db->select('*')->from('product_purchase')
-                ->where('by_order', $record->purchase_id)
-                // ->or_where('quotation_main_id', $record->purchase_id)
-                // ->or_where('by_order', $record->purchase_id)
-                // ->or_where('quotation_main_id', $record->purchase_id)
-                ->get()->row();
 
             if (isset($purchaseInfo) && !empty($purchaseInfo)) {
                 $status .= '<a href="' . base_url() . 'purchase_details/' . $purchaseInfo->purchase_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Purchase"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $purchaseInfo->purchase_id . '';

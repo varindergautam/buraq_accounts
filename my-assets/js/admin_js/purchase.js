@@ -54,9 +54,7 @@ function addPurchaseOrderField1(divName) {
       count +
       '" placeholder="0.00" readonly/> </td><td class="wt"><input type="text" name="expiry_date[]"   id="expiry_date_' +
       count +
-      '" class="form-control datepicker" placeholder="Expiry Date"/>  </td><td class="wt"><input type="text" name="batch_no[]"   id="batch_no' +
-      count +
-      '" class="form-control datepicker" placeholder="Batch No."/>  </td><td class="text-right"><input type="text" name="product_quantity[]" tabindex="' +
+      '" class="form-control datepicker" placeholder="Expiry Date"/>  </td><td class="text-right"><input type="text" name="product_quantity[]" tabindex="' +
       tab2 +
       '" required  id="cartoon_' +
       count +
@@ -241,14 +239,25 @@ function calculate_store(sl) {
   var gttl = gr_tot - dis;
   var grandtotal = parseFloat(gttl) + parseFloat(vatamnt);
   $("#grandTotal").val(grandtotal.toFixed(2, 2));
-  $("#pamount_by_method").val(grandtotal.toFixed(2, 2));
-  $("#paidAmount").val(grandtotal.toFixed(2, 2));
+
+  var cardTypeSelect = $("#cardTypeSelect").val();
+  if (cardTypeSelect === "0") {
+    $("#pamount_by_method").val("0");
+    $("#paidAmount").val("0");
+    $("#dueAmmount").val(grandtotal.toFixed(2, 2));
+  } else {
+    $("#pamount_by_method").val(grandtotal.toFixed(2, 2));
+    $("#paidAmount").val(grandtotal.toFixed(2, 2));
+    $("#dueAmmount").val(0);
+  }
+
+  
 
   var purchase_edit_page = $("#purchase_edit_page").val();
   $("#add_new_payment").empty();
 
   $("#pay-amount").text("0");
-  $("#dueAmmount").val(0);
+  
 
   if (purchase_edit_page == 1) {
     var base_url = $("#base_url").val();
@@ -665,4 +674,3 @@ function check_creditsale() {
     });
   }
 }
-

@@ -142,6 +142,7 @@ class Purchase extends MX_Controller
             'grand_total'       => $purchase_detail[0]['grand_total_amount'],
             'purchase_details'  => $purchase_detail[0]['purchase_details'],
             'purchase_date'     => $purchase_detail[0]['purchase_date'],
+            'payment_type'     => $purchase_detail[0]['payment_type'],
             'total_discount'    => $purchase_detail[0]['total_discount'],
             'invoice_discount'  => $purchase_detail[0]['invoice_discount'],
             'total_vat_amnt'    => $purchase_detail[0]['total_vat_amnt'],

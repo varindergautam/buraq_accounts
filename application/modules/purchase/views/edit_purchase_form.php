@@ -309,7 +309,7 @@
                     <p hidden id="pay-amount"><?php echo $paid_amount;?></p>
                     <p hidden id="change-amount"></p>
                     <div class="col-sm-6 table-bordered p-20">
-                        <div id="adddiscount" class="display-none">
+                        <!-- <div id="adddiscount" class="display-none">
                             
                             <input type="hidden" id="purchase_edit_page" value="1">
                             <input type="hidden" id="is_credit_edit" value="<?php echo $is_credit?>">
@@ -369,6 +369,40 @@
                                 </div>
                             </div>
 
+                        </div> -->
+
+                        <div id="adddiscount" class="">
+
+                            <!-- <input type="hidden" id="purchase_edit_page" value="1"> -->
+                            <input type="hidden" id="is_credit_edit" value="<?php echo $is_credit ?>">
+                            <div class="" id="add_new_payment1">
+
+                                <div class="row no-gutters">
+                                    <div class="form-group col-md-6">
+                                        <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?></label>
+
+                                        <?php
+                                        echo form_dropdown('multipaytype[]', $all_pmethodwith_cr, (isset($payment_type) ? $payment_type : null), 'class="card_typesl postform resizeselect required form-control "  id="cardTypeSelect"') ?>
+
+                                        <!-- <?php
+                                                echo form_dropdown('multipaytype[]', $all_pmethodwith_cr, 0, 'onchange = "check_creditsale()" required class="card_typesl postform resizeselect form-control "') ?> -->
+
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="4digit" class="col-form-label pb-2"><?php echo display('paid_amount'); ?></label>
+
+                                        <input type="text" id="pamount_by_method" class="form-control number pay firstpay" name="pamount_by_method[]" value="<?php echo $paid_amount ?>" onkeyup="changedueamount()" placeholder="0" />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-right">
+                                <div class="col-sm-12 pr-0">
+                                    <button <?php if (empty($multi_paytype)) {
+                                                echo 'disabled';
+                                            } ?> type="button" id="add_new_payment_type" class="btn btn-success w-md m-b-5"><?php echo display('new_p_method'); ?></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -387,3 +421,20 @@
     </div>
 </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#cardTypeSelect').change(function() {
+            var selectedValue = $(this).val();
+
+            if (selectedValue === '0') {
+                $('#paidAmount').val('0');
+            } else {
+                $grandTotal = $('#grandTotal').val();
+                $('#paidAmount').val($grandTotal);
+            }
+            invoice_paidamount();
+            changedueamount();
+        });
+    });
+</script>

@@ -106,7 +106,7 @@
                                 <th class="text-center" width="20%"><?php echo display('item_information') ?><i class="text-danger">*</i></th>
                                 <th class="text-center"><?php echo display('stock_ctn') ?></th>
                                 <th class="text-center"><?php echo display('expiry_date') ?></th>
-                                <th class="text-center"><?php echo display('batch_no') ?></th>
+                                <!-- <th class="text-center"><?php echo display('batch_no') ?></th> -->
                                 <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i>
                                 </th>
                                 <th class="text-center"><?php echo display('rate') ?><i class="text-danger">*</i></th>
@@ -143,9 +143,9 @@
                                         <input type="text" id="expiry_date_<?php echo $purchases['sl'] ?>" class="form-control expiry_date_<?php echo $purchases['sl'] ?>" placeholder="Expiry Date" name="expiry_date[]" value="<?php echo $purchases['expiry_date'] ?>" />
                                     </td>
 
-                                    <td class="wt">
+                                    <!-- <td class="wt">
                                         <input type="text" id="batch_no_<?php echo $purchases['sl'] ?>" class="form-control text-right batch_no_<?php echo $purchases['sl'] ?>" value="<?php echo $purchases['batch_id'] ?>" placeholder="Batch No" name="batch_no[]" />
-                                    </td>
+                                    </td> -->
                                     <td class="text-right">
                                         <input type="text" name="product_quantity[]" id="cartoon_<?php echo $purchases['sl'] ?>" class="form-control text-right store_cal_<?php echo $purchases['sl'] ?>" onkeyup="calculate_store(<?php echo $purchases['sl'] ?>);" onchange="calculate_store(<?php echo $purchases['sl'] ?>);" placeholder="0.00" value="<?php echo $purchases['quantity'] ?>" min="0" tabindex="6" />
                                     </td>
@@ -288,7 +288,6 @@
                                             } ?> type="button" id="add_new_payment_type" class="btn btn-success w-md m-b-5"><?php echo display('new_p_method'); ?></button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
