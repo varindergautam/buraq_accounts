@@ -73,3 +73,25 @@ function pmethod_dropdown()
         return false;
     }
 }
+
+function pmethod_dropdown_new()
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $data = $ci->db->select('*')
+        ->from('acc_coa')
+        ->where('PHeadName', 'Cash')
+        ->or_where('PHeadName', 'Cash at Bank')
+        ->get()
+        ->result();
+
+    $list[''] = 'Select Method';
+    if (!empty($data)) {
+
+        foreach ($data as $value)
+            $list[$value->HeadCode] = $value->HeadName;
+        return $list;
+    } else {
+        return false;
+    }
+}

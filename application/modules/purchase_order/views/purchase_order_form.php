@@ -1,399 +1,383 @@
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/json/service_quotation.js.php"></script>
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/json/productquotation.js"></script>
-<?php
-$user_type = $this->session->userdata('user_type');
-$user_id = $this->session->userdata('id'); ?>
+<script src="<?php echo base_url()?>my-assets/js/admin_js/purchase.js" type="text/javascript"></script>
+
+
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-bd lobidrag">
             <div class="panel-heading">
                 <div class="panel-title">
-                    <h4><?php echo "Add Purchase Order" ?> </h4>
+                    <h4><?php echo "Add Purchase Order" ?></h4>
                 </div>
             </div>
 
-            <?php echo form_open('purchase_order/save_purchase_order_form', array('class' => 'form-vertical', 'id' => 'insert_quotation')) ?>
             <div class="panel-body">
-                <div class="form-group row">
-                    <div class="col-sm-6">
-                        <label for="customer" class="col-sm-4 col-form-label"><?php echo display('Supplier') ?> <i class="text-danger">*</i></label>
-                        <div class="col-sm-8">
-                            <?php if ($user_type == 3) { ?>
-                                <input type="text" name="cname" value="<?php echo $this->session->userdata('user_name') ?>" class="form-control" readonly>
-                                <input type="hidden" name="supplier_id" value="<?php echo $this->session->userdata('user_id') ?>" class="form-control">
-                            <?php } else { ?>
-                                <select name="supplier_id" required class="form-control" onchange="get_supplier_info(this.value)" data-placeholder="<?php echo display('select_one'); ?>">
-                                    <option value=""></option>
-                                    <?php
-                                    foreach ($customers as $customer) {
-                                    ?>
-                                        <option value="<?php echo $customer->supplier_id ?>">
-                                            <?php echo $customer->supplier_name ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
-                            <?php } ?>
-                        </div>
-                    </div>
+                <?php echo form_open_multipart('purchase_order/save_purchase_order_form',array('class' => 'form-vertical', 'id' => 'insert_purchase','name' => 'insert_purchase'))?>
 
-                    <div class="col-sm-6">
-                        <label for="qdate" class="col-sm-4 col-form-label"><?php echo display('quotation_date') ?><i class="text-danger">*</i> </label>
-                        <div class="col-sm-8">
-                            <input type="text" required name="qdate" class="form-control datepicker" id="qdate" value="<?php echo date('Y-m-d') ?>">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-6">
-                        <label for="address" class="col-sm-4 col-form-label"><?php echo display('address') ?> <i class="text-danger"></i></label>
-                        <div class="col-sm-8">
-                            <input type="text" name="address" class="form-control" value="" id="address" readonly>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <label for="expiry_date" class="col-sm-4 col-form-label"><?php echo display('expiry_date') ?> <i class="text-danger">*</i> </label>
-                        <div class="col-sm-8">
-                            <input type="text" required name="expiry_date" class="form-control datepicker" id="expiry_date" value="<?php echo date('Y-m-d') ?>">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-6">
-                        <label for="mobile" class="col-sm-4 col-form-label"><?php echo display('mobile') ?> <i class="text-danger"></i></label>
-                        <div class="col-sm-8">
-                            <input type="text" name="mobile" class="form-control" value="" id="mobile" readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div class="col-sm-12">
-                        <label for="details" class="col-sm-2 col-form-label"><?php echo display('details') ?> <i class="text-danger"></i></label>
-                        <div class="col-sm-10">
-                            <textarea name="details" class="form-control" id="details"></textarea>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row">
-                    <div class="col-sm-12">
-                        <div class="table-responsive margin-top10">
-                            <table class="table table-bordered table-hover" id="normalinvoice">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center product_field"><?php echo display('item_information') ?>
-                                            <i class="text-danger">*</i>
-                                        </th>
-                                        <th class="text-center"><?php echo display('item_description') ?></th>
-                                        <th class="text-center"><?php echo display('unit') ?></th>
-                                        <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
-                                        <th class="text-center invoice_fields"><?php echo display('rate') ?> <i class="text-danger">*</i></th>
-
-                                        <?php if ($discount_type == 1) { ?>
-                                            <th class="text-center invoice_fields">
-                                                <?php echo display('discount_percentage') ?> %</th>
-                                        <?php } elseif ($discount_type == 2) { ?>
-                                            <th class="text-center invoice_fields"><?php echo display('discount') ?> </th>
-                                        <?php } elseif ($discount_type == 3) { ?>
-                                            <th class="text-center invoice_fields"><?php echo display('fixed_dis') ?> </th>
-                                        <?php } ?>
-                                        <th class="text-center invoice_fields"><?php echo display('dis_val') ?> </th>
-                                        <th class="text-center invoice_fields"><?php echo display('vat') . ' %' ?> </th>
-                                        <th class="text-center invoice_fields"><?php echo display('vat_val') ?> </th>
-
-                                        <th class="text-center invoice_fields"><?php echo display('total') ?>
-                                        </th>
-                                        <th class="text-center"><?php echo display('action') ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="addinvoiceItem">
-                                    <tr>
-                                        <td class="product_field">
-                                            <input type="text" required name="product_name" onkeypress="invoice_productList(1);" class="form-control productSelection" placeholder='<?php echo display('product_name') ?>' id="product_name_1" tabindex="5">
-
-                                            <input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId" />
-
-                                            <input type="hidden" class="baseUrl" value="<?php echo base_url(); ?>" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="desc[]" class="form-control text-right " tabindex="6" />
-                                        </td>
-                                        <input type="hidden" name="available_quantity[]" class="form-control text-right available_quantity_1" value="0" readonly="" />
-                                        <td>
-                                            <input name="" id="" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
-                                        </td>
-                                        <td>
-                                            <input type="text" required name="product_quantity[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8" value="1" />
-                                        </td>
-                                        <td>
-                                            <input type="text" required name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" onkeyup="quantity_calculate(1); validateMinValue(this);" onchange="quantity_calculate(1); validateMinValue(this);" placeholder="0.00" min="0" />
-                                            <input type="hidden" name="supplier_price[]" id="supplier_price_1">
-                                            <span id="minValueMsg_1" style="display: none; color: red;"></span>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="discount[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
-                                            <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_1">
-
-                                        </td>
-
-                                        <td>
-                                            <input type="text" name="discountvalue[]" id="discount_value_1" class="form-control text-right" min="0" tabindex="18" placeholder="0.00" readonly />
-                                        </td>
-
-                                        <!-- VAT  -->
-                                        <td>
-                                            <input type="text" name="vatpercent[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="vat_percent_1" class="form-control text-right" min="0" tabindex="19" placeholder="0.00" />
-
-                                        </td>
-                                        <td>
-                                            <input type="text" name="vatvalue[]" id="vat_value_1" class="form-control text-right total_vatamnt" min="0" tabindex="20" placeholder="0.00" readonly />
-                                        </td>
-                                        <!-- VAT end -->
-
-
-                                        <td>
-                                            <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" />
-                                        </td>
-
-                                        <td>
-
-                                            <!-- Tax calculate end-->
-
-                                            <!-- Discount calculate start-->
-                                            <input type="hidden" id="total_discount_1" class="" />
-                                            <input type="hidden" id="all_discount_1" class="total_discount dppr" name="discount_amount[]" />
-                                            <!-- Discount calculate end -->
-
-
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-
-                                        <td class="text-right" colspan="11">
-                                            <b><?php echo display('invoice_discount') ?>:</b>
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="text" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="invoice_discount" class="form-control text-right total_discount" name="invoice_discount" placeholder="0.00" tabindex="13" />
-                                            <input type="hidden" id="txfieldnum">
-                                        </td>
-                                        <td><a id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField('addinvoiceItem');" tabindex="11"><i class="fa fa-plus"></i></a></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="text-right" colspan="11">
-                                            <b><?php echo display('total_discount') ?>:</b>
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-right" colspan="11">
-                                            <b><?php echo display('ttl_val') ?>:</b>
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="text" id="total_vat_amnt" class="form-control text-right" name="total_vat_amnt" value="0.00" readonly="readonly" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="11" class="text-right"><b><?php echo display('grand_total') ?>:</b>
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="text" id="grandTotal" class="form-control text-right" name="grand_total_price" value="0.00" readonly="readonly" />
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <hr>
-                <div>
-                    <button type="button" class="btn btn-primary" id="service_quotation_div"><?php echo display('add_service_quotation') ?></button>
-                </div>
-
-                <div class="row" id="quotation_service">
-                    <div class="col-sm-12">
-                        <div class="table-responsive margin-top10">
-                            <table class="table table-bordered table-hover" id="serviceInvoice">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center product_field"><?php echo display('service_name') ?> <i class="text-danger">*</i></th>
-                                        <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
-                                        <th class="text-center invoice_fields"><?php echo display('charge') ?> <i class="text-danger">*</i></th>
-
-                                        <?php if ($discount_type == 1) { ?>
-                                            <th class="text-center"><?php echo display('discount_percentage') ?> %</th>
-                                        <?php } elseif ($discount_type == 2) { ?>
-                                            <th class="text-center"><?php echo display('discount') ?> </th>
-                                        <?php } elseif ($discount_type == 3) { ?>
-                                            <th class="text-center"><?php echo display('fixed_dis') ?> </th>
-                                        <?php } ?>
-                                        <th class="text-center invoice_fields"><?php echo display('dis_val') ?> </th>
-                                        <th class="text-center invoice_fields"><?php echo display('vat') . ' %' ?> </th>
-                                        <th class="text-center invoice_fields"><?php echo display('vat_val') ?> </th>
-                                        <th class="text-center product_field"><?php echo display('total') ?>
-                                        </th>
-                                        <th class="text-center"><?php echo display('action') ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="addservicedata">
-                                    <tr>
-                                        <td class="product_field">
-                                            <input type="text" name="service_name" onkeypress="invoice_serviceList(1);" class="form-control serviceSelection" placeholder='<?php echo display('service_name') ?>' id="service_name" tabindex="7">
-
-                                            <input type="hidden" class="autocomplete_hidden_value service_id_1" name="service_id[]" />
-
-                                            <input type="hidden" class="baseUrl" value="<?php echo base_url(); ?>" />
-                                        </td>
-
-                                        <td>
-                                            <input type="text" name="service_quantity[]" onkeyup="serviceCAlculation(1);" onchange="serviceCAlculation(1);" class="total_service_qty_1 form-control text-right" id="total_service_qty_1" placeholder="0.00" min="0" tabindex="8" />
-                                        </td>
-                                        <td>
-                                            <input type="text" name="service_rate[]" id="service_rate_1" class="service_rate1 service_rate form-control text-right" tabindex="9" onkeyup="serviceCAlculation(1);" onchange="serviceCAlculation(1);" placeholder="0.00" min="0" />
-
-                                        </td>
-                                        <!-- Discount -->
-                                        <td>
-                                            <input type="text" name="sdiscount[]" onkeyup="serviceCAlculation(1);" onchange="serviceCAlculation(1);" id="sdiscount_1" class="form-control text-right common_servicediscount" placeholder="0.00" min="0">
-                                            <input type='hidden' value='' name='discount_type' id='sdiscount_type_1'>
-                                        </td>
-
-                                        <td>
-                                            <input type="text" name="service_discountvalue[]" id="service_discount_value_1" class="form-control text-right" min="0" tabindex="18" placeholder="0.00" readonly />
-                                        </td>
-
-                                        <!-- VAT  -->
-                                        <td>
-                                            <input type="text" name="service_vatpercent[]" onkeyup="serviceCAlculation(1);" onchange="serviceCAlculation(1);" id="service_vat_percent_1" class="form-control text-right" min="0" tabindex="19" placeholder="0.00" />
-
-                                        </td>
-                                        <td>
-                                            <input type="text" name="service_vatvalue[]" id="service_vat_value_1" class="form-control text-right service_total_vatamnt" min="0" tabindex="20" placeholder="0.00" readonly />
-                                        </td>
-                                        <!-- VAT end -->
-
-
-                                        <td>
-                                            <input class="total_serviceprice form-control text-right" type="text" name="total_service_amount[]" id="total_service_amount_1" value="0.00" readonly="readonly" />
-                                        </td>
-
-                                        <td>
-
-                                            <input type="hidden" id="totalServiceDicount_1" class="totalServiceDicount_1">
-
-                                            <input type="hidden" id="all_service_discount_1" class="totalServiceDicount sedppr" name="sdiscount_amount[]">
-
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-
-                                    <tr>
-                                        <td class="text-right" colspan="7">
-                                            <b><?php echo display('service_discount') ?>:</b>
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="text" onkeyup="serviceCAlculation(1);" onchange="serviceCAlculation(1);" id="service_discount" class="form-control totalServiceDicount text-right" name="service_discount" placeholder="0.00" />
-                                            <input type="hidden" id="sertxfieldnum">
-                                        </td>
-                                        <td><button type="button" id="add_service_item" class="btn btn-info" name="add-invoice-item" onClick="addService('addservicedata');"><i class="fa fa-plus"></i></button></td>
-                                    </tr>
-                                    <tr>
-
-                                        <td class="text-right" colspan="7">
-                                            <b><?php echo display('totalServiceDicount') ?>:</b>
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="text" id="total_service_discount" class="form-control text-right" name="totalServiceDicount" value="0.00" readonly="readonly" />
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td class="text-right" colspan="7">
-                                            <b><?php echo display('ttl_val') ?>:</b>
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="text" id="service_total_vat_amnt" class="form-control text-right" name="service_total_vat_amnt" value="0.00" readonly="readonly" />
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td colspan="7" class="text-right"><b><?php echo display('grand_total') ?>:</b>
-                                        </td>
-                                        <td class="text-right">
-                                            <input type="text" id="serviceGrandTotal" class="form-control text-right" name="grand_total_service_amount" value="0.00" readonly="readonly" />
-                                            <input type="hidden" id="is_quotation" value="" name="">
-                                            <input type="hidden" name="" value="<?php echo $discount_type ?>" id="discount_type">
-                                        </td>
-                                    </tr>
-
-
-
-                                </tfoot>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="example-text-input" class="col-sm-4 col-form-label"></label>
                     <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="supplier_sss" class="col-sm-4 col-form-label"><?php echo display('supplier') ?>
+                                <i class="text-danger">*</i>
+                            </label>
 
-                        <input type="submit" id="add-quotation" class="btn btn-success btn-large" name="add-quotation" value="<?php echo display('save') ?>" />
+                            <div class="col-sm-6">
+                                <select name="supplier_id" id="supplier_id" class="form-control " required=""
+                                    tabindex="1" onchange="handleSelectChange(this)">
+                                    <option value=" "><?php echo display('select_one') ?></option>
+                                    <?php foreach($all_supplier as $suppliers){?>
+                                    <option value="<?php echo $suppliers['supplier_id']?>" id="<?php echo $suppliers['no_of_credit_days']?>">
+                                        <?php echo $suppliers['supplier_name']?>
+                                        </option>
+                                    <?php }?>
+                                </select>
+                            </div>
+                            <?php if($this->permission1->method('add_supplier','create')->access()){ ?>
+                            <div class="col-sm-2">
+                                <a class="btn btn-success" title="Add New Supplier"
+                                    href="<?php echo base_url('add_supplier'); ?>"><i class="fa fa-user"></i></a>
+                            </div>
+                            <?php }?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="date" class="col-sm-4 col-form-label"><?php echo display('purchase_date') ?>
+                                <i class="text-danger">*</i>
+                            </label>
+                            <div class="col-sm-8">
+                                <?php $date = date('Y-m-d'); ?>
+                                <input type="text" required tabindex="2" class="form-control datepicker"
+                                    name="purchase_date" value="<?php echo $date; ?>" id="date" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="chalan_no" class="col-sm-4 col-form-label">No of credit Days </label>
+                            <div class="col-sm-6">
+                            <div id="input-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="chalan_no" class="col-sm-4 col-form-label"><?php echo display('chalan_no') ?>
+                                <i class="text-danger">*</i>
+                            </label>
+                            <div class="col-sm-6">
+                                <input type="text" tabindex="3" class="form-control" name="chalan_no"
+                                    placeholder="<?php echo display('chalan_no') ?>" id="chalan_no" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="adress" class="col-sm-4 col-form-label"><?php echo display('details') ?>
+                            </label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" tabindex="4" id="adress" name="purchase_details"
+                                    placeholder=" <?php echo display('details') ?>" rows="1"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <br>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="purchaseTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center" width="20%"><?php echo display('item_information') ?><i
+                                        class="text-danger">*</i></th>
+                                <th class="text-center"><?php echo display('stock_ctn') ?></th>
+                                <th class="text-center"><?php echo display('expiry_date') ?></th>
+<!--                                <th class="text-center">--><?php #echo display('batch_no') ?><!--</th>-->
+                                <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i>
+                                </th>
+                                <th class="text-center"><?php echo display('rate') ?><i class="text-danger">*</i></th>
+                                <?php if ($discount_type == 1) { ?>
+                                <th class="text-center invoice_fields"><?php echo display('discount_percentage') ?> %
+                                </th>
+                                <?php } elseif ($discount_type == 2) { ?>
+                                <th class="text-center invoice_fields"><?php echo display('discount') ?> </th>
+                                <?php } elseif ($discount_type == 3) { ?>
+                                <th class="text-center invoice_fields"><?php echo display('fixed_dis') ?> </th>
+                                <?php } ?>
+                                <th class="text-center invoice_fields"><?php echo display('dis_val') ?> </th>
+                                <th class="text-center invoice_fields"><?php echo display('vat').' %' ?> </th>
+                                <th class="text-center invoice_fields"><?php echo display('vat_val') ?> </th>
+                                <th class="text-center"><?php echo display('total') ?></th>
+                                <th class="text-center"><?php echo display('action') ?></th>
+                            </tr>
+                        </thead>
+                        <tbody id="addPurchaseItem">
+                            <tr>
+                                <td class="span3 supplier">
+                                    <input type="text" name="product_name" required
+                                        class="form-control product_name productSelection"
+                                        onkeypress="product_pur_or_list(1);"
+                                        placeholder="<?php echo display('product_name') ?>" id="product_name_1"
+                                        tabindex="5">
+
+                                    <input type="hidden" class="autocomplete_hidden_value product_id_1"
+                                        name="product_id[]" id="SchoolHiddenId">
+
+                                    <input type="hidden" class="sl" value="1">
+                                </td>
+
+                                <td class="wt">
+                                    <input type="text" id="available_quantity_1"
+                                        class="form-control text-right stock_ctn_1" placeholder="0.00" readonly />
+                                </td>
+
+                                <td class="wt">
+                                    <input type="text" id="expiry_date_1" autocomplete="off" class="form-control datepicker expiry_date_1"
+                                        placeholder="Expiry Date" name="expiry_date[]" />
+                                </td>
+
+<!--                                <td class="wt">-->
+<!--                                    <input type="text" id="batch_no_1" class="form-control text-right batch_no_1"-->
+<!--                                        placeholder="Batch No" name="batch_no[]" />-->
+<!--                                </td>-->
+
+                                <td class="text-right">
+                                    <input type="text" name="product_quantity[]" id="cartoon_1" required="" min="0"
+                                        class="form-control text-right store_cal_1" onkeyup="calculate_store(1);"
+                                        onchange="calculate_store(1);" placeholder="0.00" value="" tabindex="6" />
+                                </td>
+                                <td class="test">
+                                    <input type="text" name="product_rate[]" required="" onkeyup="calculate_store(1);"
+                                        onchange="calculate_store(1);" id="product_rate_1"
+                                        class="form-control product_rate_1 text-right" placeholder="0.00" value=""
+                                        min="0" tabindex="7" />
+                                </td>
+                                <!-- Discount start-->
+                                <td>
+                                    <input type="text" name="discount_per[]" onkeyup="calculate_store(1);"
+                                        onchange="calculate_store(1);" id="discount_1" class="form-control discount_1 text-right"
+                                        min="0" tabindex="11" placeholder="0.00" />
+                                    <input type="hidden" value="<?php echo $discount_type?>" name="discount_type"
+                                        id="discount_type_1">
+
+                                </td>
+                                <td>
+                                    <input type="text" name="discountvalue[]" id="discount_value_1"
+                                        class="form-control text-right discount_value_1 total_discount_val" min="0" tabindex="12"
+                                        placeholder="0.00" readonly />
+                                </td>
+                                <!-- Discount end-->
+                                <!-- VAT  start-->
+                                <td>
+                                    <input type="text" name="vatpercent[]" onkeyup="calculate_store(1);"
+                                        onchange="calculate_store(1);" id="vat_percent_1"
+                                        class="form-control vat_percent_1 text-right" min="0" tabindex="13" placeholder="0.00" />
+
+
+                                </td>
+                                <td>
+                                    <input type="text" name="vatvalue[]" id="vat_value_1"
+                                        class="form-control vat_value_1 text-right total_vatamnt" min="0" tabindex="14"
+                                        placeholder="0.00" readonly />
+                                </td>
+                                <!-- VAT  end-->
+
+                                <td class="text-right">
+                                    <input class="form-control total_price text-right total_price_1" type="text" name="total_price[]"
+                                        id="total_price_1" value="0.00" readonly="readonly" />
+
+                                    <input type="hidden" id="total_discount_1" class="" />
+                                    <input type="hidden" id="all_discount_1" class="total_discount dppr"
+                                        name="discount_amount[]" />
+                                </td>
+                                <td>
+
+
+
+                                    <button class="btn btn-danger text-right red" type="button"
+                                        value="<?php echo display('delete')?>" onclick="deleteRow(this)" tabindex="8"><i
+                                            class="fa fa-close"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+
+                                <td class="text-right" colspan="10"><b><?php echo display('total') ?>:</b></td>
+                                <td class="text-right">
+                                    <input type="text" id="Total" class="text-right form-control" name="total"
+                                        value="0.00" readonly="readonly" />
+                                </td>
+                                <td> <button type="button" id="add_invoice_item" class="btn btn-info"
+                                        name="add-invoice-item" onClick="addPurchaseOrderField1('addPurchaseItem'); addAnotherFunction();"
+                                        tabindex="9"><i class="fa fa-plus"></i></button>
+
+                                    <input type="hidden" name="baseUrl" class="baseUrl"
+                                        value="<?php echo base_url();?>" />
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td class="text-right" colspan="10"><b><?php echo display('purchase_discount') ?>:</b>
+                                </td>
+                                <td class="text-right">
+                                    <input type="text" id="discount" class="text-right form-control discount total_discount_val"
+                                        onkeyup="calculate_store(1)" name="discount" placeholder="0.00" value="" />
+                                </td>
+
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="10"><b><?php echo display('total_discount') ?>:</b></td>
+                                <td class="text-right">
+                                    <input type="text" id="total_discount_ammount" class="form-control text-right"
+                                        name="total_discount" value="0.00" readonly="readonly" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="10"><b><?php echo display('ttl_val') ?>:</b></td>
+                                <td class="text-right">
+                                    <input type="text" id="total_vat_amnt" class="form-control text-right"
+                                        name="total_vat_amnt" value="0.00" readonly="readonly" />
+                                </td>
+                            </tr>
+
+                            <tr>
+
+                                <td class="text-right" colspan="10"><b><?php echo display('grand_total') ?>:</b></td>
+                                <td class="text-right">
+                                    <input type="text" id="grandTotal" class="text-right form-control grandTotalamnt"
+                                        name="grand_total_price" placeholder="0.00" value="00" readonly />
+                                </td>
+                                <td> </td>
+                            </tr>
+                            <tr>
+
+                                <td class="text-right" colspan="10"><b><?php echo display('paid_amount') ?>:</b></td>
+                                <td class="text-right">
+                                    <input type="text" id="paidAmount" class="text-right form-control"
+                                        onKeyup="invoice_paidamount()" name="paid_amount" placeholder="0.00" value="" />
+                                </td>
+                                <td> </td>
+                            </tr>
+                            <tr>
+                                
+                                <td class="text-right" colspan="10"><b><?php echo display('due_amount') ?>:</b></td>
+                                <td class="text-right">
+                                    <input type="text" id="dueAmmount" class="text-right form-control" name="due_amount"
+                                        value="0.00" readonly="readonly" />
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <input type="hidden" name="finyear" value="<?php echo financial_year(); ?>">
+                    <p hidden id="pay-amount"></p>
+                    <p hidden id="change-amount"></p>
+                    <div class="col-sm-6 table-bordered p-20">
+                        <div id="adddiscount" class="display-none">
+                            <div class="row no-gutters">
+                                <div class="form-group col-md-6">
+                                    <label for="payments"
+                                        class="col-form-label pb-2"><?php echo display('payment_type');?></label>
+
+                                    <?php $card_type=111000001;
+                                                echo form_dropdown('multipaytype[]',$all_pmethod,(isset($card_type)?$card_type:null),'onchange = "check_creditsale()" required class="card_typesl postform resizeselect form-control "') ?>
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="4digit"
+                                        class="col-form-label pb-2"><?php echo display('paid_amount');?></label>
+
+                                    <input type="number" id="pamount_by_method" class="form-control number pay "
+                                        name="pamount_by_method[]" value="" onkeyup="changedueamount()"
+                                        placeholder="0" />
+
+                                </div>
+                            </div>
+
+                            <div class="" id="add_new_payment">
+
+
+
+                            </div>
+                            <div class="form-group text-right">
+                                <div class="col-sm-12 pr-0">
+                                    <button type="button" id="add_new_payment_type"
+                                        class="btn btn-success w-md m-b-5"><?php echo display('new_p_method');?></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row text-right">
+                    <div class="col-sm-12 p-20">
+                        <input type="submit" id="add_purchase" class="btn btn-primary btn-large" name="add-purchase"
+                            value="<?php echo display('submit') ?>" />
 
                     </div>
                 </div>
+                <?php echo form_close()?>
             </div>
-            <?php echo form_close() ?>
         </div>
+
     </div>
 </div>
-
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/json/quotation.js"></script>
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/supplier.js"></script>
-
 <script>
-    let timeoutReference;
+    function addAnotherFunction() {
+        var table = document.getElementById(purchaseTable);
+        var textInputs = document.querySelectorAll('#purchaseTable input[type="text"]');
+        for (var i = 0; i < textInputs.length; i++) {
+            var input = textInputs[i];
 
-    function validateMinValue(input) {
-
-        const inputId = input.id;
-
-        const number = parseInt(inputId.match(/\d+/)[0]);
-        console.log(number);
-
-        clearTimeout(timeoutReference);
-
-
-        timeoutReference = setTimeout(function() {
-
-            var value = parseFloat(input.value);
-
-            var minValue = parseFloat(document.getElementById('supplier_price_' + number).value);
-
-            console.log('ds', minValue);
-
-            console.log('Input value:', value);
-
-            console.log('Supplier price value:', minValue);
-
-            var errorElement = document.getElementById('minValueMsg_' + number);
-
-            if (isNaN(value) || value < minValue) {
-                errorElement.innerHTML = 'Value must be greater than or equal to ' + minValue;
-                errorElement.style.display = 'block';
-                input.value = '';
-            } else {
-                errorElement.style.display = 'none';
+            // Check if the input field has the name "product_name[]"
+            if (input.name === "batch_no[]") {
+                input.removeAttribute("required");
             }
-        }, 2000); // 1000 milliseconds = 1 second
+        }
     }
+
+    function handleSelectChange(selectElement) {
+        // Get the selected option value
+        // var selectedValue = selectElement.value;
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var selectedId = selectedOption.id;
+        var inputContainer = document.getElementById('input-container');
+        inputContainer.innerHTML = '';
+        if(selectedId  !== ''){
+            var inputContainer = document.getElementById('input-container');
+            var inputElement = document.createElement('input');
+            inputElement.type = 'text';
+            inputElement.value = selectedId;
+            inputElement.className = 'form-control';
+            inputContainer.appendChild(inputElement);
+        }else{
+           
+        }
+
+        /*$.ajax({
+            'url':'purchase/purchase/bdtask_CheckCustomerList',
+            type: 'Post',
+            data: data,
+            success: function(response) {
+                // Handle the response data here
+                console.log(response);
+            },
+            error: function(error) {
+                // Handle errors here
+                console.error('Error:', error);
+            }
+        });*/
+        }
 </script>

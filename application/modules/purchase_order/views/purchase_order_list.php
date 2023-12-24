@@ -1,116 +1,69 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-7">
+
+                <?php echo form_open('', 'class="form-inline"') ?>
+
+                <div class="form-group">
+                    <label class="" for="from_date"><?php echo display('from') ?></label>
+                    <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="" placeholder="<?php echo display('start_date') ?>">
+                </div>
+
+                <div class="form-group">
+                    <label class="" for="to_date"><?php echo display('to') ?></label>
+                    <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="">
+                </div>
+
+                <button type="button" id="btn-filter" class="btn btn-success"><?php echo display('find') ?></button>
+
+                <?php echo form_close() ?>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Manage Purchase report -->
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-bd lobidrag">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h4><?php echo 'Manage purchase_order'; ?> </h4>
-                </div>
-            </div>
+
             <div class="panel-body">
-                <div class="table-responsive" id="results">
-                    <table id="dataTableExample2" class="table table-bordered table-striped table-hover">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="purchaseOrderList">
                         <thead>
                             <tr>
-                                <th class="text-center"><?php echo display('sl') ?></th>
-                                <th class=""><?php echo display('supplier_name') ?></th>
-                                <th class=""><?php echo 'Quotation no'; ?></th>
-                                <th class=""><?php echo 'purchase_order no'; ?></th>
-                                <th class=""><?php echo 'Delivery Date'; ?></th>
-                                <th class=""><?php echo display('expiry_date') ?></th>
-                                <th class="text-right"><?php echo display('item_total') ?></th>
-                                <th class="text-right"><?php echo display('service_total') ?></th>
-                                <th class=""><?php echo display('status') ?></th>
-                                <th class="text-center"><?php echo display('action') ?></th>
+                                <th><?php echo display('sl') ?></th>
+                                <th><?php echo display('chalan_no') ?></th>
+                                <th><?php echo display('invoice_no') ?></th>
+                                <th><?php echo display('supplier_name') ?></th>
+                                <th>No of Credit days</th>
+                                <th>Over Due</th>
+                                <th><?php echo display('purchase_date') ?></th>
+                                <th><?php echo display('total_ammount') ?></th>
+                                <!-- <th>Status</th> -->
+                                <th><?php echo display('action') ?></th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            if ($quotation_list) {
-                                $sl = 0;
-                                foreach ($quotation_list as $quotation) {
-                                    $sl++;
-                            ?>
-                                    <tr>
-                                        <td><?php echo $sl; ?></td>
-                                        <td>
-                                            <?php echo html_escape($quotation->supplier_name); ?>
-                                        </td>
-                                        <td>
-                                            <?php echo html_escape($quotation->quotation_main_id); ?>
-                                        </td>
-                                        <td>
-                                            <a href="<?php echo base_url('purchase_order_details/' . $quotation->quotation_id); ?>">
-                                                <?php echo html_escape($quotation->quot_no); ?>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            echo date('m-d-Y', strtotime(html_escape($quotation->quotdate)));
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            echo date('m-d-Y', strtotime(html_escape($quotation->expire_date)));
-                                            ?>
-                                        </td>
-                                        <td class="text-right">
-                                            <?php echo html_escape((($position == 0) ? "$currency $quotation->item_total_amount" : "$quotation->item_total_amount $currency")); ?>
-                                        </td>
-                                        <td class="text-right">
-                                            <?php echo html_escape((($position == 0) ? "$currency $quotation->service_total_amount" : "$quotation->service_total_amount $currency")); ?>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            $que_id = $quotation->quotation_id;
-                                            $btOrder = $quotation->by_order;
 
-                                            $purchaseInfo = $this->db->select('*')->from('product_purchase')
-                                                ->where('by_order', $que_id)
-                                                ->or_where('quotation_main_id', $btOrder)
-                                                ->or_where('by_order', $que_id)
-                                                ->or_where('quotation_main_id', $que_id)
-                                                ->get()->row();
-                                            
-                                            if (isset($purchaseInfo) && !empty($purchaseInfo)) {
-                                                echo '<a href="' . base_url() . 'purchase_details/' . $purchaseInfo->purchase_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Purchase"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $purchaseInfo->purchase_id . '';
-                                            } else { ?>
-                                            <a href="<?php echo base_url() . 'purchase_order/to_purchase/' . $quotation->quotation_id; ?>" class="btn btn-success btn-sm" title="<?php echo "Add to Purchase" ?>" data-original-title="<?php echo "Add to Purchase" ?> ">Add to Purchase</a>
-
-                                            <?php } ?>
-
-                                        </td>
-
-                                        <td class="text-center">
-                                            <a href="<?php echo base_url() . 'purchase_order_details/' . $quotation->quotation_id; ?>" class="btn btn-info btn-sm" title="<?php echo display('details') ?>" data-original-title="<?php echo display('details') ?> "><i class="fa fa-eye" aria-hidden="true"></i></a>
-
-                                            <a href="<?php echo base_url('purchase_order/purchase_order_download/' . $quotation->quotation_id); ?>" class="btn btn-primary btn-sm" title="<?php echo display('download') ?>" data-original-title="<?php echo display('download') ?> "><i class="fa fa-download" aria-hidden="true"></i></a>
-
-                                            
-                                            <?php
-                                            if (!isset($purchaseInfo) && empty($purchaseInfo)) {
-                                            if ($this->permission1->method('manage_purchase_order', 'update')->access()) { ?>
-                                                <a href="<?php echo base_url() . 'purchase_order/edit_purchase_order/' . $quotation->quotation_id; ?>" class="btn btn-primary btn-sm" title="<?php echo display('update') ?>" data-original-title="<?php echo display('update') ?> "><i class="fa fa-edit" aria-hidden="true"></i></a>
-                                            <?php } }
-                                            ?>
-                                        </td>
-                                    </tr>
-                            <?php
-                                }
-                            }
-                            ?>
                         </tbody>
-                        <?php if (empty($quotation_list)) { ?>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="9" class="text-danger text-center"><?php echo display('no_result_found'); ?></th>
-                                </tr>
-                            </tfoot>
-                        <?php } ?>
+                        <tfoot>
+                            <th colspan="5" class="text-right"><?php echo display('total') ?>:</th>
+
+                            <th></th>
+                            <th></th>
+                        </tfoot>
                     </table>
-                    <?php echo $links; ?>
                 </div>
+
             </div>
         </div>
     </div>
-
+    <input type="hidden" id="total_purchase_no" value="<?php echo $total_purhcase; ?>" name="">
+    <input type="hidden" id="currency" value="<?php echo $currency; ?>" name="">
 </div>
+<script src="<?php echo base_url() ?>my-assets/js/admin_js/purchase.js" type="text/javascript"></script>
