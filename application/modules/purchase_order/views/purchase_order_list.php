@@ -43,7 +43,7 @@
                                 <th>Over Due</th>
                                 <th><?php echo display('purchase_date') ?></th>
                                 <th><?php echo display('total_ammount') ?></th>
-                                <!-- <th>Status</th> -->
+                                <th>Status</th>
                                 <th><?php echo display('action') ?></th>
 
                             </tr>

@@ -115,6 +115,7 @@ $(function($){
         class: "total_sale text-right",
         render: $.fn.dataTable.render.number(",", ".", 2, currency),
       },
+      { data: "status" },
       { data: "button" },
     ],
 

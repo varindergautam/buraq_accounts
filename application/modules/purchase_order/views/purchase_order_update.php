@@ -306,3 +306,20 @@
     </div>
 </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#cardTypeSelect').change(function() {
+            var selectedValue = $(this).val();
+
+            if (selectedValue === '0') {
+                $('#paidAmount').val('0');
+            } else {
+                $grandTotal = $('#grandTotal').val();
+                $('#paidAmount').val($grandTotal);
+            }
+            invoice_paidamount();
+            changedueamount();
+        });
+    });
+</script>

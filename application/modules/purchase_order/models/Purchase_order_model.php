@@ -350,6 +350,7 @@ class Purchase_order_model extends CI_Model
         foreach ($records as $record) {
 
             $button = '';
+            $status = '';
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
 
@@ -382,6 +383,18 @@ class Purchase_order_model extends CI_Model
                 $rem_time_display = '';
             }
 
+            $purchaseInfo = $this->db->select('*')->from('product_purchase')
+                ->where('by_order', $record->purchase_id)
+                // ->or_where('quotation_main_id', $record->purchase_id)
+                // ->or_where('by_order', $record->purchase_id)
+                // ->or_where('quotation_main_id', $record->purchase_id)
+                ->get()->row();
+
+            if (isset($purchaseInfo) && !empty($purchaseInfo)) {
+                $status .= '<a href="' . base_url() . 'purchase_details/' . $purchaseInfo->purchase_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Purchase"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $purchaseInfo->purchase_id . '';
+            } else {
+                $status .= '<a href="' . $base_url . 'purchase_order/to_purchase/' . $record->purchase_id . '" class="btn btn-success btn-sm" title="Add to Purchase" data-original-title="Add to Purchase">Add to Purchase</a>';
+            }
 
             $data[] = array(
                 'sl'               => $sl,
@@ -393,6 +406,7 @@ class Purchase_order_model extends CI_Model
                 'purchase_date'    => $record->purchase_date,
                 'total_amount'     => $record->grand_total_amount,
                 'button'           => $button,
+                'status'           => $status,
 
             );
             $sl++;
@@ -435,8 +449,9 @@ class Purchase_order_model extends CI_Model
         return false;
     }
 
-    public function purchase_order_details_data($purchase_id) {
-        
+    public function purchase_order_details_data($purchase_id)
+    {
+
         $this->db->select('a.*,b.*,c.*,e.purchase_details,d.product_id,d.product_name,d.product_model, a.purchase_id as purchaseID');
         $this->db->from('purchase_order a');
         $this->db->join('supplier_information b', 'b.supplier_id = a.supplier_id');
@@ -446,7 +461,7 @@ class Purchase_order_model extends CI_Model
         $this->db->where('a.purchase_id', $purchase_id);
         $this->db->group_by('d.product_id');
         $query = $this->db->get();
- 
+
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
