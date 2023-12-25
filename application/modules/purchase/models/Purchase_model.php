@@ -108,7 +108,8 @@ public function getCustomerList_purchase($supplier_id){
                         c.product_name,
                         c.product_model,
                         d.supplier_id,
-                        d.supplier_name'
+                        d.supplier_name,
+                        a.purchase_id as purchaseID'
         );
         $this->db->from('product_purchase a');
         $this->db->join('product_purchase_details b', 'b.purchase_id =a.id');
@@ -252,10 +253,10 @@ public function getCustomerList_purchase($supplier_id){
            $button .='  <a href="'.$base_url.'purchase_details/'.$record->purchase_id.'" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="'.display('purchase_details').'"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
               if($this->permission1->method('manage_purchase','update')->access()){
                 $approve = $this->db->select('status,referenceNo')->from('acc_vaucher')->where('referenceNo', $record->purchase_id)->where('status', 1)->get()->num_rows();
-                if ($approve == 0) {
+                // if ($approve == 0) {
 
                     $button .=' <a href="'.$base_url.'purchase_edit/'.$record->purchase_id.'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="'. display('update').'"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
-                }
+                // }
              }
 
 
@@ -402,7 +403,7 @@ public function getCustomerList_purchase($supplier_id){
             'due_amount'         => $due_amount,
             'status'             => 1,
             'bank_id'            => $this->input->post('bank_id',TRUE),
-            'payment_type'       => 1,
+            'payment_type'       =>  $multipaytype[0],
             'is_credit'          => $is_credit,
         );
 

@@ -323,7 +323,7 @@
                                             class="col-form-label pb-2"><?php echo display('payment_type');?></label>
 
                                         <?php 
-                                                    echo form_dropdown('multipaytype[]',$all_pmethod,(!empty($all_paytype)?$all_paytype->RevCodde:null),'class="card_typesl postform resizeselect form-control "') ?>
+                                                    //echo form_dropdown('multipaytype[]',$all_pmethod,(!empty($all_paytype)?$all_paytype->RevCodde:null),'class="card_typesl postform resizeselect form-control "') ?>
 
                                     </div>
                                     <div class="form-group col-md-6">
@@ -344,7 +344,7 @@
                                             class="col-form-label pb-2"><?php echo display('payment_type');?></label>
 
                                         <?php 
-                                        echo form_dropdown('multipaytype[]',$all_pmethodwith_cr,0,'onchange = "check_creditsale()" required class="card_typesl postform resizeselect form-control "') ?>
+                                        //echo form_dropdown('multipaytype[]',$all_pmethodwith_cr,0,'onchange = "check_creditsale()" required class="card_typesl postform resizeselect form-control "') ?>
 
                                     </div>
                                     <div class="form-group col-md-6">

@@ -135,7 +135,7 @@ class Purchase extends MX_Controller
         $data = array(
             'title'             => display('purchase_edit'),
             'dbpurs_id'         => $purchase_detail[0]['dbpurs_id'],
-            'purchase_id'       => $purchase_detail[0]['purchase_id'],
+            'purchase_id'       => $purchase_detail[0]['purchaseID'],
             'chalan_no'         => $purchase_detail[0]['chalan_no'],
             'supplier_name'     => $purchase_detail[0]['supplier_name'],
             'supplier_id'       => $purchase_detail[0]['supplier_id'],
@@ -182,7 +182,8 @@ class Purchase extends MX_Controller
     public function bdtask_save_purchase()
     {
         $this->form_validation->set_rules('supplier_id', display('supplier'), 'required|max_length[15]');
-        $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]|is_unique[product_purchase.chalan_no]');
+        // $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]|is_unique[product_purchase.chalan_no]');
+        $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]');
         $this->form_validation->set_rules('product_id[]', display('product'), 'required|max_length[20]');
         $this->form_validation->set_rules('multipaytype[]', display('payment_type'), 'required');
         $this->form_validation->set_rules('product_quantity[]', display('quantity'), 'required|max_length[20]');
@@ -219,10 +220,6 @@ class Purchase extends MX_Controller
             }
         }
     }
-
-
-
-
 
     public function bdtask_update_purchase()
     {
@@ -278,7 +275,7 @@ class Purchase extends MX_Controller
                     'paid_amount'        => $paid_amount,
                     'due_amount'         => $due_amount,
                     'bank_id'           =>  $this->input->post('bank_id', TRUE),
-                    'payment_type'       =>  1,
+                    'payment_type'       =>  $multipaytype[0],
                     'is_credit'          =>  $is_credit,
                 );
 
@@ -312,6 +309,7 @@ class Purchase extends MX_Controller
                         $amnt_type = 'Credit';
                         $reVID     = $predefine_account->supplierCode;
                         $subcode   = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
+                        
                         $insrt_pay_amnt_vcher = $this->insert_purchase_debitvoucher($is_credit, $purchase_id, $COAID, $amnt_type, $amount_pay, $Narration, $Comment, $reVID, $subcode);
                     } else {
                         $amnt_type = 'Debit';
@@ -391,7 +389,7 @@ class Purchase extends MX_Controller
                 $setting_data = $this->db->select('is_autoapprove_v')->from('web_setting')->where('setting_id', 1)->get()->result_array();
                 if ($setting_data[0]['is_autoapprove_v'] == 1) {
 
-                    $new = $this->autoapprove($purchase_id);
+                    $new = $this->purchase_model->autoapprove($purchase_id);
                 }
                 $this->session->set_flashdata('message', display('update_successfully'));
                 redirect("purchase_list");

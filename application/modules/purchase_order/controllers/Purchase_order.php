@@ -38,7 +38,8 @@ class Purchase_order extends MX_Controller
     public function save_purchase_order_form()
     {
         $this->form_validation->set_rules('supplier_id', display('supplier'), 'required|max_length[15]');
-        $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]|is_unique[purchase_order.chalan_no]');
+        // $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]|is_unique[purchase_order.chalan_no]');
+        $this->form_validation->set_rules('chalan_no', display('invoice_no'), 'required|max_length[20]');
         $this->form_validation->set_rules('product_id[]', display('product'), 'required|max_length[20]');
         $this->form_validation->set_rules('multipaytype[]', display('payment_type'), 'required');
         $this->form_validation->set_rules('product_quantity[]', display('quantity'), 'required|max_length[20]');
@@ -214,6 +215,7 @@ class Purchase_order extends MX_Controller
                         $amnt_type = 'Credit';
                         $reVID     = $predefine_account->supplierCode;
                         $subcode   = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
+                        
                         $insrt_pay_amnt_vcher = $this->purchase_order_model->insert_purchase_debitvoucher($is_credit, $purchase_id, $COAID, $amnt_type, $amount_pay, $Narration, $Comment, $reVID, $subcode);
                     } else {
                         $amnt_type = 'Debit';
@@ -404,117 +406,117 @@ class Purchase_order extends MX_Controller
     }
 
 
-    public function quotation_pdf_generate($quot_id = null)
-    {
-        $id = $quot_id;
-        $currency_details         = setting_data();
-        $data['currency_details'] = $currency_details;
-        $data['discount_type']    = $currency_details[0]['discount_type'];
-        $data['title']            = display('quotation_details');
-        $data['quot_service']     = $this->purchase_order_model->purchase_order_service_detail($quot_id);
-        $data['quot_main']        = $this->purchase_order_model->purchase_order_main_edit($quot_id);
-        $data['quot_product']     = $this->purchase_order_model->purchase_order_product_detail($quot_id);
-        $data['customer_info']    = $this->purchase_order_model->supplierinfo($data['quot_main'][0]['supplier_id']);
-        $data['company_info'] = retrieve_company();
-        $name    = $data['customer_info'][0]['customer_name'];
-        $email   = $data['customer_info'][0]['customer_email'];
-        $this->load->library('pdfgenerator');
-        $html   = $this->load->view('quotation/quotation_download', $data, true);
-        $dompdf = new Dompdf\Dompdf();
-        $dompdf->load_html($html);
-        $dompdf->render();
-        $output = $dompdf->output();
-        file_put_contents('assets/data/pdf/quotation/' . $id . '.pdf', $output);
-        $file_path = getcwd() . '/assets/data/pdf/quotation/' . $id . '.pdf';
-        $send_email = '';
-        if (!empty($email)) {
-            $send_email = $this->setmail($email, $file_path, $id, $name);
+    // public function quotation_pdf_generate($quot_id = null)
+    // {
+    //     $id = $quot_id;
+    //     $currency_details         = setting_data();
+    //     $data['currency_details'] = $currency_details;
+    //     $data['discount_type']    = $currency_details[0]['discount_type'];
+    //     $data['title']            = display('quotation_details');
+    //     $data['quot_service']     = $this->purchase_order_model->purchase_order_service_detail($quot_id);
+    //     $data['quot_main']        = $this->purchase_order_model->purchase_order_main_edit($quot_id);
+    //     $data['quot_product']     = $this->purchase_order_model->purchase_order_product_detail($quot_id);
+    //     $data['customer_info']    = $this->purchase_order_model->supplierinfo($data['quot_main'][0]['supplier_id']);
+    //     $data['company_info'] = retrieve_company();
+    //     $name    = $data['customer_info'][0]['customer_name'];
+    //     $email   = $data['customer_info'][0]['customer_email'];
+    //     $this->load->library('pdfgenerator');
+    //     $html   = $this->load->view('quotation/quotation_download', $data, true);
+    //     $dompdf = new Dompdf\Dompdf();
+    //     $dompdf->load_html($html);
+    //     $dompdf->render();
+    //     $output = $dompdf->output();
+    //     file_put_contents('assets/data/pdf/quotation/' . $id . '.pdf', $output);
+    //     $file_path = getcwd() . '/assets/data/pdf/quotation/' . $id . '.pdf';
+    //     $send_email = '';
+    //     if (!empty($email)) {
+    //         $send_email = $this->setmail($email, $file_path, $id, $name);
 
-            if ($send_email) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-        return 0;
-    }
+    //         if ($send_email) {
+    //             return 1;
+    //         } else {
+    //             return 0;
+    //         }
+    //     }
+    //     return 0;
+    // }
 
-    public function setmail($email, $file_path, $id = null, $name = null)
-    {
-        $setting_detail = $this->db->select('*')->from('email_config')->get()->row();
-        $subject = 'Quotation Information';
-        $message = strtoupper($name) . '-' . $id;
+    // public function setmail($email, $file_path, $id = null, $name = null)
+    // {
+    //     $setting_detail = $this->db->select('*')->from('email_config')->get()->row();
+    //     $subject = 'Quotation Information';
+    //     $message = strtoupper($name) . '-' . $id;
 
-        $config = array(
-            'protocol'  => $setting_detail->protocol,
-            'smtp_host' => $setting_detail->smtp_host,
-            'smtp_port' => $setting_detail->smtp_port,
-            'smtp_user' => $setting_detail->smtp_user,
-            'smtp_pass' => $setting_detail->smtp_pass,
-            'mailtype'  => 'html',
-            'charset'   => 'utf-8',
-            'wordwrap'  => TRUE
-        );
+    //     $config = array(
+    //         'protocol'  => $setting_detail->protocol,
+    //         'smtp_host' => $setting_detail->smtp_host,
+    //         'smtp_port' => $setting_detail->smtp_port,
+    //         'smtp_user' => $setting_detail->smtp_user,
+    //         'smtp_pass' => $setting_detail->smtp_pass,
+    //         'mailtype'  => 'html',
+    //         'charset'   => 'utf-8',
+    //         'wordwrap'  => TRUE
+    //     );
 
-        $this->load->library('email');
-        $this->email->initialize($config);
-        $this->email->set_newline("\r\n");
-        $this->email->set_mailtype("html");
-        $this->email->from($setting_detail->smtp_user);
-        $this->email->to($email);
+    //     $this->load->library('email');
+    //     $this->email->initialize($config);
+    //     $this->email->set_newline("\r\n");
+    //     $this->email->set_mailtype("html");
+    //     $this->email->from($setting_detail->smtp_user);
+    //     $this->email->to($email);
 
-        $config = array(
-            'protocol'  => $setting_detail->protocol,
-            'smtp_host' => $setting_detail->smtp_host,
-            'smtp_port' => $setting_detail->smtp_port,
-            'smtp_user' => $setting_detail->smtp_user,
-            'smtp_pass' => $setting_detail->smtp_pass,
-            'mailtype'  => 'html',
-            'charset'   => 'utf-8',
-            'wordwrap'  => TRUE
-        );
+    //     $config = array(
+    //         'protocol'  => $setting_detail->protocol,
+    //         'smtp_host' => $setting_detail->smtp_host,
+    //         'smtp_port' => $setting_detail->smtp_port,
+    //         'smtp_user' => $setting_detail->smtp_user,
+    //         'smtp_pass' => $setting_detail->smtp_pass,
+    //         'mailtype'  => 'html',
+    //         'charset'   => 'utf-8',
+    //         'wordwrap'  => TRUE
+    //     );
 
-        $this->load->library('email');
-        $this->email->initialize($config);
-        $this->email->set_newline("\r\n");
-        $this->email->set_mailtype("html");
-        $this->email->from($setting_detail->smtp_user);
-        $this->email->to($email);
-        $this->email->subject($subject);
-        $this->email->message($message);
-        $this->email->attach($file_path);
-        $check_email = $this->test_input($email);
-        if (filter_var($check_email, FILTER_VALIDATE_EMAIL)) {
-            if ($this->email->send()) {
-                return true;
-            } else {
-                $this->session->set_flashdata(array('exception' => display('please_configure_your_mail.')));
-                return false;
-            }
-        } else {
+    //     $this->load->library('email');
+    //     $this->email->initialize($config);
+    //     $this->email->set_newline("\r\n");
+    //     $this->email->set_mailtype("html");
+    //     $this->email->from($setting_detail->smtp_user);
+    //     $this->email->to($email);
+    //     $this->email->subject($subject);
+    //     $this->email->message($message);
+    //     $this->email->attach($file_path);
+    //     $check_email = $this->test_input($email);
+    //     if (filter_var($check_email, FILTER_VALIDATE_EMAIL)) {
+    //         if ($this->email->send()) {
+    //             return true;
+    //         } else {
+    //             $this->session->set_flashdata(array('exception' => display('please_configure_your_mail.')));
+    //             return false;
+    //         }
+    //     } else {
 
-            return false;
-        }
-    }
+    //         return false;
+    //     }
+    // }
 
     //Email testing for email
-    public function test_input($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
+    // public function test_input($data)
+    // {
+    //     $data = trim($data);
+    //     $data = stripslashes($data);
+    //     $data = htmlspecialchars($data);
+    //     return $data;
+    // }
 
-    public function updatePaymentType($purchase_orderId, $payment_type)
-    {
-        $data = array(
-            'payment_type' => $payment_type[0],
-        );
+    // public function updatePaymentType($purchase_orderId, $payment_type)
+    // {
+    //     $data = array(
+    //         'payment_type' => $payment_type[0],
+    //     );
 
-        $this->db->where('quotation_id', $purchase_orderId);
-        $this->db->update('purchase_order', $data);
-    }
+    //     $this->db->where('quotation_id', $purchase_orderId);
+    //     $this->db->update('purchase_order', $data);
+    // }
 
 
     public function to_purchase($purchase_id = null)
@@ -601,7 +603,7 @@ class Purchase_order extends MX_Controller
 
                 $data = array(
                     'purchase_id'        => $purchase_id,
-                    // 'chalan_no'          => $this->input->post('chalan_no', TRUE),
+                    'chalan_no'          => $this->input->post('chalan_no', TRUE),
                     'supplier_id'        => $this->input->post('supplier_id', TRUE),
                     'grand_total_amount' => $this->input->post('grand_total_price', TRUE),
                     // 'total_discount'     => $this->input->post('discount', TRUE),
