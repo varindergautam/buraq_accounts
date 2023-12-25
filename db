@@ -165,92 +165,46 @@ CREATE TABLE `performa_products_used` (
 
 -----------------------------------------------------------------------------
 
+CREATE TABLE purchase_order (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    purchase_id VARCHAR(255) NULL,
+    chalan_no VARCHAR(255) NULL,
+    supplier_id VARCHAR(255) NULL,
+    grand_total_amount VARCHAR(255) NULL,
+    paid_amount VARCHAR(255) NULL,
+    due_amount VARCHAR(255) NULL,
+    total_discount VARCHAR(255) NULL,
+    invoice_discount VARCHAR(255) NULL,
+    sum_of_product_discount VARCHAR(255) NULL,
+    total_vat_amnt VARCHAR(255) NULL,
+    sum_of_product_vat VARCHAR(255) NULL,
+    purchase_date VARCHAR(255) NULL,
+    purchase_details TEXT NULL,
+    status VARCHAR(255) NULL,
+    bank_id VARCHAR(255) NULL,
+    payment_type VARCHAR(255) NULL,
+    is_credit VARCHAR(255) NULL
+);
 
 
-CREATE TABLE `purchase_order` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `quotation_id` varchar(30) NOT NULL,
-  `quot_no` varchar(50) NOT NULL,
-  `quot_description` text NOT NULL,
-  `supplier_id` varchar(30) NOT NULL,
-  `quotdate` date NOT NULL,
-  `expire_date` date DEFAULT NULL,
-  `item_total_amount` decimal(12,2) NOT NULL,
-  `item_total_dicount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `item_total_vat` double(10,2) NOT NULL DEFAULT 0.00,
-  `item_total_tax` decimal(10,2) DEFAULT 0.00,
-  `service_total_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `service_total_discount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `service_total_vat` double(10,2) NOT NULL DEFAULT 0.00,
-  `service_total_tax` decimal(10,2) DEFAULT 0.00,
-  `quot_dis_item` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `quot_dis_service` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `is_fixed` int(11) NOT NULL DEFAULT 0,
-  `is_dynamic` int(11) NOT NULL DEFAULT 0,
-  `create_by` varchar(30) NOT NULL,
-  `create_date` date NOT NULL,
-  `update_by` varchar(30) DEFAULT NULL,
-  `update_date` date DEFAULT NULL,
-  `status` tinyint(4) NOT NULL,
-  `cust_show` tinyint(4) DEFAULT NULL,
-  `quotation_main_id` varchar(255) DEFAULT NULL,
-  `by_order` varchar(255) DEFAULT NULL,
-  `payment_type` varchar(255) DEFAULT NULL,
-  `no_of_credit_days` varchar(255) DEFAULT NULL,
-  `due_amount` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+CREATE TABLE purchase_order_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    purchase_detail_id VARCHAR(255) NULL,
+    purchase_id VARCHAR(255) NULL,
+    product_id VARCHAR(255) NULL,
+    quantity VARCHAR(255) NULL,
+    rate VARCHAR(255) NULL,
+    batch_id VARCHAR(255) NULL,
+    expiry_date VARCHAR(255) NULL,
+    total_amount VARCHAR(255) NULL,
+    discount VARCHAR(255) NULL,
+    discount_percentage VARCHAR(255) NULL,
+    discount_amnt VARCHAR(255) NULL,
+    vat_amnt_per VARCHAR(255) NULL,
+    vat_amnt VARCHAR(255) NULL,
+    status VARCHAR(255) NULL
+);
 
-
-----------------------------------------------------------------------------
-
-CREATE TABLE `purchase_order_service_used` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `quot_id` varchar(20) NOT NULL,
-  `service_id` int(11) NOT NULL,
-  `qty` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `charge` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `discount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `discount_amount` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `vat_per` decimal(10,2) DEFAULT 0.00,
-  `vat_amnt` decimal(10,2) DEFAULT 0.00,
-  `tax` decimal(10,2) DEFAULT 0.00,
-  `total` decimal(10,2) NOT NULL DEFAULT 0.00,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
------------------------------------------------------------------------------
-
-CREATE TABLE `purchase_order_taxinfo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date` date NOT NULL,
-  `supplier_id` int(11) NOT NULL,
-  `relation_id` varchar(30) NOT NULL,
-  `tax0` text DEFAULT NULL,
-  `tax1` text DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---------------------------------------------------------------------------
-
-CREATE TABLE `purchase_order_products_used` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `quot_id` varchar(100) NOT NULL,
-  `product_id` varchar(100) NOT NULL,
-  `serial_no` varchar(30) DEFAULT NULL,
-  `batch_id` varchar(10) DEFAULT NULL,
-  `description` varchar(250) DEFAULT NULL,
-  `used_qty` decimal(10,2) DEFAULT NULL,
-  `rate` decimal(10,2) DEFAULT NULL,
-  `supplier_rate` float DEFAULT NULL,
-  `total_price` decimal(12,2) DEFAULT NULL,
-  `discount` decimal(10,2) DEFAULT NULL,
-  `discount_per` varchar(15) DEFAULT NULL,
-  `vat_amnt` decimal(10,2) DEFAULT NULL,
-  `vat_per` decimal(10,2) DEFAULT NULL,
-  `tax` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -----------------------------------------------------------------------------------------------
 
