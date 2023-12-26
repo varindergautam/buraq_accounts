@@ -2056,12 +2056,12 @@ class Invoice extends MX_Controller
                 'item_total_dicount'  => $this->input->post('total_discount', TRUE),
                 'item_total_vat'      => $this->input->post('total_vat_amnt', TRUE),
                 'item_total_tax'      => $this->input->post('total_tax', TRUE),
-                'service_total_amount' => $this->input->post('grand_total_service_amount', TRUE),
-                'service_total_discount' => $this->input->post('totalServiceDicount', TRUE),
-                'service_total_vat'   => $this->input->post('service_total_vat_amnt', TRUE),
-                'service_total_tax'   => $this->input->post('total_service_tax', TRUE),
+                // 'service_total_amount' => $this->input->post('grand_total_service_amount', TRUE),
+                // 'service_total_discount' => $this->input->post('totalServiceDicount', TRUE),
+                // 'service_total_vat'   => $this->input->post('service_total_vat_amnt', TRUE),
+                // 'service_total_tax'   => $this->input->post('total_service_tax', TRUE),
                 'quot_dis_item'       => $this->input->post('invoice_discount', TRUE),
-                'quot_dis_service'    => $this->input->post('service_discount', TRUE),
+                // 'quot_dis_service'    => $this->input->post('service_discount', TRUE),
                 'quot_no'             => $quot_id,
                 'create_by'           => $this->session->userdata('id'),
                 'quot_description'    => $this->input->post('details', TRUE),
@@ -2087,7 +2087,7 @@ class Invoice extends MX_Controller
             if ($result == TRUE) {
                 // Used Item Details Part
                 $item         = $this->input->post('product_id', TRUE);
-                $serial       = $this->input->post('serial_no', TRUE);
+                // $serial       = $this->input->post('serial_no', TRUE);
                 $descrp       = $this->input->post('desc', TRUE);
                 $item_rate    = $this->input->post('product_rate', TRUE);
                 $item_supp_rate = $this->input->post('supplier_price', TRUE);

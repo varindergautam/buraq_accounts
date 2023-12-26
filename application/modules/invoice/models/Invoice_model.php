@@ -209,7 +209,15 @@ class Invoice_model extends CI_Model
 
             $button .= '  <a href="' . $base_url . 'pos_print/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pos_invoice') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
 
-            $status .= '  <a href="' . $base_url . 'to_delivery/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Add Delivery Note</a>';
+            $this->db->select('a.*');
+            $this->db->from('invoice a');
+            $this->db->where('a.invoice_id', $record->invoice_id);
+            $query = $this->db->get();
+            if ($query->num_rows() == 0) {
+                $status .= '  <a href="' . $base_url . 'to_delivery/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Add Delivery Note</a>';
+            } else {
+                $status .= '<a href="' . base_url() . 'invoice_details/' . $record->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Delivery Note"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $record->invoice_id . '';
+            }
 
             if ($record->deliveryQuotID) {
                 $button .= '  <a href="' . $base_url . 'delivery_details/' . $record->deliveryQuotID . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Delivery Order</a>';

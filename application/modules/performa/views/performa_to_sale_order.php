@@ -258,7 +258,7 @@ $card_type = $quot_main[0]['payment_type'];
                                         <tr>
                                             <td class="text-right" colspan="11"><b>Paid Amount:</b></td>
                                             <td class="text-right">
-                                                <input type="hidden" name="baseUrl" class="baseUrl" value="https://buraq.smartaccount.online/">
+                                                <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>">
                                                 <?php if ($card_type == 0) {
                                                 ?>
                                                     <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="22" value="0" data-listener-added_fa723d9e="true" data-listener-added_4789e008="true" readonly>
