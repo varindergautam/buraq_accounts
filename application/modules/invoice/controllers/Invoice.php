@@ -22,7 +22,7 @@ class Invoice extends MX_Controller
         $timezone = $this->db->select('timezone')->from('web_setting')->get()->row();
         date_default_timezone_set($timezone->timezone);
         $this->load->model(array(
-            'invoice_model', 'customer/customer_model', 'account/Accounts_model', 'delivery/delivery_model', 'quotation/quotation_model'
+            'invoice_model', 'customer/customer_model', 'account/Accounts_model', 'delivery/delivery_model', 'delivery/quotation_model'
         ));
         if (!$this->session->userdata('isLogIn'))
             redirect('login');
@@ -2075,8 +2075,8 @@ class Invoice extends MX_Controller
                 'by_order' =>  $quotation_id,
             );
 
-          
-            $result = $this->quotation_model->delivery_entry($data);
+            $this->updateInvoiceColumns($quotation_id);
+            $result = $this->quotation_model->quotation_entry($data);
 
             $quotdata = array('delivery_status'  => 2, 'payment_type' => $multipaytype[0]);
             $this->db->where('quotation_id', $quotation_id);
@@ -2107,14 +2107,14 @@ class Invoice extends MX_Controller
                     $discountval   = $item_total_discount[$j];
                     $vatper        = $vat_per[$j];
                     $vatvalue      = $vat_value[$j];
-                    $tax           = $item_tax[$j];
-                    $srl           = $serial[$j];
+                    $tax           = isset($item_tax[$j]) ? $item_tax[$j] : NULL;
+                    // $srl           = $serial[$j];
                     $dcript        = $descrp[$j];
                     $total_price   = $totalp[$j];
                     $quotitem = array(
                         'quot_id'       => $quot_id,
                         'product_id'    => $product_id,
-                        'batch_id'      => $srl,
+                        // 'batch_id'      => $srl,
                         'description'   => $dcript,
                         'rate'          => $rate,
                         'supplier_rate' => $supplier_rate,
@@ -2126,7 +2126,7 @@ class Invoice extends MX_Controller
                         'tax'           => $tax,
                         'used_qty'      => $qty,
                     );
-                    $this->db->insert('invoice_details', $quotitem);
+                    $this->db->insert('deli_products_used', $quotitem);
                 }
 
                 $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
@@ -2137,14 +2137,14 @@ class Invoice extends MX_Controller
                     }
                 }
                 $this->session->set_flashdata(array('message' => display('successfully_added')));
-                redirect(base_url('manage_quotation'));
+                redirect(base_url('invoice_list'));
             } else {
                 $this->session->set_flashdata(array('exception' => display('already_inserted')));
-                redirect(base_url('manage_quotation'));
+                redirect(base_url('invoice_list'));
             }
         } else {
             $this->session->set_flashdata(array('exception' => validation_errors()));
-            redirect(base_url('manage_quotation'));
+            redirect(base_url('invoice_list'));
         }
     }
 
@@ -2158,6 +2158,7 @@ class Invoice extends MX_Controller
         $data['quot_service']     = $this->quotation_model->quot_service_detail($quot_id);
         $data['quot_main']        = $this->quotation_model->quot_main_edit($quot_id);
         $data['quot_product']     = $this->quotation_model->quot_product_detail($quot_id);
+
         $data['customer_info']    = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
         $data['company_info'] = $this->quotation_model->retrieve_company();
         $name    = $data['customer_info'][0]['customer_name'];
@@ -2191,5 +2192,16 @@ class Invoice extends MX_Controller
 
         $this->db->where('quotation_id', $performaId);
         $this->db->update('delivery', $data);
+    }
+
+    public function updateInvoiceColumns($invoiceId)
+    {
+        $data = array(
+            'by_order' => $invoiceId,
+            'quotation_main_id' => $invoiceId,
+        );
+
+        $this->db->where('invoice_id', $invoiceId);
+        $this->db->update('invoice', $data);
     }
 }

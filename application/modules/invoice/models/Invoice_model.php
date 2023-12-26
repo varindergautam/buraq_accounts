@@ -177,7 +177,7 @@ class Invoice_model extends CI_Model
         $totalRecordwithFilter = $records[0]->allcount;
 
         ## Fetch records
-        $this->db->select("a.*,b.customer_name,a.due_amount ,b.no_of_credit_days, DATEDIFF(CURDATE(), a.date) AS rem_time, u.first_name,u.last_name, d.quotation_id as deliveryQuotID");
+        $this->db->select("a.*,b.customer_name,a.due_amount ,b.no_of_credit_days, DATEDIFF(CURDATE(), a.date) AS rem_time, u.first_name,u.last_name, d.quotation_id as deliveryQuotID, d.by_order as deliveryByOrder");
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id', 'left');
         $this->db->join('users u', 'u.user_id = a.sales_by', 'left');
@@ -211,12 +211,14 @@ class Invoice_model extends CI_Model
 
             $this->db->select('a.*');
             $this->db->from('invoice a');
-            $this->db->where('a.invoice_id', $record->invoice_id);
-            $query = $this->db->get();
-            if ($query->num_rows() == 0) {
-                $status .= '  <a href="' . $base_url . 'to_delivery/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Add Delivery Note</a>';
+            $this->db->where('a.by_order', $record->deliveryByOrder);
+            // $this->db->where('a.invoice_id', $record->deliveryByOrder);
+            $queryCheck = $this->db->get();
+            // Check the number of rows in the result set
+            if ($record->deliveryByOrder && $queryCheck->num_rows() > 0) {
+                $status .= '<a href="' . base_url() . 'delivery_details/' . $record->deliveryQuotID . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Delivery Note"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $record->deliveryByOrder . '';
             } else {
-                $status .= '<a href="' . base_url() . 'invoice_details/' . $record->invoice_id . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Delivery Note"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $record->invoice_id . '';
+                $status .= '  <a href="' . $base_url . 'to_delivery/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Add Delivery Note</a>';
             }
 
             if ($record->deliveryQuotID) {
@@ -439,7 +441,7 @@ class Invoice_model extends CI_Model
             'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
             'sales_by'        => $this->session->userdata('id'),
             'status'          => 1,
-            'payment_type'    => 1,
+            'payment_type'    => $multipaytype[0],
             'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
             'is_credit'       => $is_credit,
             'is_fixed'        => $is_fixed,

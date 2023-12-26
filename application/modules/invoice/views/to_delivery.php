@@ -184,7 +184,7 @@ $card_type = $quot_main[0]['payment_type'];
 
                                                 <!-- VAT  -->
                                                 <td>
-                                                    <input type="text" name="vatpercent[]" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" id="vat_percent_<?php echo $sl; ?>" class="form-control text-right" min="0" value="<?php echo $item['vat_per']; ?>" tabindex="19" placeholder="0.00" <?php echo $readonly; ?> />
+                                                    <input type="text" name="vatpercent[]" onkeyup="quantity_calculate(<?php echo $sl; ?>);" onchange="quantity_calculate(<?php echo $sl; ?>);" id="vat_percent_<?php echo $sl; ?>" class="form-control text-right" min="0" value="<?php echo $item['vat_amnt_per']; ?>" tabindex="19" placeholder="0.00" <?php echo $readonly; ?> />
 
 
                                                 </td>
