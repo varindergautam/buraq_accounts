@@ -356,6 +356,7 @@ $(document).ready(function() {
               { data: 'rem_time'},
              { data: 'final_date' },
              { data: 'total_amount',class:"total_sale text-right",render: $.fn.dataTable.render.number( ',', '.', 2, currency )},
+             { data: 'status'},
              { data: 'button'},
           ],
 

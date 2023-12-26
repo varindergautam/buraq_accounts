@@ -199,6 +199,7 @@ class Invoice_model extends CI_Model
 
         foreach ($records as $record) {
             $button = '';
+            $status = '';
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
 
@@ -208,7 +209,9 @@ class Invoice_model extends CI_Model
 
             $button .= '  <a href="' . $base_url . 'pos_print/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pos_invoice') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
 
-            if($record->deliveryQuotID){
+            $status .= '  <a href="' . $base_url . 'to_delivery/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Add Delivery Note</a>';
+
+            if ($record->deliveryQuotID) {
                 $button .= '  <a href="' . $base_url . 'delivery_details/' . $record->deliveryQuotID . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Delivery Order</a>';
             }
 
@@ -250,6 +253,7 @@ class Invoice_model extends CI_Model
                 'rem_time'               => $rem_time_display,
                 'final_date'       => date("d-M-Y", strtotime($record->date)),
                 'total_amount'     => $record->total_amount,
+                'status'           => $status,
                 'button'           => $button,
 
             );
@@ -1497,7 +1501,7 @@ class Invoice_model extends CI_Model
         } else {
             $invoice_no = 1;
         }
-        return 'IN-'.$invoice_no;
+        return 'IN-' . $invoice_no;
     }
 
     public function autoapprove($invoice_id)
@@ -1509,18 +1513,19 @@ class Invoice_model extends CI_Model
         return true;
     }
 
-    public function invoice_pdf_generate($invoice_id = null) {
+    public function invoice_pdf_generate($invoice_id = null)
+    {
         $id = $invoice_id;
         $invoice_detail = $this->quotation_model->retrieve_invoice_html_data($invoice_id);
         $taxfield = $this->db->select('*')
-                ->from('tax_settings')
-                ->where('is_show',1)
-                ->get()
-                ->result_array();
-        $txregname ='';
-        foreach($taxfield as $txrgname){
-        $regname = $txrgname['tax_name'].' Reg No  - '.$txrgname['reg_no'].', ';
-        $txregname .= $regname;
+            ->from('tax_settings')
+            ->where('is_show', 1)
+            ->get()
+            ->result_array();
+        $txregname = '';
+        foreach ($taxfield as $txrgname) {
+            $regname = $txrgname['tax_name'] . ' Reg No  - ' . $txrgname['reg_no'] . ', ';
+            $txregname .= $regname;
         }
         $subTotal_quantity = 0;
         $subTotal_cartoon = 0;
@@ -1535,75 +1540,69 @@ class Invoice_model extends CI_Model
                 $invoice_detail[$k]['final_date'] = $this->occational->dateConvert($invoice_detail[$k]['date']);
                 $subTotal_quantity = $subTotal_quantity + $invoice_detail[$k]['quantity'];
                 $subTotal_ammount = $subTotal_ammount + $invoice_detail[$k]['total_price'];
-
             }
 
             $i = 0;
             foreach ($invoice_detail as $k => $v) {
                 $i++;
                 $invoice_detail[$k]['sl'] = $i;
-                if(!empty($invoice_detail[$k]['description'])){
-                    $descript = $descript+1;
-
+                if (!empty($invoice_detail[$k]['description'])) {
+                    $descript = $descript + 1;
                 }
-                 if(!empty($invoice_detail[$k]['serial_no'])){
-                    $isserial = $isserial+1;
-
+                if (!empty($invoice_detail[$k]['serial_no'])) {
+                    $isserial = $isserial + 1;
                 }
-                 if(!empty($invoice_detail[$k]['discount_per'])){
-                    $is_discount = $is_discount+1;
-
+                if (!empty($invoice_detail[$k]['discount_per'])) {
+                    $is_discount = $is_discount + 1;
                 }
 
-                if(!empty($invoice_detail[$k]['unit'])){
-                    $isunit = $isunit+1;
-
+                if (!empty($invoice_detail[$k]['unit'])) {
+                    $isunit = $isunit + 1;
                 }
-
             }
         }
 
         $currency_details = $this->quotation_model->setting_data();
         $company_info = $this->quotation_model->retrieve_company();
-        $totalbal = $invoice_detail[0]['total_amount']+$invoice_detail[0]['prevous_due'];
+        $totalbal = $invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'];
         $amount_inword = $this->numbertowords->convert_number($totalbal);
         $user_id = $invoice_detail[0]['sales_by'];
 
         $name    = $invoice_detail[0]['customer_name'];
         $email   = $invoice_detail[0]['customer_email'];
         $data = array(
-        'title'             => display('invoice_details'),
-        'invoice_id'        => $invoice_detail[0]['invoice_id'],
-        'customer_info'     => $invoice_detail,
-        'invoice_no'        => $invoice_detail[0]['invoice'],
-        'customer_name'     => $invoice_detail[0]['customer_name'],
-        'customer_address'  => $invoice_detail[0]['customer_address'],
-        'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
-        'customer_email'    => $invoice_detail[0]['customer_email'],
-        'final_date'        => $invoice_detail[0]['final_date'],
-        'invoice_details'   => $invoice_detail[0]['invoice_details'],
-        'total_amount'      => number_format($invoice_detail[0]['total_amount']+$invoice_detail[0]['prevous_due'], 2, '.', ','),
-        'subTotal_quantity' => $subTotal_quantity,
-        'total_discount'    => number_format($invoice_detail[0]['total_discount'], 2, '.', ','),
-        'total_tax'         => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
-        'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
-        'paid_amount'       => number_format($invoice_detail[0]['paid_amount'], 2, '.', ','),
-        'due_amount'        => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
-        'previous'          => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
-        'shipping_cost'     => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),
-        'invoice_all_data'  => $invoice_detail,
-        'company_info'      => $company_info,
-        'currency'          => $currency_details[0]['currency'],
-        'position'          => $currency_details[0]['currency_position'],
-        'discount_type'     => $currency_details[0]['discount_type'],
-        'currency_details'  => $currency_details,
-        'am_inword'         => $amount_inword,
-        'is_discount'       => $is_discount,
+            'title'             => display('invoice_details'),
+            'invoice_id'        => $invoice_detail[0]['invoice_id'],
+            'customer_info'     => $invoice_detail,
+            'invoice_no'        => $invoice_detail[0]['invoice'],
+            'customer_name'     => $invoice_detail[0]['customer_name'],
+            'customer_address'  => $invoice_detail[0]['customer_address'],
+            'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
+            'customer_email'    => $invoice_detail[0]['customer_email'],
+            'final_date'        => $invoice_detail[0]['final_date'],
+            'invoice_details'   => $invoice_detail[0]['invoice_details'],
+            'total_amount'      => number_format($invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'], 2, '.', ','),
+            'subTotal_quantity' => $subTotal_quantity,
+            'total_discount'    => number_format($invoice_detail[0]['total_discount'], 2, '.', ','),
+            'total_tax'         => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
+            'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
+            'paid_amount'       => number_format($invoice_detail[0]['paid_amount'], 2, '.', ','),
+            'due_amount'        => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
+            'previous'          => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
+            'shipping_cost'     => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),
+            'invoice_all_data'  => $invoice_detail,
+            'company_info'      => $company_info,
+            'currency'          => $currency_details[0]['currency'],
+            'position'          => $currency_details[0]['currency_position'],
+            'discount_type'     => $currency_details[0]['discount_type'],
+            'currency_details'  => $currency_details,
+            'am_inword'         => $amount_inword,
+            'is_discount'       => $is_discount,
 
-        'tax_regno'         => $txregname,
-        'is_desc'           => $descript,
-        'is_serial'         => $isserial,
-        'is_unit'           => $isunit,
+            'tax_regno'         => $txregname,
+            'is_desc'           => $descript,
+            'is_serial'         => $isserial,
+            'is_unit'           => $isunit,
         );
 
         $this->load->library('pdfgenerator');
@@ -1618,37 +1617,35 @@ class Invoice_model extends CI_Model
         if (!empty($email)) {
             $send_email = $this->setmail($email, $file_path, $invoice_detail[0]['invoice'], $name);
 
-            if($send_email){
-           return 1;
-            }else{
-               return 0;
-
+            if ($send_email) {
+                return 1;
+            } else {
+                return 0;
             }
-
         }
-      return 0;
-
+        return 0;
     }
 
-    public function voucher_no_generator() {
+    public function voucher_no_generator()
+    {
         $pieces = null;
         $data = $this->db->select('max(id) as voucher_sl')->from('service_invoice')->get()->row();
-        if (!empty($data->voucher_sl)){
+        if (!empty($data->voucher_sl)) {
             $invoice_no = $data->voucher_sl + 1;
-        }
-        else {
+        } else {
             $invoice_no = 1;
         }
-        return 'serv-'.$invoice_no;
+        return 'serv-' . $invoice_no;
         return $data;
     }
 
-    public function setmail($email, $file_path, $id = null, $name = null) {
+    public function setmail($email, $file_path, $id = null, $name = null)
+    {
         $setting_detail = $this->db->select('*')->from('email_config')->get()->row();
         $subject = 'Quotation Information';
         $message = strtoupper($name) . '-' . $id;
 
-        $config = Array(
+        $config = array(
             'protocol'  => $setting_detail->protocol,
             'smtp_host' => $setting_detail->smtp_host,
             'smtp_port' => $setting_detail->smtp_port,
@@ -1666,15 +1663,15 @@ class Invoice_model extends CI_Model
         $this->email->from($setting_detail->smtp_user);
         $this->email->to($email);
 
-        $config = Array(
-        'protocol'  => $setting_detail->protocol,
-        'smtp_host' => $setting_detail->smtp_host,
-        'smtp_port' => $setting_detail->smtp_port,
-        'smtp_user' => $setting_detail->smtp_user,
-        'smtp_pass' => $setting_detail->smtp_pass,
-        'mailtype'  => 'html',
-        'charset'   => 'utf-8',
-        'wordwrap'  => TRUE
+        $config = array(
+            'protocol'  => $setting_detail->protocol,
+            'smtp_host' => $setting_detail->smtp_host,
+            'smtp_port' => $setting_detail->smtp_port,
+            'smtp_user' => $setting_detail->smtp_user,
+            'smtp_pass' => $setting_detail->smtp_pass,
+            'mailtype'  => 'html',
+            'charset'   => 'utf-8',
+            'wordwrap'  => TRUE
         );
 
         $this->load->library('email');
@@ -1701,7 +1698,8 @@ class Invoice_model extends CI_Model
     }
 
     //Email testing for email
-    public function test_input($data) {
+    public function test_input($data)
+    {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
@@ -1709,16 +1707,17 @@ class Invoice_model extends CI_Model
     }
 
     // insert sales debitvoucher
-    public function insert_servsale_creditvoucher($is_credit = null,$invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){
+    public function insert_servsale_creditvoucher($is_credit = null, $invoice_id = null, $dbtid = null, $amnt_type = null, $amnt = null, $Narration = null, $Comment = null, $reVID = null, $subcode = null)
+    {
 
         $fyear = financial_year();
         $VDate = date('Y-m-d');
-        $CreateBy=$this->session->userdata('id');
-        $createdate=date('Y-m-d H:i:s');
+        $CreateBy = $this->session->userdata('id');
+        $createdate = date('Y-m-d H:i:s');
         // Cash & credit voucher insert
         if ($is_credit == 1) {
-            $maxid = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');
-            $vaucherNo = "JV-". ($maxid +1);
+            $maxid = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'JV', 'VNo');
+            $vaucherNo = "JV-" . ($maxid + 1);
 
             $debitinsert = array(
                 'fyear'          =>  $fyear,
@@ -1737,11 +1736,9 @@ class Invoice_model extends CI_Model
                 'CreateDate'     =>  $createdate,
                 'status'         =>  0,
             );
-
-
-        }else {
-            $maxid = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','CV','VNo');
-            $vaucherNo = "CV-". ($maxid +1);
+        } else {
+            $maxid = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'CV', 'VNo');
+            $vaucherNo = "CV-" . ($maxid + 1);
             $debitinsert = array(
                 'fyear'          =>  $fyear,
                 'VNo'            =>  $vaucherNo,
@@ -1757,33 +1754,33 @@ class Invoice_model extends CI_Model
                 'CreateDate'     => $createdate,
                 'status'         => 0,
             );
-
         }
-        if($amnt_type == 'Debit'){
+        if ($amnt_type == 'Debit') {
 
             $debitinsert['Debit']  = $amnt;
             $debitinsert['Credit'] =  0.00;
-        }else{
+        } else {
 
             $debitinsert['Debit']  = 0.00;
             $debitinsert['Credit'] =  $amnt;
         }
 
-        $this->db->insert('acc_vaucher',$debitinsert);
+        $this->db->insert('acc_vaucher', $debitinsert);
 
-	    return true;
-	}
+        return true;
+    }
 
-    public function insert_servsale_taxvoucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+    public function insert_servsale_taxvoucher($invoice_id = null, $dbtid = null, $amnt = null, $Narration = null, $Comment = null, $reVID = null)
+    {
 
         $fyear = financial_year();
         $VDate = date('Y-m-d');
-        $CreateBy=$this->session->userdata('id');
-        $createdate=date('Y-m-d H:i:s');
+        $CreateBy = $this->session->userdata('id');
+        $createdate = date('Y-m-d H:i:s');
 
         // cost of goods sold voucher insert
-        $maxidtax = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');
-        $vauchertax = "JV-". ($maxidtax +1);
+        $maxidtax = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'JV', 'VNo');
+        $vauchertax = "JV-" . ($maxidtax + 1);
         $debitinsert = array(
             'fyear'          =>  $fyear,
             'VNo'            =>  $vauchertax,
@@ -1801,23 +1798,24 @@ class Invoice_model extends CI_Model
             'status'         =>  0,
         );
 
-        $this->db->insert('acc_vaucher',$debitinsert);
+        $this->db->insert('acc_vaucher', $debitinsert);
 
 
-	    return true;
-	}
+        return true;
+    }
 
 
-    public function service_pdf_generate($invoice_id = null) {
+    public function service_pdf_generate($invoice_id = null)
+    {
         $id = $invoice_id;
         $currency_details = $this->quotation_model->setting_data();
         $service_inv_main = $this->service_model->service_invoice_updata($invoice_id);
         $customer_info    =  $this->service_model->customer_info($service_inv_main[0]['customer_id']);
         $taxinfo          = $this->service_model->service_invoice_taxinfo($invoice_id);
         $taxfield         = $this->db->select('tax_name,default_value')
-                ->from('tax_settings')
-                ->get()
-                ->result_array();
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
         $company_info = $this->quotation_model->retrieve_company();
 
         $subTotal_quantity = 0;
@@ -1846,27 +1844,27 @@ class Invoice_model extends CI_Model
             'customer_id'   => $service_inv_main[0]['customer_id'],
             'customer_info' => $customer_info,
             'customer_name' => $customer_info->customer_name,
-            'customer_address'=> $customer_info->customer_address,
-            'customer_mobile'=> $customer_info->customer_mobile,
-            'customer_email'=> $customer_info->customer_email,
+            'customer_address' => $customer_info->customer_address,
+            'customer_mobile' => $customer_info->customer_mobile,
+            'customer_email' => $customer_info->customer_email,
             'details'       => $service_inv_main[0]['details'],
             'total_amount'  => $service_inv_main[0]['total_amount'],
-            'total_discount'=> $service_inv_main[0]['total_discount'],
-            'invoice_discount'=> $service_inv_main[0]['invoice_discount'],
-            'subTotal_ammount'=> number_format($subTotal_ammount, 2, '.', ','),
-            'subTotal_quantity'=>number_format($subTotal_quantity, 2, '.', ','),
+            'total_discount' => $service_inv_main[0]['total_discount'],
+            'invoice_discount' => $service_inv_main[0]['invoice_discount'],
+            'subTotal_ammount' => number_format($subTotal_ammount, 2, '.', ','),
+            'subTotal_quantity' => number_format($subTotal_quantity, 2, '.', ','),
             'total_tax'     => $service_inv_main[0]['total_tax'],
             'paid_amount'   => $service_inv_main[0]['paid_amount'],
             'due_amount'    => $service_inv_main[0]['due_amount'],
             'shipping_cost' => $service_inv_main[0]['shipping_cost'],
-            'invoice_detail'=> $service_inv_main,
+            'invoice_detail' => $service_inv_main,
             'taxvalu'       => $taxinfo,
             'discount_type' => $currency_details[0]['discount_type'],
-            'currency_details'=>$currency_details,
+            'currency_details' => $currency_details,
             'currency'      => $currency_details[0]['currency'],
             'position'      => $currency_details[0]['currency_position'],
             'taxes'         => $taxfield,
-            'stotal'        => $service_inv_main[0]['total_amount']-$service_inv_main[0]['previous'],
+            'stotal'        => $service_inv_main[0]['total_amount'] - $service_inv_main[0]['previous'],
             'employees'     => $service_inv_main[0]['employee_id'],
             'previous'      => $service_inv_main[0]['previous'],
             'company_info'  => $company_info,
@@ -1884,19 +1882,28 @@ class Invoice_model extends CI_Model
         if (!empty($email)) {
             $send_email = $this->setmail($email, $file_path, $id, $name);
 
-            if($send_email){
+            if ($send_email) {
                 return 1;
+            } else {
 
-
-            }else{
-
-            return 0;
-
+                return 0;
             }
-
         }
         return 0;
+    }
 
+    public function single_invoice($invoice_id)
+    {
+        $this->db->select(
+            'a.*'
+        );
+        $this->db->from('invoice a');
+        $this->db->where('a.invoice_id', $invoice_id);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
     }
 
     public function customerinfo($customer_id)
@@ -1910,14 +1917,13 @@ class Invoice_model extends CI_Model
 
     public function quot_product_detail($quot_id)
     {
-
         return $this->db->select('a.*,b.*')
             ->from('invoice_details a')
             ->join('product_information b', 'a.product_id=b.product_id', 'left')
-            ->where('a.invoice_id', $quot_id)
+            ->join('invoice i', 'i.id=a.invoice_id', 'left')
+            ->where('i.invoice_id', $quot_id)
             ->order_by('a.id', 'asc')
             ->get()
             ->result_array();
     }
-
 }

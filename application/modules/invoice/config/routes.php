@@ -18,3 +18,4 @@ $route['terms_list'] = 'invoice/invoice/bdtask_terms_list';
 $route['terms_add'] = 'invoice/invoice/bdtask_terms_form';
 $route['terms_add/(:num)'] = 'invoice/invoice/bdtask_terms_form/$1';
 
+$route['to_delivery/(:any)'] = 'invoice/invoice/to_delivery/$1';
