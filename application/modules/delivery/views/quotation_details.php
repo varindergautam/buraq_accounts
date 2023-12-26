@@ -86,6 +86,8 @@ $user_id = $this->session->userdata('id');
                                         <abbr class="font-bold"><?php echo display('cr_no') ?>: </abbr>
                                         <?php echo $customer_info[0]['contact']; ?>
                                     <?php } ?>
+                                    <abbr class="font-bold"><?php echo "Reference ID" ?>: </abbr>
+                                        <?php echo $quot_main[0]['by_order'] ?><br>
                                 </address>
                             </div>
                         </div>

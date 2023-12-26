@@ -40,7 +40,7 @@
 
                                         </td>
                                         <td>
-                                            <?php echo html_escape($quotation->quotation_main_id); ?>
+                                            <?php echo html_escape($quotation->by_order); ?>
                                         </td>
                                         <td>
                                             <a href="<?php echo base_url('delivery_details/' . $quotation->quotation_id); ?>">

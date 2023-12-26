@@ -177,10 +177,11 @@ class Invoice_model extends CI_Model
         $totalRecordwithFilter = $records[0]->allcount;
 
         ## Fetch records
-        $this->db->select("a.*,b.customer_name,a.due_amount ,b.no_of_credit_days, DATEDIFF(CURDATE(), a.date) AS rem_time, u.first_name,u.last_name");
+        $this->db->select("a.*,b.customer_name,a.due_amount ,b.no_of_credit_days, DATEDIFF(CURDATE(), a.date) AS rem_time, u.first_name,u.last_name, d.quotation_id as deliveryQuotID");
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id', 'left');
         $this->db->join('users u', 'u.user_id = a.sales_by', 'left');
+        $this->db->join('delivery d', 'd.by_order = a.by_order', 'left');
         if ($usertype == 2) {
             $this->db->where('a.sales_by', $this->session->userdata('user_id'));
         }
@@ -206,6 +207,11 @@ class Invoice_model extends CI_Model
             $button .= '  <a href="' . $base_url . 'invoice_pad_print/' . $record->invoice_id . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pad_print') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
 
             $button .= '  <a href="' . $base_url . 'pos_print/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('pos_invoice') . '"><i class="fa fa-fax" aria-hidden="true"></i></a>';
+
+            if($record->deliveryQuotID){
+                $button .= '  <a href="' . $base_url . 'delivery_details/' . $record->deliveryQuotID . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Delivery Order</a>';
+            }
+
             if ($this->permission1->method('manage_invoice', 'update')->access()) {
                 $approve = $this->db->select('status,referenceNo')->from('acc_vaucher')->where('referenceNo', $record->invoice_id)->where('status', 1)->get()->num_rows();
                 if ($approve == 0) {
