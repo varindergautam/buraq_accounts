@@ -1899,4 +1899,25 @@ class Invoice_model extends CI_Model
 
     }
 
+    public function customerinfo($customer_id)
+    {
+        return $this->db->select('*')
+            ->from('customer_information')
+            ->where('customer_id', $customer_id)
+            ->get()
+            ->result_array();
+    }
+
+    public function quot_product_detail($quot_id)
+    {
+
+        return $this->db->select('a.*,b.*')
+            ->from('invoice_details a')
+            ->join('product_information b', 'a.product_id=b.product_id', 'left')
+            ->where('a.invoice_id', $quot_id)
+            ->order_by('a.id', 'asc')
+            ->get()
+            ->result_array();
+    }
+
 }

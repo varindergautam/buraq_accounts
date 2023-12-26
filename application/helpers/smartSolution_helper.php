@@ -95,3 +95,14 @@ function pmethod_dropdown_new()
         return false;
     }
 }
+
+function get_allcustomer()
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    return $ci->db->select('*')
+        ->from('customer_information')
+        ->order_by('customer_name', 'asc')
+        ->get()
+        ->result_array();
+}

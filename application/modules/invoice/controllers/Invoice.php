@@ -21,7 +21,7 @@ class Invoice extends MX_Controller {
         $timezone = $this->db->select('timezone')->from('web_setting')->get()->row();
         date_default_timezone_set($timezone->timezone);
         $this->load->model(array(
-            'invoice_model','customer/customer_model','account/Accounts_model')); 
+            'invoice_model','customer/customer_model','account/Accounts_model', 'delivery/delivery_model')); 
         if (! $this->session->userdata('isLogIn'))
             redirect('login');
           
@@ -1985,6 +1985,235 @@ class Invoice extends MX_Controller {
         }
 
         redirect("terms_list");
+    }
+
+    public function quotation_to_delivery($quot_id = null)
+    {
+        $data['type'] = isset($_GET['type']) ? $_GET['type'] : NULL;
+        $vat_tax_info   = vatTaxSetting();
+        $data['quot_main']       = $this->invoice_model->retrieve_invoice_html_data($quot_id);
+
+        if ($data['quot_main'][0]['is_dynamic'] == 1) {
+            if ($data['quot_main'][0]['is_dynamic'] != $vat_tax_info->dynamic_tax) {
+
+                $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
+                redirect("manage_quotation");
+            }
+        } elseif ($data['quot_main'][0]['is_fixed'] == 1) {
+            if ($data['quot_main'][0]['is_fixed'] != $vat_tax_info->fixed_tax) {
+
+                $this->session->set_flashdata('exception', 'VAT and TAX are set globally, which is not the same as VAT and TAX on this invoice. (which was configured when the invoice was created). It is not editable.');
+                redirect("manage_quotation");
+            }
+        }
+        $taxfield = $this->db->select('tax_name,default_value')
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
+
+        $tablecolumn = $this->db->list_fields('tax_collection');
+        $num_column = count($tablecolumn) - 4;
+        $currency_details        = setting_data();
+        $data['currency_details'] = $currency_details;
+        $data['title']           = display('quotation_to_delivery');
+        $data['quot_product']    = $this->invoice_model->quot_product_detail($quot_id);
+        $data['customer_info']   = $this->invoice_model->customerinfo($data['quot_main'][0]['customer_id']);
+        $data['taxes']           = $taxfield;
+        $data['taxnumber']       = $num_column;
+        $data['customers']       = get_allcustomer();
+        $data['get_productlist'] = getAllProducts();
+        $data['all_pmethod']     = pmethod_dropdown();
+        $data['module']          = "invoice";
+        $vatortax              = vatTaxSetting();
+        if ($vatortax->fixed_tax == 1) {
+
+            $data['page']            = "to_delivery";
+        }
+        if ($vatortax->dynamic_tax == 1) {
+            $data['page']          = "to_delivery_dynamic";
+        }
+        echo modules::run('template/layout', $data);
+    }
+
+    public function add_quotation_to_delivery()
+    {
+        $this->form_validation->set_rules('customer_id', display('customer_name'), 'required|max_length[50]');
+        $this->form_validation->set_rules('qdate', display('quotation_date'), 'required|max_length[50]');
+        $this->form_validation->set_rules('expiry_date', display('expiry_date'), 'required|max_length[50]');
+        if ($this->form_validation->run()) {
+
+            $quot_id     = $this->delivery_model->delivery_quot_number_generator();
+            $quotation_id = $this->input->post('quotation_id', TRUE);
+
+            $tablecolumn = $this->db->list_fields('delivery_taxinfo');
+            $num_column  = count($tablecolumn) - 4;
+            $fixordyn    = $this->db->select('*')->from('vat_tax_setting')->get()->row();
+            $is_fixed    = '';
+            $is_dynamic  = '';
+
+            if ($fixordyn->fixed_tax == 1) {
+                $is_fixed   = 1;
+                $is_dynamic = 0;
+            } elseif ($fixordyn->dynamic_tax == 1) {
+                $is_fixed   = 0;
+                $is_dynamic = 1;
+            }
+
+            $status = 2;
+   
+            $customer_id  = $this->input->post('customer_id', TRUE);
+
+            $multipaytype   = $this->input->post('multipaytype', TRUE);
+
+            $cusifo       = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $no_of_credit_day = $cusifo->no_of_credit_days;
+
+            if ($no_of_credit_day !== null && $no_of_credit_day > 0 && $multipaytype[0] == '0') {
+                $grand_total_price = $this->input->post('grand_total_price', TRUE);
+                $paid_amount = $this->input->post('paid_amount', TRUE);
+                // $due_amount = $this->input->post('due_amount',TRUE);
+                $due_amount = $grand_total_price - $paid_amount;
+            } else {
+                $due_amount = '';
+            }
+            $data = array(
+                'quotation_id'        => $quot_id,
+                'customer_id'         => $this->input->post('customer_id', TRUE),
+                'quotdate'            => $this->input->post('qdate', TRUE),
+                'expire_date'         => $this->input->post('expiry_date', TRUE),
+                'item_total_amount'   => $this->input->post('grand_total_price', TRUE),
+                'item_total_dicount'  => $this->input->post('total_discount', TRUE),
+                'item_total_vat'      => $this->input->post('total_vat_amnt', TRUE),
+                'item_total_tax'      => $this->input->post('total_tax', TRUE),
+                'service_total_amount' => $this->input->post('grand_total_service_amount', TRUE),
+                'service_total_discount' => $this->input->post('totalServiceDicount', TRUE),
+                'service_total_vat'   => $this->input->post('service_total_vat_amnt', TRUE),
+                'service_total_tax'   => $this->input->post('total_service_tax', TRUE),
+                'quot_dis_item'       => $this->input->post('invoice_discount', TRUE),
+                'quot_dis_service'    => $this->input->post('service_discount', TRUE),
+                'quot_no'             => $quot_id,
+                'create_by'           => $this->session->userdata('id'),
+                'quot_description'    => $this->input->post('details', TRUE),
+                'status'              => $status,
+                // 'deliver_status'              => $deliver_status,
+                // 'sale_order_status'              => $sale_order_status,
+                'is_fixed'            =>  $is_fixed,
+                'is_dynamic'          =>  $is_dynamic,
+                'quotation_main_id'     => $quotation_id,
+                'due_amount'      => $due_amount,
+                'payment_type'    =>  $multipaytype[0],
+                'no_of_credit_days' =>  $no_of_credit_day,
+                'by_order' =>  $quotation_id,
+            );
+
+
+            $result = $this->quotation_model->delivery_entry($data);
+
+            $quotdata = array('delivery_status'  => 2, 'payment_type' => $multipaytype[0]);
+            $this->db->where('quotation_id', $quotation_id);
+            $this->db->update('quotation', $quotdata);
+
+            // $this->updatePaymentType($quotation_id, $multipaytype);
+
+            if ($result == TRUE) {
+                // Used Item Details Part
+                $item         = $this->input->post('product_id', TRUE);
+                $serial       = $this->input->post('serial_no', TRUE);
+                $descrp       = $this->input->post('desc', TRUE);
+                $item_rate    = $this->input->post('product_rate', TRUE);
+                $item_supp_rate = $this->input->post('supplier_price', TRUE);
+                $item_qty     = $this->input->post('product_quantity', TRUE);
+                $item_dis_per = $this->input->post('discount', TRUE);
+                $item_total_discount = $this->input->post('discountvalue', TRUE);
+                $vat_per      = $this->input->post('vatpercent', TRUE);
+                $vat_value    = $this->input->post('vatvalue', TRUE);
+                $item_tax     = $this->input->post('tax', TRUE);
+                $totalp       =  $this->input->post('total_price', TRUE);
+                for ($j = 0, $n = count($item); $j < $n; $j++) {
+                    $product_id    = $item[$j];
+                    $rate          = $item_rate[$j];
+                    $qty           = $item_qty[$j];
+                    $supplier_rate = $item_supp_rate[$j];
+                    $discount      = $item_dis_per[$j];
+                    $discountval   = $item_total_discount[$j];
+                    $vatper        = $vat_per[$j];
+                    $vatvalue      = $vat_value[$j];
+                    $tax           = $item_tax[$j];
+                    $srl           = $serial[$j];
+                    $dcript        = $descrp[$j];
+                    $total_price   = $totalp[$j];
+                    $quotitem = array(
+                        'quot_id'       => $quot_id,
+                        'product_id'    => $product_id,
+                        'batch_id'      => $srl,
+                        'description'   => $dcript,
+                        'rate'          => $rate,
+                        'supplier_rate' => $supplier_rate,
+                        'total_price'   => $total_price,
+                        'discount_per'  => $discount,
+                        'discount'      => $discountval,
+                        'vat_amnt'      => $vatvalue,
+                        'vat_per'       => $vatper,
+                        'tax'           => $tax,
+                        'used_qty'      => $qty,
+                    );
+                    $this->db->insert('invoice_details', $quotitem);
+                }
+
+                
+
+                $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
+                if ($mailsetting[0]['isquotation'] == 1) {
+                    $mail = $this->quotation_pdf_generate($quot_id);
+                    if ($mail == 0) {
+                        $this->session->set_flashdata(array('exception' => display('please_config_your_mail_setting')));
+                    }
+                }
+                $this->session->set_flashdata(array('message' => display('successfully_added')));
+                redirect(base_url('manage_quotation'));
+            } else {
+                $this->session->set_flashdata(array('exception' => display('already_inserted')));
+                redirect(base_url('manage_quotation'));
+            }
+        } else {
+            $this->session->set_flashdata(array('exception' => validation_errors()));
+            redirect(base_url('manage_quotation'));
+        }
+    }
+
+    public function quotation_pdf_generate($quot_id = null)
+    {
+        $id = $quot_id;
+        $currency_details         = $this->quotation_model->setting_data();
+        $data['currency_details'] = $currency_details;
+        $data['discount_type']    = $currency_details[0]['discount_type'];
+        $data['title']            = display('quotation_details');
+        $data['quot_service']     = $this->quotation_model->quot_service_detail($quot_id);
+        $data['quot_main']        = $this->quotation_model->quot_main_edit($quot_id);
+        $data['quot_product']     = $this->quotation_model->quot_product_detail($quot_id);
+        $data['customer_info']    = $this->quotation_model->customerinfo($data['quot_main'][0]['customer_id']);
+        $data['company_info'] = $this->quotation_model->retrieve_company();
+        $name    = $data['customer_info'][0]['customer_name'];
+        $email   = $data['customer_info'][0]['customer_email'];
+        $this->load->library('pdfgenerator');
+        $html   = $this->load->view('quotation/quotation_download', $data, true);
+        $dompdf = new Dompdf\Dompdf();
+        $dompdf->load_html($html);
+        $dompdf->render();
+        $output = $dompdf->output();
+        file_put_contents('assets/data/pdf/quotation/' . $id . '.pdf', $output);
+        $file_path = getcwd() . '/assets/data/pdf/quotation/' . $id . '.pdf';
+        $send_email = '';
+        if (!empty($email)) {
+            $send_email = $this->setmail($email, $file_path, $id, $name);
+
+            if ($send_email) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        return 0;
     }
 }
 
