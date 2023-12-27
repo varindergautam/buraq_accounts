@@ -216,14 +216,14 @@ class Invoice_model extends CI_Model
             $queryCheck = $this->db->get();
             // Check the number of rows in the result set
             if ($record->deliveryByOrder && $queryCheck->num_rows() > 0) {
-                $status .= '<a href="' . base_url() . 'delivery_details/' . $record->deliveryQuotID . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Delivery Note"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $record->deliveryByOrder . '';
+                $status .= '<a href="' . base_url() . 'delivery_details/' . $record->deliveryQuotID . ' " class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="Delivery Note"><i class="fa fa-window-restore" aria-hidden="true"></i></a>' . $record->deliveryQuotID . '';
             } else {
-                $status .= '  <a href="' . $base_url . 'to_delivery/' . $record->invoice_id . '" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Add Delivery Note</a>';
+                $status .= '  <a href="' . $base_url . 'to_delivery/' . $record->invoice_id . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Add Delivery Note</a>';
             }
 
-            if ($record->deliveryQuotID) {
-                $button .= '  <a href="' . $base_url . 'delivery_details/' . $record->deliveryQuotID . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Delivery Order</a>';
-            }
+            // if ($record->deliveryQuotID) {
+            //     $button .= '  <a href="' . $base_url . 'delivery_details/' . $record->deliveryQuotID . '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="Delivery Order">Delivery Order</a>';
+            // }
 
             if ($this->permission1->method('manage_invoice', 'update')->access()) {
                 $approve = $this->db->select('status,referenceNo')->from('acc_vaucher')->where('referenceNo', $record->invoice_id)->where('status', 1)->get()->num_rows();
