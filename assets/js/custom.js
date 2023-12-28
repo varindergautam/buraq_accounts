@@ -264,7 +264,7 @@ var twelveHour = $('.timepicker-12-hr').wickedpicker();
     
     function printDivnew(divName) { 
       $( ".print-font-size" ).css({
-        fontSize: "11px",
+        fontSize: "10px",
         
         });
         $( ".print-logo" ).css({

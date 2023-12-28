@@ -5,13 +5,29 @@ $user_id = $this->session->userdata('id');
 ?>
 <link href="<?php echo base_url('assets/custom/quotation.css') ?>" rel="stylesheet" type="text/css" />
 
+<style>
+    th.heading {
+        /* width: 14%; */
+    }
+
+    th.colon {
+        width: 30px;
+        border: 0px solid;
+        text-align: center;
+    }
+
+    td.data-text {
+        width: 65%;
+    }
+</style>
+
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-bd">
-            <div id="printableArea">
+            <div id="printableArea" style="padding: 0 10px;">
                 <div class="panel-body print-font-size">
 
-                    <div class="row marginleft5">
+                    <div class="row ">
                         <div class="fl-left">
                             <div class="col-xs-3">
                                 <img src="<?php
@@ -23,13 +39,13 @@ $user_id = $this->session->userdata('id');
 
                             <div class="col-xs-7 text-center ">
                                 <h3 style="color:#1a3f85;font-weight:bold;">SHAMIS MOHAMED GENERAL TRADING LLC</h3>
-                                <p class=""  style="font-weight:bold;">Near Hor Al Anz Post Office Opp,Dubai Municipality <br>
+                                <p class="" style="font-weight:bold;">Near Hor Al Anz Post Office Opp,Dubai Municipality <br>
                                     Dubai-U.A.E,P O BOX.21099 <br>
                                     Tel: +971 42964336 Mob:+971 521060170
                                 </p>
 
                                 <h3 style="font-weight:bold;">CUSTOMER QUOTATION</h3>
-                                <p  style="font-weight:bold;">TRN: 100433744800003</p>
+                                <p style="font-weight:bold;">TRN: 100433744800003</p>
 
                             </div>
                             <div class="col-xs-2"></div>
@@ -37,9 +53,9 @@ $user_id = $this->session->userdata('id');
                     </div>
 
 
-                    <div class="row marginleft5" style="margin-bottom: 20px;">
+                    <div class="row " style="margin-bottom: 20px;">
                         <div class="fl-left" style="border:1px solid #ccc;">
-                            <div class="col-xs-7" style="border-right:1px solid #ccc;">
+                            <div class="col-xs-6" style="border-right:1px solid #ccc;">
                                 <table width="100%">
                                     <tr>
                                         <th class="heading">
@@ -175,7 +191,7 @@ $user_id = $this->session->userdata('id');
                                 </address> -->
                             </div>
 
-                            <div class="col-xs-5 text-left ">
+                            <div class="col-xs-6 text-left ">
 
                                 <table width="100%">
                                     <tr>
